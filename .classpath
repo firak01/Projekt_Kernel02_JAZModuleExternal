@@ -8,5 +8,5 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/JAZKernel"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JAZKernelLogReport"/>
-	<classpathentry kind="output" path="build/classes"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
