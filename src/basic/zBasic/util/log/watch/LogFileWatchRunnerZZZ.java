@@ -7,20 +7,45 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
 
 import basic.zBasic.ExceptionZZZ;
-import basic.zBasic.component.AbstractProgramRunnableZZZ;
-import basic.zBasic.component.AbstractProgramZZZ;
+import basic.zBasic.ReflectCodeZZZ;
+import basic.zBasic.component.AbstractProgramRunnableWithStatusZZZ;
 import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
+import basic.zKernel.status.IEventBrokerStatusLocalMessageSetUserZZZ;
+import basic.zKernel.status.IEventBrokerStatusLocalSetUserZZZ;
+import basic.zKernel.status.IListenerObjectStatusLocalMessageSetZZZ;
+import basic.zKernel.status.IListenerObjectStatusLocalSetZZZ;
+import basic.zKernel.status.ISenderObjectStatusLocalMessageSetZZZ;
+import basic.zKernel.status.ISenderObjectStatusLocalSetZZZ;
+import basic.zKernel.status.KernelSenderObjectStatusLocalMessageSetZZZ;
+import basic.zKernel.status.KernelSenderObjectStatusLocalSetZZZ;
 
-public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableZZZ implements ILogFileWatchRunnerZZZ {
+public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ implements ILogFileWatchRunnerZZZ, IEventBrokerStatusLocalMessageSetUserZZZ{
 	private static final long serialVersionUID = 6586079955658760005L;
-	public File objLogFile=null;
+	private File objLogFile=null;
+	private String sLineFilter = null;
+	
+	//TODOGOON:
+	//Also: Gib dem LogFileWatchRunner einen Status mit.
+	//      Lass andere Objekte an diesem Runner sich registrieren
+	//      Der Runner wirft bei Änderung des Status (z.B. "Suchtext gefunden") einen entsprechenden Event.
+	
+	//analog zu... ProcessWatchRunnerOVPN
+	//Merke: der LogFileWatchRunner selbst wird dann irgendwann mal für die Server-Version im ProcessWatchRunnerOVPN genutzt werden.
+	//       Momentan wird dort nur das Log der "StarterBatch" ausgwertet. Auch hinsichtlich von "hasOutput". Das ist aber nicht korrekt.
+	
+	//TODOGOON20240114: Baue zuerst die Status-Struktur fuer diese Klasse auf.
+	private ISenderObjectStatusLocalMessageSetZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
+	
 	
 	public LogFileWatchRunnerZZZ() throws ExceptionZZZ {
 		super();		
@@ -28,14 +53,20 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableZZZ implements
 
 	public LogFileWatchRunnerZZZ(File objLogFile) throws ExceptionZZZ {
 		super();	
-		LogFileWatchRunnerNew_(null, objLogFile);
+		LogFileWatchRunnerNew_(null, objLogFile, null);
 	}
 	
-	private boolean LogFileWatchRunnerNew_(IModuleZZZ objModule, File objLogFile) {
+	public LogFileWatchRunnerZZZ(File objLogFile, String sFilterSentence) throws ExceptionZZZ {
+		super();	
+		LogFileWatchRunnerNew_(null, objLogFile, sFilterSentence);
+	}
+	
+	private boolean LogFileWatchRunnerNew_(IModuleZZZ objModule, File objLogFile, String sFilterSentence) {
 		boolean bReturn = false;
 		main:{
 			this.objLogFile = objLogFile;
 			this.objModule = objModule;
+			this.sLineFilter = sFilterSentence;
 		}//end main:
 		return bReturn;
 	}
@@ -52,32 +83,23 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableZZZ implements
 	}
 	
 	@Override
+	public String getLineFilter() {
+		return this.sLineFilter;
+	}
+	
+	@Override
+	public void setLineFilter(String sLineFilter) {
+		this.sLineFilter=sLineFilter;
+	}
+	
+	@Override
 	public boolean start() throws ExceptionZZZ, InterruptedException{
 		boolean bReturn = false;
-		main:{
-//			this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
-//			
-//			 boolean bValue = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP);
-//			 System.out.println("bValue = " + bValue);
-//				
-//			this.reset();
-//			
-//		    bValue = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP);
-//			System.out.println("bValue = " + bValue);
-//		    
+		main:{	
 			
-			int icount=0;
-			while(true) {
-				icount++;
-				System.out.println("mache was " + icount);
-				Thread.sleep(100);				
-				if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) {
-					break;
-				}
-				this.startServerProcessLogWacher();
-			}
-			
-			bReturn = true;
+			//Lies die Datei Zeile für Zeile aus.
+			bReturn = this.startServerProcessLogWatcher();
+
 		}//end main:
 		return bReturn;
 	}
@@ -88,16 +110,14 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableZZZ implements
 	 * @return
 	 * @author Fritz Lindhauer, 10.12.2023, 16:04:55
 	 */
-	public boolean startServerProcessLogWacher() {
+	public boolean startServerProcessLogWatcher() throws ExceptionZZZ{
 		boolean bReturn= false;
 		main:{			
 			BufferedReader br=null;
 			try {
-				String sLogDirectory =  "c:\\fglkernel\\kernellog\\ovpnServer";
-				String sLogFile = "ovpn.log";
-				String sLogFilePathTotal =	FileEasyZZZ.joinFilePathName(sLogDirectory, sLogFile);		
-				File objFileLog = new File(sLogFilePathTotal);
-								
+				File objFileLog = this.getLogFileWatched();
+				
+				//Warte auf die Existenz der Datei.
 				boolean bExists = false;
 				do {
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) {
@@ -109,24 +129,38 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableZZZ implements
 					}
 				}while(!bExists);
 				
+				String sLineFilter = this.getLineFilter();
+				if(StringZZZ.isEmpty(sLineFilter)) {
+					ExceptionZZZ ez = new ExceptionZZZ("Keine Zeilenfilter gesetzt.", this.iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+					throw ez;
+				}
+				
 				String sLine = null;
 				InputStream objStream = new FileInputStream(objFileLog);
 				br = new BufferedReader(new InputStreamReader(objStream));
+				
+				int icount=0;
                 while (true){
+                	Thread.sleep(100); //Bremse zum Debuggen ab. Sonst gehen mir die Zeilen aus... ;-))
                 	if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) {
     					break main;
     				}
                     sLine = br.readLine();
                     if(sLine!=null)
                     {
-                        System.out.println(sLine);
+                    	icount++;
+                    	System.out.println(ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: " + sLine);	                    	
+                    	if(StringZZZ.contains(sLine, sLineFilter)) {
+                    		System.out.println(ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: Zeilenfilter gefunden: '" + sLineFilter + "'");
+                    		
+                    		IEventObject4LogFileWatchRunnerStatusLocalSetZZZ event = new EventObject4LogFileWatchRunnerStatusLocalSetZZZ(this,1,ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, true);			                			
+                			this.getSenderStatusLocalUsed().fireEvent(event);
+                    	}
                     }else{
+                    	//Warte auf weiter Ausgaben
                         Thread.sleep(100);
                     }
-                }
-			} catch (ExceptionZZZ e) {				
-				e.printStackTrace();				
-				
+                }			
 			} catch (InterruptedException e) {				
 				e.printStackTrace();
 				
@@ -135,7 +169,7 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableZZZ implements
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e.printStackTrace();								
 			} finally {
 				if(br!=null) {
 					IOUtils.closeQuietly(br);
@@ -144,7 +178,7 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableZZZ implements
 		}//end main:
 		return bReturn;
 	}
-	
+		
 	//###############################
 	//### FLAG HANDLING
 	//###############################
@@ -183,5 +217,151 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableZZZ implements
 	@Override
 	public boolean proofFlagSetBefore(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
 		return this.proofFlagExists(objEnumFlag.name());
+	}
+
+	//#########################################################
+	//### aus IEventBrokerStatusLocalSetUserZZZ
+	@Override
+	public ISenderObjectStatusLocalMessageSetZZZ getSenderStatusLocalUsed() throws ExceptionZZZ {
+		if(this.objEventStatusLocalBroker==null) {
+			//++++++++++++++++++++++++++++++
+			//Nun geht es darum den Sender fuer Aenderungen an den Flags zu erstellen, der dann registrierte Objekte ueber Aenderung von Flags informiert
+			ISenderObjectStatusLocalMessageSetZZZ objSenderStatusLocal = new KernelSenderObjectStatusLocalMessageSetZZZ();			
+			this.objEventStatusLocalBroker = objSenderStatusLocal;
+		}		
+		return this.objEventStatusLocalBroker;
+	}
+
+	@Override
+	public void setSenderStatusLocalUsed(ISenderObjectStatusLocalMessageSetZZZ objEventSender) {
+		this.objEventStatusLocalBroker = objEventSender;
+	}
+
+	@Override
+	public void registerForStatusLocalEvent(IListenerObjectStatusLocalMessageSetZZZ objEventListener) throws ExceptionZZZ {
+		this.getSenderStatusLocalUsed().addListenerObjectStatusLocalSet(objEventListener);
+	}
+
+	@Override
+	public void unregisterForStatusLocalEvent(IListenerObjectStatusLocalMessageSetZZZ objEventListener) throws ExceptionZZZ {
+		this.getSenderStatusLocalUsed().removeListenerObjectStatusLocalSet(objEventListener);
+	}
+
+	//####### aus IStatusLocalUserZZZ
+	/* (non-Javadoc)
+	 * @see basic.zKernel.status.IStatusLocalUserZZZ#getStatusLocal(java.lang.Enum)
+	 */
+	@Override
+	public boolean getStatusLocal(Enum objEnumStatusIn) throws ExceptionZZZ {
+		boolean bFunction = false;
+		main:{
+			if(objEnumStatusIn==null) {
+				break main;
+			}
+			
+			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) objEnumStatusIn;
+			String sStatusName = enumStatus.name();
+			if(StringZZZ.isEmpty(sStatusName)) break main;
+										
+			HashMap<String, Boolean> hmFlag = this.getHashMapStatusLocal();
+			Boolean objBoolean = hmFlag.get(sStatusName.toUpperCase());
+			if(objBoolean==null){
+				bFunction = false;
+			}else{
+				bFunction = objBoolean.booleanValue();
+			}
+							
+		}	// end main:
+		
+		return bFunction;	
+	}
+
+	@Override
+	public IEnumSetMappedStatusZZZ getStatusLocalEnumPrevious(int iIndexStepsBack) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean offerStatusLocal(int iIndexOfProcess, Enum enumStatusIn, String sStatusMessage, boolean bStatusValue)
+			throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean offerStatusLocal(Enum enumStatusIn, String sStatusMessage, boolean bStatusValue)
+			throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setStatusLocal(Enum enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setStatusLocal(Enum enumStatusIn, String sMessage, boolean bStatusValue) throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setStatusLocal(int iIndexOfProcess, Enum enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setStatusLocal(int iIndexOfProcess, Enum enumStatusIn, String sMessage, boolean bStatusValue)
+			throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setStatusLocalEnum(IEnumSetMappedStatusZZZ enumStatusMapped, boolean bStatusValue)
+			throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setStatusLocalEnum(IEnumSetMappedStatusZZZ enumStatusMapped, String sMessage, boolean bStatusValue)
+			throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setStatusLocalEnum(int iIndexOfProcess, IEnumSetMappedStatusZZZ enumStatusMapped,
+			boolean bStatusValue) throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setStatusLocalEnum(int iIndexOfProcess, IEnumSetMappedStatusZZZ enumStatusMapped, String sMessage,
+			boolean bStatusValue) throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
 	}	
+	
+	//#######################################
+	/* (non-Javadoc)
+	 * @see basic.zBasic.AbstractObjectWithStatusZZZ#isStatusLocalRelevant(basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ)
+	 */
+	@Override
+	public boolean isStatusLocalRelevant(IEnumSetMappedStatusZZZ objEnumStatusIn) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			if(objEnumStatusIn==null) break main;
+				
+			//Fuer das Main-Objekt ist erst einmal jeder Status relevant
+			bReturn = true;
+		}//end main:
+		return bReturn;
+	}
 }
