@@ -5,6 +5,8 @@ import java.io.File;
 import base.files.DateiUtil;
 import base.io.IoUtil;
 import basic.zBasic.ExceptionZZZ;
+import basic.zBasic.IConstantZZZ;
+import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.crypt.code.Vigenere256ZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
@@ -14,7 +16,7 @@ import basic.zKernel.status.IListenerObjectStatusLocalMessageSetZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalSetZZZ;
 import debug.zBasic.util.log.create.LogFileCreateMockRunnerZZZ;
 
-public class LogFileProcessMainZZZ {
+public class LogFileProcessMainZZZ implements IConstantZZZ{
 
 	public static void main(String[] args) {
 			main:{
@@ -50,6 +52,14 @@ public class LogFileProcessMainZZZ {
 			
 			//Merke: Einen TryoutCode gibt es hier: OpenVPNZZZ\\tryout\\basic\\zBasic\\util\\log\\watch\\TryoutOpenVpnLogWatcherOVPN.java				
 			String sLogDirectory =  "c:\\fglkernel\\kernellog\\ovpnServer";
+			
+			//Erstelle dieses Verzeichnis, falls noch nicht vorhanden
+			boolean bCreated = FileEasyZZZ.createDirectory(sLogDirectory);
+			if(!bCreated) {
+				ExceptionZZZ ez = new ExceptionZZZ("unable to create directory: '" + sLogDirectory + "'.", iERROR_RUNTIME, LogFileProcessMainZZZ.class, ReflectCodeZZZ.getPositionCurrent());
+				throw ez;
+			}
+			
 			String sLogFile = "ovpn.log";
 			String sLogFilePathTotalDefault =	FileEasyZZZ.joinFilePathName(sLogDirectory, sLogFile);		
 							
