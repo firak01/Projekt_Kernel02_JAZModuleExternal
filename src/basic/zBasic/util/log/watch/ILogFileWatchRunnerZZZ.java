@@ -14,7 +14,7 @@ public interface ILogFileWatchRunnerZZZ {
 	
 	//##############################################################	
 	public enum FLAGZ{
-		DUMMY
+		DUMMY,END_ON_FILTERFOUND
 	}
 
 	boolean getFlag(FLAGZ objEnumFlag);

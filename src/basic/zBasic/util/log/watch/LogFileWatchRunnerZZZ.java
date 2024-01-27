@@ -20,14 +20,11 @@ import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
+import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventBrokerStatusLocalMessageSetUserZZZ;
-import basic.zKernel.status.IEventBrokerStatusLocalSetUserZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalMessageSetZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalSetZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalMessageSetZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalSetZZZ;
 import basic.zKernel.status.KernelSenderObjectStatusLocalMessageSetZZZ;
-import basic.zKernel.status.KernelSenderObjectStatusLocalSetZZZ;
 
 public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ implements ILogFileWatchRunnerZZZ, IEventBrokerStatusLocalMessageSetUserZZZ{
 	private static final long serialVersionUID = 6586079955658760005L;
@@ -53,17 +50,35 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ 
 
 	public LogFileWatchRunnerZZZ(File objLogFile) throws ExceptionZZZ {
 		super();	
-		LogFileWatchRunnerNew_(null, objLogFile, null);
+		LogFileWatchRunnerNew_(null, objLogFile, null, null);
 	}
 	
 	public LogFileWatchRunnerZZZ(File objLogFile, String sFilterSentence) throws ExceptionZZZ {
 		super();	
-		LogFileWatchRunnerNew_(null, objLogFile, sFilterSentence);
+		LogFileWatchRunnerNew_(null, objLogFile, sFilterSentence, null);
 	}
 	
-	private boolean LogFileWatchRunnerNew_(IModuleZZZ objModule, File objLogFile, String sFilterSentence) {
+	public LogFileWatchRunnerZZZ(File objLogFile, String sFilterSentence, String[] saFlag) throws ExceptionZZZ {
+		super();	
+		LogFileWatchRunnerNew_(null, objLogFile, sFilterSentence, saFlag);
+	}
+	
+	private boolean LogFileWatchRunnerNew_(IModuleZZZ objModule, File objLogFile, String sFilterSentence, String[] saFlagControl) throws ExceptionZZZ {
 		boolean bReturn = false;
-		main:{
+		main:{			
+			if(saFlagControl != null){
+				String stemp; boolean btemp;
+				for(int iCount = 0;iCount<=saFlagControl.length-1;iCount++){
+					stemp = saFlagControl[iCount];
+					btemp = setFlag(stemp, true);
+					if(btemp==false){ 								   
+						   ExceptionZZZ ez = new ExceptionZZZ( stemp, IFlagZUserZZZ.iERROR_FLAG_UNAVAILABLE, this, ReflectCodeZZZ.getMethodCurrentName()); 						
+						   throw ez;		 
+					}
+				}
+				if(this.getFlag("init")) break main;
+			}
+			
 			this.objLogFile = objLogFile;
 			this.objModule = objModule;
 			this.sLineFilter = sFilterSentence;
@@ -112,7 +127,11 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ 
 	 */
 	public boolean startServerProcessLogWatcher() throws ExceptionZZZ{
 		boolean bReturn= false;
-		main:{			
+		main:{	
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + " LogFileWatchRunner started.";
+			System.out.println(sLog);
+			this.logLineDate(sLog);
+			
 			BufferedReader br=null;
 			try {
 				File objFileLog = this.getLogFileWatched();
@@ -120,7 +139,7 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ 
 				//Warte auf die Existenz der Datei.
 				boolean bExists = false;
 				do {
-					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) {
+					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
 						break main;
 					}
 					bExists = FileEasyZZZ.exists(objFileLog);
@@ -142,9 +161,14 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ 
 				int icount=0;
                 while (true){
                 	Thread.sleep(100); //Bremse zum Debuggen ab. Sonst gehen mir die Zeilen aus... ;-))
-                	if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) {
-    					break main;
-    				}
+                	
+                	boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
+					if( bStopRequested) {
+						sLog = ReflectCodeZZZ.getPositionCurrent() + ": Breche Schleife ab.";
+						this.logLineDate(sLog);
+						break main;
+					}
+					
                     sLine = br.readLine();
                     if(sLine!=null)
                     {
@@ -155,12 +179,33 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ 
                     		
                     		IEventObject4LogFileWatchRunnerStatusLocalSetZZZ event = new EventObject4LogFileWatchRunnerStatusLocalSetZZZ(this,1,ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, true);			                			
                 			this.getSenderStatusLocalUsed().fireEvent(event);
+                			
+                			if(this.getFlag(ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+                				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+        						this.logLineDate(sLog);
+        						break;
+                			}
                     	}
                     }else{
                     	//Warte auf weiter Ausgaben
                         Thread.sleep(100);
                     }
-                }			
+                    
+                    this.logLineDate("");
+                    Thread.sleep(20);													
+					boolean bError = this.getStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR);
+					if(bError) break;
+		
+					//Nach irgendeiner Ausgabe enden ist hier falsch, in einer abstrakten Klasse vielleicht richtig, quasi als Muster.
+					//if(this.getFlag("hasOutput")) break;
+					//System.out.println("FGLTEST03");					
+				}//end while
+					
+				this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED,true);
+				this.logLineDate(ReflectCodeZZZ.getPositionCurrent() + ": LogFileWatchRunner ended.");
+				
+              	
+                bReturn = true;
 			} catch (InterruptedException e) {				
 				e.printStackTrace();
 				

@@ -11,6 +11,7 @@ import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.crypt.code.Vigenere256ZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
+import basic.zBasic.util.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.log.watch.LogFileWatchRunnerZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalMessageSetZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalSetZZZ;
@@ -103,7 +104,8 @@ public class LogFileProcessMainZZZ implements IConstantZZZ{
 		    	//sFilterSentence = "local_port";
 		    }
 			
-			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence);
+		    String[]saFlag= {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
+			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence,saFlag);
 			LogFileWatchListenerExampleZZZ objListener = new LogFileWatchListenerExampleZZZ();
 			objWatcher.registerForStatusLocalEvent((IListenerObjectStatusLocalMessageSetZZZ)objListener);//Registriere den Monitor nun am ProcessWatchRunner
 			
@@ -116,12 +118,11 @@ public class LogFileProcessMainZZZ implements IConstantZZZ{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			TODOGOON20240120;
-//			IDEE: Flag StopWhenFound
-//			Und dann beide Threads registrieren
-//			und dann beide registerierte Objeteke benachrichtigen
-//			und wenn Flag in den Objekten StopWhenFound gesetzt ist.. anhalten.
+
+			TODOGOON20240127;
+//			IDEE: Flag END_ON_FILTERFOUND
+//			Und dann den CreatorThread an dem LogFileWatch thread registrieren.
+//			und wenn Flag im CreatorThread gesetzt ist, z.B. auch END_ON_FILTERFOUND gesetzt ist.. anhalten.
 			
 			//Test: Kann man so den lauf anhalten...
 			System.out.println("Versuche anzuhalten: LogFileCreateMockRunnerZZZ");
