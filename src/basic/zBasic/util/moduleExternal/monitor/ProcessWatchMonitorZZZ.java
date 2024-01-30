@@ -46,16 +46,19 @@ import use.openvpn.server.status.SenderObjectStatusLocalSetOVPN;
  *
  */
 //public class ServerThreadProcessWatchMonitorOVPN extends AbstractKernelUseObjectWithStatusListeningCascadedZZZ implements IServerThreadProcessWatchMonitorOVPN, Runnable, IListenerObjectStatusLocalSetOVPN, IEventBrokerStatusLocalSetUserOVPN{
-public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ implements IServerThreadProcessWatchMonitorOVPN, Runnable, IListenerObjectStatusLocalSetOVPN, IEventBrokerStatusLocalSetUserOVPN{
-	private IServerMainOVPN objServerMain = null;
-	private ISenderObjectStatusLocalSetOVPN objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
+public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ implements IProcessWatchMonitorZZZ, Runnable, IListenerObjectStatusLocalSetOVPN, IEventBrokerStatusLocalSetUserOVPN{
+	//private IServerMainOVPN objServerMain = null;
+	private ISenderObjectStatusLocalSetZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
 	
-	public ProcessWatchMonitorZZZ(IKernelZZZ objKernel, IServerMainOVPN objConfig, String[] saFlagControl) throws ExceptionZZZ{
+	//public ProcessWatchMonitorZZZ(IKernelZZZ objKernel, IServerMainOVPN objConfig, String[] saFlagControl) throws ExceptionZZZ{
+	public ProcessWatchMonitorZZZ(IKernelZZZ objKernel, String[] saFlagControl) throws ExceptionZZZ{
 		super(objKernel);
-		ServerMonitorRunnerNew_(objConfig, saFlagControl);
+		//ProcessWatchMonitorNew_(objConfig, saFlagControl);
+		ProcessWatchMonitorNew_(saFlagControl);
 	}
 
-private void ServerMonitorRunnerNew_(IServerMainOVPN objServerMain, String[] saFlagControl) throws ExceptionZZZ{
+//private void ProcessWatchMonitorNew_(IServerMainOVPN objServerMain, String[] saFlagControl) throws ExceptionZZZ{
+	private void ProcessWatchMonitorNew_(String[] saFlagControl) throws ExceptionZZZ{
 	main:{	
 		if(saFlagControl != null){
 			String stemp; boolean btemp;
@@ -70,7 +73,7 @@ private void ServerMonitorRunnerNew_(IServerMainOVPN objServerMain, String[] saF
 			if(this.getFlag("init")) break main;
 		}
 					
-		this.objServerMain = objServerMain;
+		//this.objServerMain = objServerMain;
 	}//END main
 }
 	/* (non-Javadoc)
@@ -80,11 +83,11 @@ private void ServerMonitorRunnerNew_(IServerMainOVPN objServerMain, String[] saF
 	public void run() {		
 		main:{
 		try {
-			if(this.getMainObject()==null) break main;
+			//if(this.getMainObject()==null) break main;
 				
-			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Trying to establish a new connection with every OVPN-configuration-file. Starting threads.";
+			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Trying to use an external thread.";
 			System.out.println(sLog);
-			this.getMainObject().logProtocolString(sLog);
+			this.logProtocolString(sLog);
 		
 			//NUN DAS BACKEND-AUFRUFEN. Merke, dass muss in einem eigenen Thread geschehen, damit das Icon anclickbar bleibt.								
 			//Merke: Wenn über das enum der setStatusLocal gemacht wird, dann kann über das enum auch weiteres uebergeben werden. Z.B. StatusMeldungen.				
