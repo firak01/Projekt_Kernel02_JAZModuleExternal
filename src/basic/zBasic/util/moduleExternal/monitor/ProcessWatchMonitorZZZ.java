@@ -17,27 +17,11 @@ import basic.zKernel.IKernelZZZ;
 import basic.zKernel.flag.EventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IEventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.process.IProcessWatchRunnerZZZ;
+import basic.zKernel.status.IEventBrokerStatusLocalSetUserZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalSetZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalSetZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalSetZZZ;
-import use.openvpn.IApplicationOVPN;
-import use.openvpn.client.process.ClientThreadVpnIpPingerOVPN;
-import use.openvpn.client.process.IClientThreadVpnIpPingerOVPN;
-import use.openvpn.server.process.ServerThreadProcessWatchMonitorOVPN;
-import use.openvpn.server.process.IServerThreadProcessWatchMonitorOVPN;
-import use.openvpn.server.process.IProcessWatchRunnerOVPN;
-import use.openvpn.server.process.IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL;
-import use.openvpn.server.IServerMainOVPN;
-import use.openvpn.server.ServerConfigStarterOVPN;
-import use.openvpn.server.ServerMainOVPN;
-import use.openvpn.server.status.EventObject4ProcessMonitorStatusLocalSetOVPN;
-import use.openvpn.server.status.IEventBrokerStatusLocalSetUserOVPN;
-import use.openvpn.server.status.IEventObject4ProcessWatchMonitorStatusLocalSetOVPN;
-import use.openvpn.server.status.IEventObjectStatusLocalSetOVPN;
-import use.openvpn.server.status.IListenerObjectStatusLocalSetOVPN;
-import use.openvpn.server.status.ISenderObjectStatusLocalSetOVPN;
-import use.openvpn.server.status.SenderObjectStatusLocalSetOVPN;
+
 
 /**This class watches the ServerMainZZZ-class and the ServerConnectionListenerRuner-objects.
  * This class runs in a seperate thread, so the TrayIcon stays "clickable", that means that clicking on the icon will be processed.
@@ -46,9 +30,11 @@ import use.openvpn.server.status.SenderObjectStatusLocalSetOVPN;
  *
  */
 //public class ServerThreadProcessWatchMonitorOVPN extends AbstractKernelUseObjectWithStatusListeningCascadedZZZ implements IServerThreadProcessWatchMonitorOVPN, Runnable, IListenerObjectStatusLocalSetOVPN, IEventBrokerStatusLocalSetUserOVPN{
-public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ implements IProcessWatchMonitorZZZ, Runnable, IListenerObjectStatusLocalSetOVPN, IEventBrokerStatusLocalSetUserOVPN{
+public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 	//private IServerMainOVPN objServerMain = null;
 	private ISenderObjectStatusLocalSetZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
+	
+	
 	
 	//public ProcessWatchMonitorZZZ(IKernelZZZ objKernel, IServerMainOVPN objConfig, String[] saFlagControl) throws ExceptionZZZ{
 	public ProcessWatchMonitorZZZ(IKernelZZZ objKernel, String[] saFlagControl) throws ExceptionZZZ{
@@ -94,28 +80,36 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ imple
 			//besser ueber eine geworfenen Event... und nicht direkt: this.objMain.setStatusLocal(ClientMainOVPN.STATUSLOCAL.ISCONNECTING, true);
 			//this.setStatusLocal(IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.ISSTARTNO, false);
 			//boolean bStartNewGoon = this.setStatusLocal(IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.ISSTARTING, true);
-			boolean bStatusLocalSet = this.switchStatusLocalForGroupTo(IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.ISSTARTING, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
+			boolean bStatusLocalSet = this.switchStatusLocalForGroupTo(IProcessWatchMonitorZZZ.STATUSLOCAL.ISSTARTING, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
 			if(!bStatusLocalSet) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Lokaler Status nicht gesetzt, aus Gruenden. Breche ab";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				break main;
 			}			
 			Thread.sleep(5000);
 					
+			TODOGOON:
+			//Vom Handling.. 
+			//Hole im Konsturktor die List der Processe
+			//Mache dann für jeden Process einen ProcessWatchrunnerZZZ
+			//und starte diesen einzeln...
 			
 			//Erst mal sehn, ob ueberhaupt was da ist.			
-			ArrayList<ServerConfigStarterOVPN> listaProcessStarter = objServerMain.getServerConfigStarterList();
+			//ArrayList<ServerConfigStarterOVPN> listaProcessStarter = objServerMain.getServerConfigStarterList();
 			
 			//Vorbereitend: Process bereitstellen, der die Ausgabe des gestarteten Processes ueberwacht.
 			//              Das funktioniert beim Client per direktem Standard.out.
 			//              Beim Server aber nur per Beobachten des Log Files
-			ProcessWatchRunnerOVPN[] runneraProcessOVPN = null;
-			boolean bUseLogFileWatch = this.getFlag(IServerThreadProcessWatchMonitorOVPN.FLAGZ.USE_LOGFILE_WATCHRUNNER); 
+			ProcessWatchRunnerZZZ[] runneraProcessOVPN = null;
+			boolean bUseLogFileWatch = this.getFlag(IProcessWatchMonitorZZZ.FLAGZ.USE_LOGFILE_WATCHRUNNER); 
 			if(bUseLogFileWatch) {
-				TODOGOON20240127;
+				//TODOGOON20240127;
 			}else {
-				runneraProcessOVPN = new ProcessWatchRunnerOVPN[listaProcessStarter.size()];
+				//Die Liste der Processe einfach abholen.
+				//TODOGOON20240131;//Sie muss vorher gefüllt worden sein.
+				
+				runneraProcessOVPN = this.getProcessList(); new ProcessWatchRunnerZZZ[listaProcessStarter.size()];
 			}
 			//Nun fuer alle in ServerMain bereitgestellten Konfigurationen einen OpenVPN.exe - Process bereitstellen.
 			//Den passenden WatchRunner starten den Monitor Prozess daran registrieren.				
@@ -221,16 +215,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ imple
 	
 	}//END run
 	
-	@Override
-	public void setMainObject(IServerMainOVPN objClientBackend){
-		this.objServerMain = (ServerMainOVPN) objClientBackend;
-	}
-	
-	@Override
-	public IServerMainOVPN getMainObject(){
-		return this.objServerMain;
-	}
-	
+			
 	//### Getter / Setter
 		
 	/**
@@ -264,174 +249,9 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ imple
 	
 
 	//###### FLAGS
-	/* @see basic.zBasic.IFlagZZZ#getFlagZ(java.lang.String)
-	 * 	 Weitere Voraussetzungen:
-	 * - Public Default Konstruktor der Klasse, damit die Klasse instanziiert werden kann.
-	 * - Innere Klassen muessen auch public deklariert werden.(non-Javadoc)
-	 */
-	public boolean getFlag(String sFlagName) {
-		boolean bFunction = false;
-		main:{
-			if(StringZZZ.isEmpty(sFlagName)) break main;
-										
-			HashMap<String, Boolean> hmFlag = this.getHashMapFlag();
-			Boolean objBoolean = hmFlag.get(sFlagName.toUpperCase());
-			if(objBoolean==null){
-				bFunction = false;
-			}else{
-				bFunction = objBoolean.booleanValue();
-			}
-							
-		}	// end main:
-		
-		return bFunction;	
-	}
 	
-	//ALTE VERSION
-	/* (non-Javadoc)
-	@see zzzKernel.basic.KernelObjectZZZ#getFlag(java.lang.String)
-	Flags used: 
-	- connectionrunnerstarted	 */
-//	public boolean getFlag(String sFlagName){
-//		boolean bFunction = false;
-//		main:{
-//			if(StringZZZ.isEmpty(sFlagName)) break main;
-//			bFunction = super.getFlag(sFlagName);
-//			if(bFunction==true) break main;
-//		
-			//getting the flags of this object
-//			String stemp = sFlagName.toLowerCase();
-//			if(stemp.equals("connectionrunnerstarted")){
-//				bFunction = bFlagConnectionRunnerStarted;
-//				break main;
-//			}		
-//		}//end main:
-//		return bFunction;
-//	}
 
-/** DIESE METHODE MUSS IN ALLEN KLASSEN VORHANDEN SEIN - über Vererbung -, DIE IHRE FLAGS SETZEN WOLLEN
- * Weitere Voraussetzungen:
- * - Public Default Konstruktor der Klasse, damit die Klasse instanziiert werden kann.
- * - Innere Klassen müssen auch public deklariert werden.
- * @param objClassParent
- * @param sFlagName
- * @param bFlagValue
- * @return
- * lindhaueradmin, 23.07.2013
- */
-@Override
-public boolean setFlag(String sFlagName, boolean bFlagValue) throws ExceptionZZZ {
-	boolean bFunction = false;
-	main:{
-		if(StringZZZ.isEmpty(sFlagName)) {
-			bFunction = true;
-			break main;
-		}
-					
-		bFunction = this.proofFlagExists(sFlagName);															
-		if(bFunction == true){
-			
-			//Setze das Flag nun in die HashMap
-			HashMap<String, Boolean> hmFlag = this.getHashMapFlag();
-			hmFlag.put(sFlagName.toUpperCase(), bFlagValue);								
-			
-			//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
-			//Dann erzeuge den Event und feuer ihn ab.
-			if(this.objEventFlagZBroker!=null) {
-				IEventObjectFlagZsetZZZ event = new EventObjectFlagZsetZZZ(this,1,sFlagName.toUpperCase(), bFlagValue);
-				this.objEventFlagZBroker.fireEvent(event);
-			}
-			
-			bFunction = true;								
-		}										
-	}	// end main:
-	
-	return bFunction;	
-}
-
-//ALTE VERSION
-	/**
-	 * @see zzzKernel.basic.KernelUseObjectZZZ#setFlag(java.lang.String, boolean)
-	 * @param sFlagName
-	 * Flags used:<CR>
-	 	- ConnectionRunnerStarted.
-	 * @throws ExceptionZZZ 
-	 */
-//	public boolean setFlag(String sFlagName, boolean bFlagValue) throws ExceptionZZZ{
-//		boolean bFunction = false;
-//		main:{			
-//			if(StringZZZ.isEmpty(sFlagName)) break main;
-//			bFunction = super.setFlag(sFlagName, bFlagValue);
-//			if(bFunction==true) break main;
-//			
-			//setting the flags of this object
-//			String stemp = sFlagName.toLowerCase();
-//			if(stemp.equals("connectionrunnerstarted")){
-//				bFlagConnectionRunnerStarted = bFlagValue;
-//				bFunction = true;
-//				break main;
-//	
-//			}
-//		}//end main:
-//		return bFunction;
-//	}
-//	
-	
-		@Override
-		public boolean getFlag(IServerThreadProcessWatchMonitorOVPN.FLAGZ objEnumFlag) {
-			return this.getFlag(objEnumFlag.name());
-		}
-		@Override
-		public boolean setFlag(IServerThreadProcessWatchMonitorOVPN.FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
-			return this.setFlag(objEnumFlag.name(), bFlagValue);
-		}
-		
-		@Override
-		public boolean[] setFlag(IServerThreadProcessWatchMonitorOVPN.FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
-			boolean[] baReturn=null;
-			main:{
-				if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
-					baReturn = new boolean[objaEnumFlag.length];
-					int iCounter=-1;
-					for(IServerThreadProcessWatchMonitorOVPN.FLAGZ objEnumFlag:objaEnumFlag) {
-						iCounter++;
-						boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
-						baReturn[iCounter]=bReturn;
-					}
-					
-					//!!! Ein mögliches init-Flag ist beim direkten setzen der Flags unlogisch.
-					//    Es wird entfernt.
-					this.setFlag(IFlagZUserZZZ.FLAGZ.INIT, false);
-				}
-			}//end main:
-			return baReturn;
-		}
-		
-		@Override
-		public boolean proofFlagExists(IServerThreadProcessWatchMonitorOVPN.FLAGZ objEnumFlag) throws ExceptionZZZ {
-			return this.proofFlagExists(objEnumFlag.name());
-		}	
-		
-		@Override
-		public boolean proofFlagSetBefore(IServerThreadProcessWatchMonitorOVPN.FLAGZ objEnumFlag) throws ExceptionZZZ {
-			return this.proofFlagSetBefore(objEnumFlag.name());
-		}
-
-		
-		
-
-		//### aus IEventBrokerStatusLocalSetUserOVPN
-		@Override
-		public void registerForStatusLocalEvent(IListenerObjectStatusLocalSetOVPN objEventListener)throws ExceptionZZZ {
-			this.getSenderStatusLocalUsed().addListenerObjectStatusLocalSet(objEventListener);		
-		}
-
-		@Override
-		public void unregisterForStatusLocalEvent(IListenerObjectStatusLocalSetOVPN objEventListener) throws ExceptionZZZ {
-			this.getSenderStatusLocalUsed().removeListenerObjectStatusLocalSet(objEventListener);;
-		}
-	
-		
+	//###### STATUS		
 	@Override
 	public boolean isStatusLocalRelevant(IEnumSetMappedStatusZZZ objEnumStatusIn) throws ExceptionZZZ {
 		boolean bReturn = false;
@@ -447,36 +267,13 @@ public boolean setFlag(String sFlagName, boolean bFlagValue) throws ExceptionZZZ
 //				break main;
 //		}	
 			
-			//Fuer das Main-Objekt ist erst einmal jeder Status relevant
+			//Erst einmal ist jeder Status relevant
 			bReturn = true;
 		}//end main:
 		return bReturn;
 	}
 	
-	public boolean getStatusLocal(Enum objEnumStatusIn) throws ExceptionZZZ {
-		boolean bFunction = false;
-		main:{
-			if(objEnumStatusIn==null) {
-				break main;
-			}
-			
-			//Merke: Bei einer anderen Klasse, die dieses DesingPattern nutzt, befindet sich der STATUSLOCAL in einer anderen Klasse
-			IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL enumStatus = (IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL) objEnumStatusIn;
-			String sStatusName = enumStatus.name();
-			if(StringZZZ.isEmpty(sStatusName)) break main;
-										
-			HashMap<String, Boolean> hmFlag = this.getHashMapStatusLocal();
-			Boolean objBoolean = hmFlag.get(sStatusName.toUpperCase());
-			if(objBoolean==null){
-				bFunction = false;
-			}else{
-				bFunction = objBoolean.booleanValue();
-			}
-							
-		}	// end main:
-		
-		return bFunction;	
-	}
+	
 	
 //	//### aus ISenderObjectStatusLocalSetUserOVPN
 //	@Override
@@ -490,22 +287,7 @@ public boolean setFlag(String sFlagName, boolean bFlagValue) throws ExceptionZZZ
 //	}
 	
 	
-	//####### aus ISenderObjectStatusLocalSetUserOVPN
-	@Override
-	public ISenderObjectStatusLocalSetOVPN getSenderStatusLocalUsed() throws ExceptionZZZ {
-		if(this.objEventStatusLocalBroker==null) {
-			//++++++++++++++++++++++++++++++
-			//Nun geht es darum den Sender fuer Aenderungen am Status zu erstellen, der dann registrierte Objekte ueber Aenderung von Flags informiert
-			ISenderObjectStatusLocalSetOVPN objSenderStatusLocal = new SenderObjectStatusLocalSetOVPN();
-			this.objEventStatusLocalBroker = objSenderStatusLocal;
-		}
-		return this.objEventStatusLocalBroker;
-	}
-
-	@Override
-	public void setSenderStatusLocalUsed(ISenderObjectStatusLocalSetOVPN objEventSender) {
-		this.objEventStatusLocalBroker = objEventSender;
-	}
+	
 	
 	
 	

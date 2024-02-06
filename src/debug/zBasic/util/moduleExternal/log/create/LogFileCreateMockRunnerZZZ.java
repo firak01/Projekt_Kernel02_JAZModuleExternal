@@ -1,7 +1,6 @@
-package debug.zBasic.util.log.create;
+package debug.zBasic.util.moduleExternal.log.create;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,26 +9,36 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
 import org.apache.commons.io.IOUtils;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramRunnableWithStatusZZZ;
-import basic.zBasic.component.AbstractProgramWithFlagRunnableZZZ;
-import basic.zBasic.component.AbstractProgramWithFlagZZZ;
+import basic.zBasic.component.AbstractProgramWithFlagRunnableOnStatusMessageListeningZZZ;
 import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
-import basic.zBasic.util.log.watch.ILogFileWatchRunnerZZZ;
-import basic.zKernel.status.IEventBrokerStatusLocalSetUserZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalSetZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalSetZZZ;
+import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
+import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.status.IEventObjectStatusBasicZZZ;
+import basic.zKernel.status.IEventObjectStatusLocalMessageReactZZZ;
+import basic.zKernel.status.IEventObjectStatusLocalMessageSetZZZ;
+import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
+import basic.zKernel.status.IListenerObjectStatusLocalMessageReactZZZ;
 
-public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableZZZ implements ILogFileCreateRunnerZZZ {
+/**Diese Klasse erzeugt laaangsam, Zeile fuer Zeile eine Log-Datei.
+ * Der Inhalt der Log-Datei kommt aus einer anderen Dummy-Log-Datei, die fest im Projekt als Beispiel vorliegt.
+ * 
+ * Dieser Runner spielt zusammen mit einem Runner, der die Log Datei Zeile für Zeile ausliest 
+ * und dann auf bestimmte Eintraeg filtert.
+ * 
+ * 
+ * @author fl86kyvo
+ *
+ */
+public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableOnStatusMessageListeningZZZ implements ILogFileCreateRunnerZZZ {
 	private static final long serialVersionUID = 6586079955658760005L;
 	private File objSourceFile = null;
 	private File objLogFile=null;
@@ -40,18 +49,39 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableZ
 
 	public LogFileCreateMockRunnerZZZ(File objSourceFile, File objLogFile) throws ExceptionZZZ {
 		super();	
-		LogFileCreateMockRunnerNew_(null, objSourceFile, objLogFile);
+		LogFileCreateMockRunnerNew_(null, objSourceFile, objLogFile, null);
 	}
 	
-	private boolean LogFileCreateMockRunnerNew_(IModuleZZZ objModule, File objSourceFile, File objLogFile) {
+	public LogFileCreateMockRunnerZZZ(File objSourceFile, File objLogFile, String[] saFlag) throws ExceptionZZZ {
+		super();	
+		LogFileCreateMockRunnerNew_(null, objSourceFile, objLogFile, saFlag);
+	}
+		
+	
+	private boolean LogFileCreateMockRunnerNew_(IModuleZZZ objModule, File objSourceFile, File objLogFile, String[] saFlagControl) throws ExceptionZZZ {
 		boolean bReturn = false;
-		main:{
-			this.objSourceFile = objSourceFile;
+		main:{			
+			if(saFlagControl != null){
+				String stemp; boolean btemp;
+				for(int iCount = 0;iCount<=saFlagControl.length-1;iCount++){
+					stemp = saFlagControl[iCount];
+					btemp = setFlag(stemp, true);
+					if(btemp==false){ 								   
+						   ExceptionZZZ ez = new ExceptionZZZ( stemp, IFlagZUserZZZ.iERROR_FLAG_UNAVAILABLE, this, ReflectCodeZZZ.getMethodCurrentName()); 						
+						   throw ez;		 
+					}
+				}
+				if(this.getFlag("init")) break main;
+			}
+			
 			this.objLogFile = objLogFile;
 			this.objModule = objModule;
+			this.objLogFile = objLogFile;
 		}//end main:
 		return bReturn;
 	}
+	
+	
 
 	//#### GETTER / SETTER
 	@Override
@@ -81,19 +111,18 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableZ
 			
 			//Lies die Datei Source Datei Zeile für Zeile aus.
 			//und fülle damit die Ziel Datei
-			bReturn = this.startServerProcessLogCreator();
+			bReturn = this.startLogFileCreateMockRunner();
 
 		}//end main:
 		return bReturn;
 	}
 	
 	
-	/** Das klappt... man kann das LogFile auslesen,
-	 *  welches immer weiter neu vom OVPN-Server gefüllt wird.
+	/** Ein Dummy-Logfile auslesen und langsam(!) Zeile fuer Zeile ausgeben
 	 * @return
 	 * @author Fritz Lindhauer, 10.12.2023, 16:04:55
 	 */
-	public boolean startServerProcessLogCreator() throws ExceptionZZZ{
+	public boolean startLogFileCreateMockRunner() throws ExceptionZZZ{
 		boolean bReturn= false;
 		main:{			
 			BufferedReader br=null;
@@ -210,5 +239,73 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableZ
 	@Override
 	public boolean proofFlagSetBefore(ILogFileCreateRunnerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
 		return this.proofFlagExists(objEnumFlag.name());
-	}		
+	}
+
+	//### aus IListenerObjectStatusLocalMessageReactZZZ
+	//### Reaktion darauf, wenn ein Event aufgefangen wurde
+	@Override
+	public boolean reactOnStatusLocalEvent(IEventObjectStatusBasicZZZ eventStatusLocal) throws ExceptionZZZ {
+		boolean bReturn = false;
+		String sLog=null;
+		
+		main:{
+			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
+			this.logProtocolString(sLog);
+			
+			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageReactZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
+				IEventObjectStatusLocalMessageReactZZZ event = (IEventObjectStatusLocalMessageReactZZZ) eventStatusLocal;
+				boolean bStatusValue = event.getStatusValue();
+				if(bStatusValue!=true) break main;
+			}
+			
+			
+			if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+				this.logProtocolString(sLog);
+				
+				this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
+			}
+		}//end main:
+		return bReturn;	
+	}
+
+	@Override
+	public boolean isStatusLocalDifferent(String sStatusString, boolean bStatusValue) throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean isEventRelevant2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusLocalReact) throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusLocalReact) throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean isEventRelevantByStatusLocal2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusLocalReact) throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusLocalReact) throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean isEventRelevant(IEventObjectStatusBasicZZZ eventStatusBasic) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			
+			if(!this.isEventRelevant2ChangeStatusLocal(eventStatusBasic)) break main;
+			if(!this.isEventRelevantByClass2ChangeStatusLocal(eventStatusBasic)) break main;
+			if(!this.isEventRelevantByStatusLocal2ChangeStatusLocal(eventStatusBasic)) break main;
+			if(!this.isEventRelevantByStatusLocalValue2ChangeStatusLocal(eventStatusBasic)) break main;
+			
+			bReturn = true;
+		}//end main:
+		return bReturn;
+	}
 }

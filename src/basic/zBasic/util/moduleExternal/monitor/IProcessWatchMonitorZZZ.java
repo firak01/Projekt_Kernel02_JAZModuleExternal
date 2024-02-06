@@ -1,6 +1,7 @@
 package basic.zBasic.util.moduleExternal.monitor;
 
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 
 import basic.zBasic.ExceptionZZZ;
@@ -17,9 +18,13 @@ public interface IProcessWatchMonitorZZZ {
 	boolean proofFlagExists(FLAGZ objEnumFlag) throws ExceptionZZZ;
 	boolean proofFlagSetBefore(FLAGZ objEnumFlag) throws ExceptionZZZ;
 	
-	
-	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	
+	//Methoden des Monitors
+	public ArrayList<Process>getProcessList();
+	public void setProcessList(ArrayList<Process>listaProcess);
+	
+	
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//Die StatusId für Stati, aus dieser Klasse selbst. Nicht die Stati der anderen Klassen.

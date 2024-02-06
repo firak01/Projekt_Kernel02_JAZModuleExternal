@@ -1,4 +1,4 @@
-package basic.zBasic.util.log.watch;
+package basic.zBasic.util.moduleExternal.log.watch;
 
 import java.io.File;
 import java.util.EnumSet;
@@ -13,10 +13,10 @@ public interface ILogFileWatchRunnerZZZ {
 	public void setLineFilter(String sLineFilter);
 	
 	//##############################################################	
-	public enum FLAGZ{
+	
+public enum FLAGZ{
 		DUMMY,END_ON_FILTERFOUND
 	}
-
 	boolean getFlag(FLAGZ objEnumFlag);
 	boolean setFlag(FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ;
 	boolean[] setFlag(FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ;

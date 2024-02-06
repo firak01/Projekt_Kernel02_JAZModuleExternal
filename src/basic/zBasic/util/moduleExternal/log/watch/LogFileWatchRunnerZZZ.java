@@ -1,4 +1,4 @@
-package basic.zBasic.util.log.watch;
+package basic.zBasic.util.moduleExternal.log.watch;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramRunnableWithStatusZZZ;
+import basic.zBasic.component.AbstractProgramRunnableWithStatusMessageZZZ;
 import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
@@ -21,49 +21,50 @@ import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.status.EventObject4LogFileWatchRunnerStatusLocalSetZZZ;
 import basic.zKernel.status.IEventBrokerStatusLocalMessageSetUserZZZ;
+import basic.zKernel.status.IEventObject4LogFileWatchRunnerStatusLocalSetZZZ;
+import basic.zKernel.status.IEventObjectStatusBasicZZZ;
+import basic.zKernel.status.IEventObjectStatusLocalMessageSetZZZ;
+import basic.zKernel.status.IEventObjectStatusLocalSetZZZ;
+import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalMessageSetZZZ;
+import basic.zKernel.status.ISenderObjectStatusBasicZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalMessageSetZZZ;
 import basic.zKernel.status.KernelSenderObjectStatusLocalMessageSetZZZ;
+import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
 
-public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ implements ILogFileWatchRunnerZZZ, IEventBrokerStatusLocalMessageSetUserZZZ{
+public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	private static final long serialVersionUID = 6586079955658760005L;
-	private File objLogFile=null;
-	private String sLineFilter = null;
-	
-	//TODOGOON:
-	//Also: Gib dem LogFileWatchRunner einen Status mit.
-	//      Lass andere Objekte an diesem Runner sich registrieren
-	//      Der Runner wirft bei Änderung des Status (z.B. "Suchtext gefunden") einen entsprechenden Event.
-	
+		
 	//analog zu... ProcessWatchRunnerOVPN
 	//Merke: der LogFileWatchRunner selbst wird dann irgendwann mal für die Server-Version im ProcessWatchRunnerOVPN genutzt werden.
 	//       Momentan wird dort nur das Log der "StarterBatch" ausgwertet. Auch hinsichtlich von "hasOutput". Das ist aber nicht korrekt.
 	
 	//TODOGOON20240114: Baue zuerst die Status-Struktur fuer diese Klasse auf.
-	private ISenderObjectStatusLocalMessageSetZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
-	
-	
+	//private ISenderObjectStatusLocalMessageSetZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
+	// ISenderObjectStatusBasicZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
+		
 	public LogFileWatchRunnerZZZ() throws ExceptionZZZ {
 		super();		
 	}
 
 	public LogFileWatchRunnerZZZ(File objLogFile) throws ExceptionZZZ {
-		super();	
-		LogFileWatchRunnerNew_(null, objLogFile, null, null);
+		super(objLogFile);	
+		LogFileWatchRunnerNew_(null);
 	}
 	
 	public LogFileWatchRunnerZZZ(File objLogFile, String sFilterSentence) throws ExceptionZZZ {
-		super();	
-		LogFileWatchRunnerNew_(null, objLogFile, sFilterSentence, null);
+		super(objLogFile, sFilterSentence);	
+		LogFileWatchRunnerNew_(null);
 	}
 	
 	public LogFileWatchRunnerZZZ(File objLogFile, String sFilterSentence, String[] saFlag) throws ExceptionZZZ {
-		super();	
-		LogFileWatchRunnerNew_(null, objLogFile, sFilterSentence, saFlag);
+		super(objLogFile, sFilterSentence);	
+		LogFileWatchRunnerNew_(saFlag);
 	}
 	
-	private boolean LogFileWatchRunnerNew_(IModuleZZZ objModule, File objLogFile, String sFilterSentence, String[] saFlagControl) throws ExceptionZZZ {
+	private boolean LogFileWatchRunnerNew_(String[] saFlagControl) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{			
 			if(saFlagControl != null){
@@ -79,9 +80,7 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ 
 				if(this.getFlag("init")) break main;
 			}
 			
-			this.objLogFile = objLogFile;
-			this.objModule = objModule;
-			this.sLineFilter = sFilterSentence;
+
 		}//end main:
 		return bReturn;
 	}
@@ -180,6 +179,9 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ 
                     		IEventObject4LogFileWatchRunnerStatusLocalSetZZZ event = new EventObject4LogFileWatchRunnerStatusLocalSetZZZ(this,1,ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, true);			                			
                 			this.getSenderStatusLocalUsed().fireEvent(event);
                 			
+                			//Das Anhalten wird dann im gemeinsamen Listener gemacht, an dem der WatchRunner registriert ist.
+                			//bzw. in der entsprechenden reaktions-Methode in dieser Klasse.....
+                			
                 			if(this.getFlag(ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
                 				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
         						this.logLineDate(sLog);
@@ -268,30 +270,37 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ 
 	//### aus IEventBrokerStatusLocalSetUserZZZ
 	@Override
 	public ISenderObjectStatusLocalMessageSetZZZ getSenderStatusLocalUsed() throws ExceptionZZZ {
+	//public ISenderObjectStatusBasicZZZ getSenderStatusLocalUsed() throws ExceptionZZZ {
 		if(this.objEventStatusLocalBroker==null) {
 			//++++++++++++++++++++++++++++++
 			//Nun geht es darum den Sender fuer Aenderungen an den Flags zu erstellen, der dann registrierte Objekte ueber Aenderung von Flags informiert
 			ISenderObjectStatusLocalMessageSetZZZ objSenderStatusLocal = new KernelSenderObjectStatusLocalMessageSetZZZ();			
 			this.objEventStatusLocalBroker = objSenderStatusLocal;
 		}		
+		//return (ISenderObjectStatusLocalMessageSetZZZ) this.objEventStatusLocalBroker;
 		return this.objEventStatusLocalBroker;
 	}
 
 	@Override
 	public void setSenderStatusLocalUsed(ISenderObjectStatusLocalMessageSetZZZ objEventSender) {
+	//public void setSenderStatusLocalUsed(ISenderObjectStatusBasicZZZ objEventSender) {
+		//this.objEventStatusLocalBroker = (ISenderObjectStatusLocalMessageSetZZZ) objEventSender;
 		this.objEventStatusLocalBroker = objEventSender;
 	}
-
+	
+	
 	@Override
-	public void registerForStatusLocalEvent(IListenerObjectStatusLocalMessageSetZZZ objEventListener) throws ExceptionZZZ {
-		this.getSenderStatusLocalUsed().addListenerObjectStatusLocalSet(objEventListener);
+	//public void registerForStatusLocalEvent(IListenerObjectStatusLocalMessageSetZZZ objEventListener) throws ExceptionZZZ {
+	public void registerForStatusLocalEvent(IListenerObjectStatusBasicZZZ objEventListener) throws ExceptionZZZ {
+		this.getSenderStatusLocalUsed().addListenerObject(objEventListener);
 	}
 
 	@Override
-	public void unregisterForStatusLocalEvent(IListenerObjectStatusLocalMessageSetZZZ objEventListener) throws ExceptionZZZ {
-		this.getSenderStatusLocalUsed().removeListenerObjectStatusLocalSet(objEventListener);
+	//public void unregisterForStatusLocalEvent(IListenerObjectStatusLocalMessageSetZZZ objEventListener) throws ExceptionZZZ {
+	public void unregisterForStatusLocalEvent(IListenerObjectStatusBasicZZZ objEventListener) throws ExceptionZZZ {
+		this.getSenderStatusLocalUsed().removeListenerObject(objEventListener);
 	}
-
+	
 	//####### aus IStatusLocalUserZZZ
 	/* (non-Javadoc)
 	 * @see basic.zKernel.status.IStatusLocalUserZZZ#getStatusLocal(java.lang.Enum)
@@ -319,12 +328,6 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ 
 		}	// end main:
 		
 		return bFunction;	
-	}
-
-	@Override
-	public IEnumSetMappedStatusZZZ getStatusLocalEnumPrevious(int iIndexStepsBack) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -409,4 +412,77 @@ public class LogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusZZZ 
 		}//end main:
 		return bReturn;
 	}
+
+	//### Aus IListenerObjectStatusBasicZZZ
+	//### Reaktion darauf, wenn ein Event aufgefangen wurde
+	@Override
+	public boolean reactOnStatusLocalEvent(IEventObjectStatusBasicZZZ eventStatusLocal) throws ExceptionZZZ {
+		boolean bReturn = false;
+		String sLog=null;
+		
+		main:{
+			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
+			this.logProtocolString(sLog);
+			
+			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageSetZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
+				IEventObjectStatusLocalMessageSetZZZ event = (IEventObjectStatusLocalMessageSetZZZ) eventStatusLocal;
+				boolean bStatusValue = event.getStatusValue();
+				if(bStatusValue!=true) break main;
+				
+				
+			}
+			
+			if(this.getFlag(ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+				this.logProtocolString(sLog);
+				
+				this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
+			}
+			
+			bReturn = true;
+		}//end main:
+		return bReturn;		
+	}
+
+	@Override
+	public boolean isEventRelevant(IEventObjectStatusBasicZZZ eventStatusBasic) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			
+			if(!this.isEventRelevant2ChangeStatusLocal(eventStatusBasic)) break main;
+			if(!this.isEventRelevantByClass2ChangeStatusLocal(eventStatusBasic)) break main;
+			if(!this.isEventRelevantByStatusLocal2ChangeStatusLocal(eventStatusBasic)) break main;
+			if(!this.isEventRelevantByStatusLocalValue2ChangeStatusLocal(eventStatusBasic)) break main;
+			
+			bReturn = true;
+		}//end main:
+		return bReturn;
+	}
+	
+	@Override
+	public boolean isStatusLocalDifferent(String sStatusString, boolean bStatusValue) throws ExceptionZZZ {
+		return true;
+	}
+	
+	@Override
+	public boolean isEventRelevant2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusLocalSet) throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusLocalSet) throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean isEventRelevantByStatusLocal2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusLocalSet) throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusLocalSet) throws ExceptionZZZ {
+		return true;
+	}
+
+	
 }

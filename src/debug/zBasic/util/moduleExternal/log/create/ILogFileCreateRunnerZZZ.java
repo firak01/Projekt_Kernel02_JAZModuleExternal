@@ -1,9 +1,9 @@
-package debug.zBasic.util.log.create;
+package debug.zBasic.util.moduleExternal.log.create;
 
 import java.io.File;
 
 import basic.zBasic.ExceptionZZZ;
-import basic.zBasic.util.log.watch.ILogFileWatchRunnerZZZ.FLAGZ;
+import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.FLAGZ;
 
 public interface ILogFileCreateRunnerZZZ {
 	public File getSourceFile();
@@ -15,7 +15,7 @@ public interface ILogFileCreateRunnerZZZ {
 	
 	//##############################################################	
 	public enum FLAGZ{
-		DUMMY
+		DUMMY,END_ON_FILTERFOUND
 	}
 
 	boolean getFlag(FLAGZ objEnumFlag);
