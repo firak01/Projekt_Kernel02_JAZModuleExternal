@@ -48,6 +48,11 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	public LogFileWatchRunnerZZZ() throws ExceptionZZZ {
 		super();		
 	}
+	
+	public LogFileWatchRunnerZZZ(String[] saFlag) throws ExceptionZZZ {
+		super();	
+		LogFileWatchRunnerNew_(saFlag);
+	}
 
 	public LogFileWatchRunnerZZZ(File objLogFile) throws ExceptionZZZ {
 		super(objLogFile);	

@@ -17,10 +17,10 @@ import basic.zKernel.status.IListenerObjectStatusLocalMessageSetZZZ;
  * @author fl86kyvo
  *
  */
-public class LogFileWatchListenerMonitorExampleZZZ extends AbstractObjectZZZ implements IListenerObjectStatusLocalMessageSetZZZ, IListenerObjectStatusLocalMessageReactZZZ{
+public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ implements IListenerObjectStatusLocalMessageSetZZZ, IListenerObjectStatusLocalMessageReactZZZ{
 	private static final long serialVersionUID = -2338056174362726426L;
 
-	public LogFileWatchListenerMonitorExampleZZZ() throws ExceptionZZZ {
+	public LogFileWatchListener_RunnerExampleZZZ() throws ExceptionZZZ {
 		super();
 	}
 	

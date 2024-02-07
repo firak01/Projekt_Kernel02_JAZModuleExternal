@@ -37,7 +37,7 @@ import debug.zBasic.util.moduleExternal.log.create.LogFileCreateMockRunnerZZZ;
  * @author fl86kyvo
  *
  */
-public class LogFileWatch_1_DirectProcessStyle_MainZZZ implements IConstantZZZ{
+public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 
 	public static void main(String[] args) {
 			main:{
@@ -53,17 +53,16 @@ public class LogFileWatch_1_DirectProcessStyle_MainZZZ implements IConstantZZZ{
 			System.out.println("#################################################################");
 			System.out.println("### 1. Starte einen Thread, der Zeilen aus einer Text-        ###");
 			System.out.println("###    datei in eine andere, neue schreibt und diese          ###");
-			System.out.println("###    allmählich n"
-					+ "füllt. (LogFileCreateMockRunner)            ###");
+			System.out.println("###    allmählich füllt. (LogFileCreateMockRunner)            ###");
+			System.out.println("###    Dieser registriert sich am LogFileWatchRunner.         ###");
 			System.out.println("### 2. Starte einen weiteren Thread, der die neu gefuellte    ###");
 			System.out.println("###    Datei beobachtet. (LogFileWatchRunner)                 ###");
 			System.out.println("###    - Gib die neuen Zeilen aus.                            ###");
 			System.out.println("###    - Reagiere auf die Ausgabe eines bestimmten Texts.     ###");
 			System.out.println("###    - Wirf dann einen Event                                ###");
-			System.out.println("### 3. Verwende den LogFileWatchListener,                     ###");
-			System.out.println("###    der auf den Event aus Schritt 2 hoert und reagiert.    ###");
-			System.out.println("###    Dieser Listener ist kein eigener Thread,               ###");
-			System.out.println("###    sondern lediglich an dem LogFileWatchRunner registiert.###");
+			System.out.println("### 3. Starte einen weiteren Thread, der die neu gefuellte    ###");
+			System.out.println("###    (LogFileWatchListener_RunnerExampleZZZ),               ###");
+			System.out.println("###    der einfach nur am LogFileWatchRunner registiert ist   ###");
 			System.out.println("#################################################################");
 		
 											
@@ -78,7 +77,7 @@ public class LogFileWatch_1_DirectProcessStyle_MainZZZ implements IConstantZZZ{
 			//Erstelle dieses Verzeichnis, falls noch nicht vorhanden
 			boolean bCreated = FileEasyZZZ.createDirectory(sLogDirectory);
 			if(!bCreated) {
-				ExceptionZZZ ez = new ExceptionZZZ("unable to create directory: '" + sLogDirectory + "'.", iERROR_RUNTIME, LogFileWatch_1_DirectProcessStyle_MainZZZ.class, ReflectCodeZZZ.getPositionCurrent());
+				ExceptionZZZ ez = new ExceptionZZZ("unable to create directory: '" + sLogDirectory + "'.", iERROR_RUNTIME, LogFileWatch_1_LogWatchDirectStyle_MainZZZ.class, ReflectCodeZZZ.getPositionCurrent());
 				throw ez;
 			}
 			
@@ -103,8 +102,8 @@ public class LogFileWatch_1_DirectProcessStyle_MainZZZ implements IConstantZZZ{
 		    }
 		    File objLogFile = new File(sFilePath);
 			
-			//0. Schritt: Bereite den Listener vor, der als Beispiel für einen "Monitor" fungiert.
-		    LogFileWatchListenerMonitorExampleZZZ objListener = new LogFileWatchListenerMonitorExampleZZZ();
+			//0. Schritt: Bereite den Listener vor, der als Beispiel für einen einfachen Listener fungiert.
+		    LogFileWatchListener_RunnerExampleZZZ objListener = new LogFileWatchListener_RunnerExampleZZZ();
 			
 		   
 			//1. Schritt: Mache den Log Creator

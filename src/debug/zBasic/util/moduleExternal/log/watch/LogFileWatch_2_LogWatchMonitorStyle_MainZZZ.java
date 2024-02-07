@@ -20,7 +20,9 @@ import basic.zKernel.status.IListenerObjectStatusLocalSetZZZ;
 import basic.zKernel.status.ISenderObjectStatusBasicZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalMessageReactZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalMessageSetZZZ;
+import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerOnMonitorListeningZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
+import debug.zBasic.util.moduleExternal.log.create.LogFileCreateMockRunnerOnMonitorListeningZZZ;
 import debug.zBasic.util.moduleExternal.log.create.LogFileCreateMockRunnerZZZ;
 
 /** In dieser Klasse wird ein LogFile von dem einen Thread erzeugt 
@@ -44,7 +46,7 @@ import debug.zBasic.util.moduleExternal.log.create.LogFileCreateMockRunnerZZZ;
  * @author fl86kyvo
  *
  */
-public class LogFileWatch_2_MonitorProcessStyle_MainZZZ implements IConstantZZZ{
+public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ{
 
 	public static void main(String[] args) {
 			main:{
@@ -57,21 +59,24 @@ public class LogFileWatch_2_MonitorProcessStyle_MainZZZ implements IConstantZZZ{
 			              //  Auflistungszeichen <li>
 			 
 			//Merke: Consolencode aus: JAZKernel\\tryout\\basic\\zBasic\\util\\crypt\\decrypt\\Vig_Decode256ZZZmain.java
-			System.out.println("#################################################################");
-			System.out.println("### 1. Starte einen Thread, der Zeilen aus einer Text-        ###");
-			System.out.println("###    datei in eine andere, neue schreibt und diese          ###");
-			System.out.println("###    allmählich n"
-					+ "füllt. (LogFileCreateMockRunner)            ###");
-			System.out.println("### 2. Starte einen weiteren Thread, der die neu gefuellte    ###");
-			System.out.println("###    Datei beobachtet. (LogFileWatchRunner)                 ###");
-			System.out.println("###    - Gib die neuen Zeilen aus.                            ###");
-			System.out.println("###    - Reagiere auf die Ausgabe eines bestimmten Texts.     ###");
-			System.out.println("###    - Wirf dann einen Event                                ###");
-			System.out.println("### 3. Verwende den LogFileWatchListener,                     ###");
-			System.out.println("###    der auf den Event aus Schritt 2 hoert und reagiert.    ###");
-			System.out.println("###    Dieser Listener ist kein eigener Thread,               ###");
-			System.out.println("###    sondern lediglich an dem LogFileWatchRunner registiert.###");
-			System.out.println("#################################################################");
+			System.out.println("###################################################################");
+			System.out.println("### 1.  Starte einen Thread, der auf den 'Monitor-Thread' hört. ###");
+			System.out.println("###     (LogFileWatchListenerOnMonitor_RunnerExampleZZZ)        ###");					
+			System.out.println("### 2.  Starte den 'Monitor-Thread', der weiter Threads startet ###");
+			System.out.println("###     und auf deren Events hoert.                             ###");
+			System.out.println("###     Wird ein Event empfangen, wirf er ebenfalls einen Event.###");
+			System.out.println("###     Der Thread aus 1 empfängt diesen, dito 2a, 2b.          ###");
+		    System.out.println("###     Dabei ist der geworfene Event ein anderer (s. Mapping). ###");
+			System.out.println("### 2a. Starte einen Thread, der Zeilen aus einer Text-         ###");
+			System.out.println("###     datei in eine andere, neue schreibt und diese           ###");
+			System.out.println("###     allmählich füllt.                                       ###");
+			System.out.println("###     (LogFileCreateMockRunnerOnMonitorListeningZZZ)          ###");						
+			System.out.println("### 2b. Starte einen weiteren Thread, der die neu gefuellte     ###");
+			System.out.println("###     Datei beobachtet. (LogFileWatchRunner)                  ###");
+			System.out.println("###     - Gib die neuen Zeilen aus.                             ###");
+			System.out.println("###     - Reagiere auf die Ausgabe eines bestimmten Texts.      ###");
+			System.out.println("###     - Wirf dann einen Event                                 ###");
+			System.out.println("###################################################################");
 		
 											
 			//Lies die Test-Datei aus und fülle damit das Ziel-Log.
@@ -85,7 +90,7 @@ public class LogFileWatch_2_MonitorProcessStyle_MainZZZ implements IConstantZZZ{
 			//Erstelle dieses Verzeichnis, falls noch nicht vorhanden
 			boolean bCreated = FileEasyZZZ.createDirectory(sLogDirectory);
 			if(!bCreated) {
-				ExceptionZZZ ez = new ExceptionZZZ("unable to create directory: '" + sLogDirectory + "'.", iERROR_RUNTIME, LogFileWatch_MonitorProcessStyle_MainZZZ.class, ReflectCodeZZZ.getPositionCurrent());
+				ExceptionZZZ ez = new ExceptionZZZ("unable to create directory: '" + sLogDirectory + "'.", iERROR_RUNTIME, LogFileWatch_2_LogWatchMonitorStyle_MainZZZ.class, ReflectCodeZZZ.getPositionCurrent());
 				throw ez;
 			}
 			
@@ -110,29 +115,32 @@ public class LogFileWatch_2_MonitorProcessStyle_MainZZZ implements IConstantZZZ{
 		    }
 		    File objLogFile = new File(sFilePath);
 			
-		    TODOGOON20240204; 
-		    //Mache eine Hauptklasse, die sich am Objekt-Broker der Monitorklasse registriert.
 		    		    
 		    //Der Monitor wird nun gestartet.
 		    //Beim Start des Monitors werden die anderen Threads (Creator, Watcher) gestartet.
 		    //Der Monitor registriert sich nun am Watcher-Thread. Beim Werfen des Events "Filterwert gefunden" 
 		    //wird der Monitor die an ihm registrierte Hauptklasse per neuem Event informieren.
 		    
-			//0. Schritt: Bereite den Listener vor, der als Beispiel für einen "Monitor" fungiert.
-		    LogFileWatchListenerMonitorExampleZZZ objListener = new LogFileWatchListenerMonitorExampleZZZ();
+			//0. Schritt: Bereite den Listener vor, der als Beispiel für einen "Listener am Monitor" fungiert.
+		    LogFileWatchListenerOnMonitor_RunnerExampleZZZ objListener = new LogFileWatchListenerOnMonitor_RunnerExampleZZZ();
 			
 		   
-			//1. Schritt: Mache den Log Creator
+			//1. Schritt: Mache den Log Creator, 
 			String sSourceDirectory = "resourceZZZ\\file";
 			String sSourceFile = "logExampleUsed.txt";
 			String sSourceFilePathTotalDefault = FileEasyZZZ.joinFilePathName(sSourceDirectory, sSourceFile);
 			
 			
 			File objSourceFile = new File(sSourceFilePathTotalDefault); 
-			String[]saFlagCreate= {ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
-			LogFileCreateMockRunnerZZZ objCreator = new LogFileCreateMockRunnerZZZ(objSourceFile, objLogFile, saFlagCreate);
+			String[]saFlagCreate= {ILogFileCreateRunnerOnMonitorListeningZZZ.FLAGZ.END_ON_EVENT_BYMONITOR.name()};
+			LogFileCreateMockRunnerOnMonitorListeningZZZ objCreator = new LogFileCreateMockRunnerOnMonitorListeningZZZ(objSourceFile, objLogFile, saFlagCreate);
 			
-			//2. Schritt: Mache den Log Watcher mit dem "Reaktionsstring".
+			//2. Mache den Log Watcher mit dem "Reaktionsstring".
+		    String[]saFlag= {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
+			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(saFlag);			
+			
+			
+			//2. Schritt: Mache den Monitor
 		    String sFilterSentence;    
 		    if (args.length > 1) {
 		    	sFilterSentence = (args[1]);
@@ -140,17 +148,30 @@ public class LogFileWatch_2_MonitorProcessStyle_MainZZZ implements IConstantZZZ{
 		    	sFilterSentence = "Peer Connection Initiated with";
 		    	//sFilterSentence = "local_port";
 		    }
-			
-		    String[]saFlag= {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
-			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence,saFlag);			
-			
+		    
+		    String[] saFlagMonitor = {ILogFileWatchRunnerMonitorZZZ.FLAGZ.END_ON_FILTERFOUND.name()};		    
+		    LogFileWatchRunnerMonitorZZZ objMonitor = new LogFileWatchRunnerMonitorZZZ(objLogFile, sFilterSequence, saFlagMonitor);
+		    
+		    //3. Schritt: Statt im Konstruktor des Monitors alles zu definieren...
+		    //            übergib die Objekte an den Monitor
+		    		    
+		    //TODO: Beim Übergeben der Objekte an den Monitor... diese dabei sofort am Monitor registrieren....
+		    objMonitor.addRunner(objWatcher);
+		    objMonitor.addRunner(objCreator);
+		    
+		    
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
-			objWatcher.registerForStatusLocalEvent(objListener);//Registriere den Monitor nun am ProcessWatchRunner
+			objMonitor.registerForStatusLocalEvent(objWatcher);//Registriere den Monitor nun am ProcessWatchRunner
 				
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Creator daran.
-			objWatcher.registerForStatusLocalEvent((IListenerObjectStatusBasicZZZ) objCreator);//Registriere den Creator nun am ProcessWatchRunner
-					
+			objMonitor.registerForStatusLocalEvent((IListenerObjectStatusBasicZZZ) objCreator);//Registriere den Creator nun am ProcessWatchRunner
+			//++++++++++++++++++++++++++++++++++++
 			
+			//Registriere den Beispiellistener auch am Monitor
+			objMonitor.registerForStatusLocalEvent(objListener);
+			
+			//+++++++++++++++++++++++++++++++++++
+			//TODO: Beim Starten des Monitor-Threads die übergebenen Runner auch starten.						
 			//3. Starte die Threads
 			Thread objThreadWatcher = new Thread(objWatcher);
 			objThreadWatcher.start();
@@ -158,16 +179,29 @@ public class LogFileWatch_2_MonitorProcessStyle_MainZZZ implements IConstantZZZ{
 			
 			Thread objThreadCreator = new Thread(objCreator);
 			objThreadCreator.start();
+			//+++++++++++++++++++++++++++++++++++++
 			
+			Thread objThreadListener = new Thread(objListener);
+			objThreadListener.start();
+			
+			Thread objThreadMonitor = new Thread(objMonitor);
+			objThreadMonitor.start();
 			
 			
 			try {
 				Thread.sleep(50000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+			} catch (InterruptedException e) {				
 				e.printStackTrace();
 			}
 
+			//20240207:
+			//Idee: Teste den Monitor Thread anzuhalten.
+			//      Dann sollte er einen Event werfen "ich stoppe"
+			//      Dann sollten alle anderen Threads ebenfalls aufhören.
+			
+			
+			
+			
 // So kann man so den Lauf anhalten...
 //	System.out.println("Versuche anzuhalten: LogFileCreateMockRunnerZZZ");
 //	objCreator.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
