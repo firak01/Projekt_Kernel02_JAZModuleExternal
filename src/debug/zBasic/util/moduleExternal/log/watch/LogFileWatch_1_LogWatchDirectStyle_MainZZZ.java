@@ -15,11 +15,9 @@ import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.LogFileWatchRunnerZZZ;
 import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalMessageReactZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalMessageSetZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalSetZZZ;
+import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusBasicZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalMessageReactZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalMessageSetZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
 import debug.zBasic.util.moduleExternal.log.create.LogFileCreateMockRunnerZZZ;
 
@@ -132,7 +130,7 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 			objWatcher.registerForStatusLocalEvent(objListener);//Registriere den Monitor nun am ProcessWatchRunner
 				
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Creator daran.
-			objWatcher.registerForStatusLocalEvent((IListenerObjectStatusBasicZZZ) objCreator);//Registriere den Creator nun am ProcessWatchRunner
+			objWatcher.registerForStatusLocalEvent((IListenerObjectStatusLocalZZZ) objCreator);//Registriere den Creator nun am ProcessWatchRunner
 					
 			
 			//3. Starte die Threads

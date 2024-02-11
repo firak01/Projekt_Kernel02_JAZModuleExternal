@@ -1,34 +1,37 @@
 package basic.zBasic.util.moduleExternal.monitor;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.HashMap;
 
-import basic.zBasic.AbstractObjectWithStatusListeningZZZ;
 import basic.zBasic.ExceptionZZZ;
+import basic.zBasic.component.AbstractProgramRunnableMonitorZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
-import basic.zKernel.AbstractKernelUseObjectWithStatusListeningMonitoredZZZ;
-import basic.zKernel.IKernelZZZ;
 import basic.zKernel.flag.EventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IEventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.IEventBrokerStatusLocalSetUserZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalMessageZZZ;
-import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalReactZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalSetZZZ;
-import basic.zKernel.status.KernelSenderObjectStatusLocalSetZZZ;
+import basic.zKernel.status.ISenderObjectStatusLocalMessageZZZ;
+import basic.zKernel.status.KernelSenderObjectStatusLocalMessageZZZ;
 
-public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWithStatusListeningZZZ implements IProcessWatchMonitorZZZ, IListenerObjectStatusLocalZZZ, IEventBrokerStatusLocalSetUserZZZ{
-	protected volatile ArrayList<Process> listaProcess = new ArrayList<Process>(); //Hierueber werden alle zu beobachtenden Processe verwaltet.
-	private ISenderObjectStatusLocalSetZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
-	
-	public AbstractProcessWatchMonitorZZZ() throws ExceptionZZZ{
+public abstract class AbstractLogFileWatchRunnableMonitorZZZ  extends AbstractProgramRunnableMonitorZZZ implements ILogFileWatchRunnerMonitorZZZ{
+	private static final long serialVersionUID = 968455281850239704L;
+	protected volatile File objLogFile = null;	
+		
+	public AbstractLogFileWatchRunnableMonitorZZZ() throws ExceptionZZZ{
 		super();
 	}
-		
+	
+	@Override
+	public File getLogFile() {
+		return this.objLogFile;
+	}
+	
+	@Override
+	public void setLogFile(File objFile) {
+		this.objLogFile = objFile;
+	}
+	
 	//###################################################
 	//### FLAGS #########################################
 	//###################################################
@@ -56,7 +59,7 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWith
 	}
 	
 	@Override
-	public boolean getFlag(IProcessWatchMonitorZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(ILogFileWatchRunnerMonitorZZZ.FLAGZ objEnumFlag) {
 		return this.getFlag(objEnumFlag.name());
 	}
 	
@@ -123,7 +126,7 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWith
 	}
 	
 	@Override
-	public boolean setFlag(IProcessWatchMonitorZZZ.FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
+	public boolean setFlag(ILogFileWatchRunnerMonitorZZZ.FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
 		return this.setFlag(objEnumFlag.name(), bFlagValue);
 	}
 	
@@ -158,13 +161,13 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWith
 	
 
 	@Override
-	public boolean[] setFlag(IProcessWatchMonitorZZZ.FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
+	public boolean[] setFlag(ILogFileWatchRunnerMonitorZZZ.FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
 		boolean[] baReturn=null;
 		main:{
 			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
 				baReturn = new boolean[objaEnumFlag.length];
 				int iCounter=-1;
-				for(IProcessWatchMonitorZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+				for(ILogFileWatchRunnerMonitorZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
 					iCounter++;
 					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
 					baReturn[iCounter]=bReturn;
@@ -179,12 +182,12 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWith
 	}
 
 	@Override
-	public boolean proofFlagExists(IProcessWatchMonitorZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+	public boolean proofFlagExists(ILogFileWatchRunnerMonitorZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.proofFlagExists(objEnumFlag.name());
 	}
 
 	@Override
-	public boolean proofFlagSetBefore(IProcessWatchMonitorZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+	public boolean proofFlagSetBefore(ILogFileWatchRunnerMonitorZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.proofFlagSetBefore(objEnumFlag.name());
 	}
 
@@ -197,32 +200,32 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWith
 	 * @see basic.zKernel.status.ISenderObjectStatusLocalSetUserZZZ#getSenderStatusLocalUsed()
 	 */
 	@Override
-	public ISenderObjectStatusLocalSetZZZ getSenderStatusLocalUsed() throws ExceptionZZZ {
+	public ISenderObjectStatusLocalMessageZZZ getSenderStatusLocalUsed() throws ExceptionZZZ {
 		if(this.objEventStatusLocalBroker==null) {
 			//++++++++++++++++++++++++++++++
 			//Nun geht es darum den Sender fuer Aenderungen am Status zu erstellen, der dann registrierte Objekte ueber Aenderung von Flags informiert
-			ISenderObjectStatusLocalSetZZZ objSenderStatusLocal = new KernelSenderObjectStatusLocalSetZZZ();
+			ISenderObjectStatusLocalMessageZZZ objSenderStatusLocal = new KernelSenderObjectStatusLocalMessageZZZ();
 			this.objEventStatusLocalBroker = objSenderStatusLocal;
 		}
 		return this.objEventStatusLocalBroker;
 	}
 
 	@Override
-	public void setSenderStatusLocalUsed(ISenderObjectStatusLocalSetZZZ objEventSender) {
+	public void setSenderStatusLocalUsed(ISenderObjectStatusLocalMessageZZZ objEventSender) {
 		this.objEventStatusLocalBroker = objEventSender;
 	}
 		
 	
-	//### aus IEventBrokerStatusLocalSetUserZZZ
-	@Override
-	public void registerForStatusLocalEvent(IListenerObjectStatusBasicZZZ objEventListener)throws ExceptionZZZ {
-		this.getSenderStatusLocalUsed().addListenerObject(objEventListener);		
-	}
-	
-	@Override
-	public void unregisterForStatusLocalEvent(IListenerObjectStatusBasicZZZ objEventListener) throws ExceptionZZZ {
-		this.getSenderStatusLocalUsed().removeListenerObject(objEventListener);;
-	}
+	//### aus IEventBrokerStatusLocalMessageSetUserZZZ
+//	@Override
+//	public void registerForStatusLocalEvent(IListenerObjectStatusBasicZZZ objEventListener)throws ExceptionZZZ {
+//		this.getSenderStatusLocalUsed().addListenerObject(objEventListener);		
+//	}
+//	
+//	@Override
+//	public void unregisterForStatusLocalEvent(IListenerObjectStatusBasicZZZ objEventListener) throws ExceptionZZZ {
+//		this.getSenderStatusLocalUsed().removeListenerObject(objEventListener);;
+//	}
 	
 	@Override
 	public abstract boolean isStatusLocalRelevant(IEnumSetMappedStatusZZZ objEnumStatusIn) throws ExceptionZZZ;
@@ -236,7 +239,7 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWith
 			}
 			
 			//Merke: Bei einer anderen Klasse, die dieses DesingPattern nutzt, befindet sich der STATUSLOCAL in einer anderen Klasse
-			IProcessWatchMonitorZZZ.STATUSLOCAL enumStatus = (IProcessWatchMonitorZZZ.STATUSLOCAL) objEnumStatusIn;
+			ILogFileWatchRunnerMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchRunnerMonitorZZZ.STATUSLOCAL) objEnumStatusIn;
 			String sStatusName = enumStatus.name();
 			if(StringZZZ.isEmpty(sStatusName)) break main;
 										

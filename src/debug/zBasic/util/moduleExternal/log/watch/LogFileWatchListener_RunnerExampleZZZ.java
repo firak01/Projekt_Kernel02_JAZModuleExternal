@@ -9,15 +9,16 @@ import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
 import basic.zKernel.status.IEventObjectStatusBasicZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalMessageReactZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalMessageSetZZZ;
+import basic.zKernel.status.IEventObjectStatusLocalMessageZZZ;
+import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalMessageReactZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalMessageSetZZZ;
+import basic.zKernel.status.IListenerObjectStatusLocalMessageZZZ;
 
 /** Ein Beispiel-Broker, an dem sich die "hoerenden" Klassen registieren.
  * @author fl86kyvo
  *
  */
-public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ implements IListenerObjectStatusLocalMessageSetZZZ, IListenerObjectStatusLocalMessageReactZZZ{
+public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ implements IListenerObjectStatusLocalMessageZZZ, IListenerObjectStatusLocalMessageReactZZZ{
 	private static final long serialVersionUID = -2338056174362726426L;
 
 	public LogFileWatchListener_RunnerExampleZZZ() throws ExceptionZZZ {
@@ -25,7 +26,7 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ imp
 	}
 	
 	@Override
-	public boolean reactOnStatusLocalEvent(IEventObjectStatusBasicZZZ eventStatusLocal) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
 		boolean bReturn=false;
 		main:{	
 			if(eventStatusLocal==null)break main;
@@ -34,9 +35,9 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ imp
 			System.out.println(sLog);
 			this.logLineDate(sLog);
 			
-			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageSetZZZ) {
+			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageZZZ) {
 				
-				boolean bRelevant = this.isEventRelevant(eventStatusLocal); 
+				boolean bRelevant = this.isEventRelevant((IEventObjectStatusLocalZZZ) eventStatusLocal); 
 				if(!bRelevant) {
 					sLog = 	ReflectCodeZZZ.getPositionCurrent() + ": Event / Status nicht relevant. Breche ab.";
 					System.out.println(sLog);
@@ -44,8 +45,8 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ imp
 					break main;
 				}
 				
-				IEventObjectStatusLocalMessageSetZZZ eventStatusLocalSet = (IEventObjectStatusLocalMessageSetZZZ) eventStatusLocal;
-				IEnumSetMappedZZZ enumStatus = eventStatusLocalSet.getStatusEnum();				
+				IEventObjectStatusLocalMessageZZZ eventStatusLocalSet = (IEventObjectStatusLocalMessageZZZ) eventStatusLocal;
+				IEnumSetMappedZZZ enumStatus = eventStatusLocalSet.getStatusLocal();				
 				
 				
 			
@@ -87,7 +88,7 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ imp
 			
 			boolean bEventHasFilterFound = objEnum.equals(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND)&& bValue;
 				
-			int iIndex = eventStatusLocalSet.getProcessID();
+			//int iIndex = eventStatusLocalSet.getProcessID();
 			String sStatusMessage = eventStatusLocalSet.getStatusMessage();	
 			sLog = ReflectCodeZZZ.getPositionCurrent() + ": StatusMessage ist = '" + sStatusMessage + "'";
 			this.logProtocolString(sLog);
@@ -136,7 +137,7 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ imp
 
 
 	@Override
-	public boolean isEventRelevant(IEventObjectStatusBasicZZZ eventStatusBasic) throws ExceptionZZZ {
+	public boolean isEventRelevant(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
 			
@@ -151,22 +152,22 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ imp
 	}
 
 	@Override
-	public boolean isEventRelevant2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusBasic) throws ExceptionZZZ {
+	public boolean isEventRelevant2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
 		return true;
 	}
 
 	@Override
-	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusBasic) throws ExceptionZZZ {
+	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
 		return true;
 	}
 
 	@Override
-	public boolean isEventRelevantByStatusLocal2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusBasic) throws ExceptionZZZ {
+	public boolean isEventRelevantByStatusLocal2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
 		return true;
 	}
 
 	@Override
-	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusBasicZZZ eventStatusBasic) throws ExceptionZZZ {
+	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
 	return true;
 	}
 }

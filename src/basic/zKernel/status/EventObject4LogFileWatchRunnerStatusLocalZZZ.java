@@ -1,9 +1,8 @@
 package basic.zKernel.status;
 
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
-import basic.zKernel.status.AbstractEventObjectStatusLocalMessageSetZZZ;
-import basic.zKernel.status.AbstractEventObjectStatusLocalSetZZZ;
 
 
 /** 
@@ -14,7 +13,7 @@ import basic.zKernel.status.AbstractEventObjectStatusLocalSetZZZ;
  *  
  * @author Fritz Lindhauer, 02.04.2023, 12:00:33  
  */
-public class EventObject4LogFileWatchRunnerStatusLocalSetZZZ  extends AbstractEventObjectStatusLocalMessageSetZZZ implements IEventObject4LogFileWatchRunnerStatusLocalSetZZZ, Comparable<IEventObject4LogFileWatchRunnerStatusLocalSetZZZ>{
+public class EventObject4LogFileWatchRunnerStatusLocalZZZ  extends AbstractEventObjectStatusLocalMessageZZZ implements IEventObject4LogFileWatchRunnerStatusLocalZZZ, Comparable<IEventObject4LogFileWatchRunnerStatusLocalZZZ>{
 	private STATUSLOCAL objStatusEnum=null;
 	                                             
 	//Merke: Diese Strings sind wichtig für das Interface und kommen nicht aus der abstrakten Klasse
@@ -26,17 +25,17 @@ public class EventObject4LogFileWatchRunnerStatusLocalSetZZZ  extends AbstractEv
 	 * @param iID
 	 * @param sComponentItemText, z.B. fuer einen DirectoryJTree ist es der Pfad, fuer eine JCombobox der Name des ausgew�hlten Items 
 	 */
-	public EventObject4LogFileWatchRunnerStatusLocalSetZZZ(Object source, int iID,  String sStatusText, boolean bStatusValue) {
-		super(source,iID,sStatusText,bStatusValue);		
+	public EventObject4LogFileWatchRunnerStatusLocalZZZ(Object source,  String sStatusText, boolean bStatusValue) {
+		super(source,sStatusText,bStatusValue);		
 	}
 	
-	public EventObject4LogFileWatchRunnerStatusLocalSetZZZ(Object source, int iID,  String sStatusAbbreviation, String sStatusText, boolean bStatusValue) {
-		super(source,iID,sStatusText,bStatusValue);
+	public EventObject4LogFileWatchRunnerStatusLocalZZZ(Object source,  String sStatusAbbreviation, String sStatusText, boolean bStatusValue) {
+		super(source,sStatusText,bStatusValue);
 		this.sStatusAbbreviation = sStatusAbbreviation;
 	}
 	
-	public EventObject4LogFileWatchRunnerStatusLocalSetZZZ(Object source, int iID,  STATUSLOCAL objStatusEnum, boolean bStatusValue) {
-		super(source,iID,"",bStatusValue);
+	public EventObject4LogFileWatchRunnerStatusLocalZZZ(Object source, STATUSLOCAL objStatusEnum, boolean bStatusValue) {
+		super(source,"",bStatusValue);
 		this.objStatusEnum=objStatusEnum;
 	}
 	
@@ -49,6 +48,10 @@ public class EventObject4LogFileWatchRunnerStatusLocalSetZZZ  extends AbstractEv
 		return this.objStatusEnum;
 	}
 	
+	@Override
+	public IEnumSetMappedStatusZZZ getStatusLocal() {
+		return this.objStatusEnum;
+	}
 	
 	/* (non-Javadoc)
 	 * @see use.openvpn.client.status.IEventObjectStatusLocalSetOVPN#getStatusAbbreviation()
@@ -65,7 +68,7 @@ public class EventObject4LogFileWatchRunnerStatusLocalSetZZZ  extends AbstractEv
 	@Override
 	public String getStatusText(){
 		if(this.objStatusEnum==null) {
-			return this.sStatusText;
+			return this.sStatusMessage;
 		}else {
 			return this.objStatusEnum.name();
 		}
@@ -83,7 +86,7 @@ public class EventObject4LogFileWatchRunnerStatusLocalSetZZZ  extends AbstractEv
 	
 	//### Aus dem Interface Comparable
 	@Override
-	public int compareTo(IEventObject4LogFileWatchRunnerStatusLocalSetZZZ o) {
+	public int compareTo(IEventObject4LogFileWatchRunnerStatusLocalZZZ o) {
 		//Das macht lediglich .sort funktionsfähig und wird nicht bei .equals(...) verwendet.
 		int iReturn = 0;
 		main:{
@@ -104,8 +107,8 @@ public class EventObject4LogFileWatchRunnerStatusLocalSetZZZ  extends AbstractEv
    @Override 
    public boolean equals(Object aThat) {
      if (this == aThat) return true;
-     if (!(aThat instanceof EventObject4LogFileWatchRunnerStatusLocalSetZZZ)) return false;
-     EventObject4LogFileWatchRunnerStatusLocalSetZZZ that = (EventObject4LogFileWatchRunnerStatusLocalSetZZZ)aThat;
+     if (!(aThat instanceof EventObject4LogFileWatchRunnerStatusLocalZZZ)) return false;
+     EventObject4LogFileWatchRunnerStatusLocalZZZ that = (EventObject4LogFileWatchRunnerStatusLocalZZZ)aThat;
      
      String sNameToCompare = that.getStatusEnum().getName();
 	 boolean bValueToCompare = that.getStatusValue();

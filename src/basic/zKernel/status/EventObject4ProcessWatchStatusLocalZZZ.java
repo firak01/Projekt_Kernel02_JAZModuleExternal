@@ -11,7 +11,7 @@ import basic.zBasic.util.moduleExternal.process.watch.ProcessWatchRunnerZZZ;
  *  
  * @author Fritz Lindhauer, 02.04.2023, 12:00:33  
  */
-public class EventObject4ProcessWatchStatusLocalSetZZZ extends AbstractEventObjectStatusLocalSetZZZ implements Comparable<IEventObjectStatusLocalSetZZZ>{
+public class EventObject4ProcessWatchStatusLocalZZZ extends AbstractEventObjectStatusLocalMessageZZZ implements Comparable<IEventObjectStatusLocalZZZ>{
 	private ProcessWatchRunnerZZZ.STATUSLOCAL objStatusEnum=null;	
 	
 	/** In dem Konstruktor wird neben der ID dieses Events auch der identifizierende Name der neu gewaehlten Komponente �bergeben.
@@ -19,29 +19,29 @@ public class EventObject4ProcessWatchStatusLocalSetZZZ extends AbstractEventObje
 	 * @param iID
 	 * @param sComponentItemText, z.B. fuer einen DirectoryJTree ist es der Pfad, fuer eine JCombobox der Name des ausgew�hlten Items 
 	 */
-	public EventObject4ProcessWatchStatusLocalSetZZZ(Object source, int iID,  String sStatusText, boolean bStatusValue) {
-		super(source, iID, sStatusText, bStatusValue);		
-		this.sStatusText = sStatusText;
-		this.iId = iID;
-		this.bStatusValue = bStatusValue;
+	public EventObject4ProcessWatchStatusLocalZZZ(Object source, String sStatusText, boolean bStatusValue) {
+		super(source, sStatusText, bStatusValue);		
 	}
 	
-	public EventObject4ProcessWatchStatusLocalSetZZZ(Object source, int iID, ProcessWatchRunnerZZZ.STATUSLOCAL objStatusEnum, boolean bStatusValue) {
-		super(source, iID, "", bStatusValue);		
+	public EventObject4ProcessWatchStatusLocalZZZ(Object source, ProcessWatchRunnerZZZ.STATUSLOCAL objStatusEnum, boolean bStatusValue) {
+		super(source, "", bStatusValue);		
 		this.objStatusEnum=objStatusEnum;		
-		this.iId = iID;
-		this.bStatusValue = bStatusValue;
 	}
 		
 	@Override
-	public IEnumSetMappedStatusZZZ getStatusEnum() {
+	public Enum getStatusEnum() {
+		return this.objStatusEnum;
+	}
+	
+	@Override
+	public IEnumSetMappedStatusZZZ getStatusLocal() {
 		return this.objStatusEnum;
 	}
 		
 	@Override
 	public String getStatusText(){
 		if(this.objStatusEnum==null) {
-			return this.sStatusText;
+			return this.getStatusMessage();
 		}else {
 			return this.objStatusEnum.name();
 		}
@@ -51,7 +51,7 @@ public class EventObject4ProcessWatchStatusLocalSetZZZ extends AbstractEventObje
 	
 	//### Aus dem Interface Comparable
 	@Override
-	public int compareTo(IEventObjectStatusLocalSetZZZ o) {
+	public int compareTo(IEventObjectStatusLocalZZZ o) {
 		//Das macht lediglich .sort funktionsfähig und wird nicht bei .equals(...) verwendet.
 		int iReturn = 0;
 		main:{
@@ -72,13 +72,13 @@ public class EventObject4ProcessWatchStatusLocalSetZZZ extends AbstractEventObje
 	@Override 
 	   public boolean equals(Object aThat) {
 	     if (this == aThat) return true;
-	     if (!(aThat instanceof EventObject4ProcessWatchStatusLocalSetZZZ)) return false;
-	     EventObject4ProcessWatchStatusLocalSetZZZ that = (EventObject4ProcessWatchStatusLocalSetZZZ)aThat;
+	     if (!(aThat instanceof EventObject4ProcessWatchStatusLocalZZZ)) return false;
+	     EventObject4ProcessWatchStatusLocalZZZ that = (EventObject4ProcessWatchStatusLocalZZZ)aThat;
 
-	     String sNameToCompare = that.getStatusEnum().getName();
+	     String sNameToCompare = that.getStatusEnum().name();
 		 boolean bValueToCompare = that.getStatusValue();
 			
-		 String sName = this.getStatusEnum().getName();
+		 String sName = this.getStatusEnum().name();
 		 boolean bValue = this.getStatusValue();
 	     
 		 if(sNameToCompare.equals(sName) && bValueToCompare==bValue) return true;

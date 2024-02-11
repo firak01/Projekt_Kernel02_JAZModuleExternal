@@ -7,7 +7,7 @@ import java.util.EnumSet;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 
-public interface IProcessWatchMonitorZZZ {
+public interface IProcessWatchMonitorZZZ extends Runnable{
 	public enum FLAGZ{
 		DUMMY,END_ON_CONNECTION,USE_LOGFILE_WATCHRUNNER
 	}

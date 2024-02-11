@@ -13,13 +13,13 @@ import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.LogFileWatchRunnerZZZ;
+import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchRunnerMonitorZZZ;
+import basic.zBasic.util.moduleExternal.monitor.LogFileWatchRunnerMonitorZZZ;
 import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalMessageReactZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalMessageSetZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalSetZZZ;
+import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusBasicZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalMessageReactZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalMessageSetZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerOnMonitorListeningZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
 import debug.zBasic.util.moduleExternal.log.create.LogFileCreateMockRunnerOnMonitorListeningZZZ;
@@ -149,22 +149,22 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 		    	//sFilterSentence = "local_port";
 		    }
 		    
-		    String[] saFlagMonitor = {ILogFileWatchRunnerMonitorZZZ.FLAGZ.END_ON_FILTERFOUND.name()};		    
-		    LogFileWatchRunnerMonitorZZZ objMonitor = new LogFileWatchRunnerMonitorZZZ(objLogFile, sFilterSequence, saFlagMonitor);
+		    //String[] saFlagMonitor = {ILogFileWatchRunnerMonitorZZZ.FLAGZ.END_ON_FILTERFOUND.name()};		    
+		    LogFileWatchRunnerMonitorZZZ objMonitor = new LogFileWatchRunnerMonitorZZZ(objLogFile);//, sFilterSequence, saFlagMonitor);
 		    
 		    //3. Schritt: Statt im Konstruktor des Monitors alles zu definieren...
 		    //            übergib die Objekte an den Monitor
 		    		    
 		    //TODO: Beim Übergeben der Objekte an den Monitor... diese dabei sofort am Monitor registrieren....
-		    objMonitor.addRunner(objWatcher);
-		    objMonitor.addRunner(objCreator);
+		    objMonitor.addProgramRunnable(objWatcher);
+		    objMonitor.addProgramRunnable(objCreator);
 		    
 		    
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
 			objMonitor.registerForStatusLocalEvent(objWatcher);//Registriere den Monitor nun am ProcessWatchRunner
 				
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Creator daran.
-			objMonitor.registerForStatusLocalEvent((IListenerObjectStatusBasicZZZ) objCreator);//Registriere den Creator nun am ProcessWatchRunner
+			objMonitor.registerForStatusLocalEvent((IListenerObjectStatusLocalZZZ) objCreator);//Registriere den Creator nun am ProcessWatchRunner
 			//++++++++++++++++++++++++++++++++++++
 			
 			//Registriere den Beispiellistener auch am Monitor
