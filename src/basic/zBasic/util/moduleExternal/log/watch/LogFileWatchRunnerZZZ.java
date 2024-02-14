@@ -111,7 +111,7 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	}
 	
 	@Override
-	public boolean start() throws ExceptionZZZ, InterruptedException{
+	public boolean start() throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{	
 			

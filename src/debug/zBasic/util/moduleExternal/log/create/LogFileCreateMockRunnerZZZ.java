@@ -102,7 +102,7 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableO
 	}
 	
 	@Override
-	public boolean start() throws ExceptionZZZ, InterruptedException{
+	public boolean start() throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{	
 			

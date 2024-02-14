@@ -13,17 +13,17 @@ import basic.zKernel.IKernelZZZ;
 import basic.zKernel.flag.EventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IEventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.IEventBrokerStatusLocalSetUserZZZ;
+import basic.zKernel.status.IEventBrokerStatusLocalUserZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalMessageZZZ;
 import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalReactZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalSetZZZ;
-import basic.zKernel.status.KernelSenderObjectStatusLocalSetZZZ;
+import basic.zKernel.status.ISenderObjectStatusLocalZZZ;
+import basic.zKernel.status.KernelSenderObjectStatusLocalZZZ;
 
-public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWithStatusListeningZZZ implements IProcessWatchMonitorZZZ, IListenerObjectStatusLocalZZZ, IEventBrokerStatusLocalSetUserZZZ{
+public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWithStatusListeningZZZ implements IProcessWatchMonitorZZZ, IListenerObjectStatusLocalZZZ, IEventBrokerStatusLocalUserZZZ{
 	protected volatile ArrayList<Process> listaProcess = new ArrayList<Process>(); //Hierueber werden alle zu beobachtenden Processe verwaltet.
-	private ISenderObjectStatusLocalSetZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
+	private ISenderObjectStatusLocalZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
 	
 	public AbstractProcessWatchMonitorZZZ() throws ExceptionZZZ{
 		super();
@@ -197,30 +197,30 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWith
 	 * @see basic.zKernel.status.ISenderObjectStatusLocalSetUserZZZ#getSenderStatusLocalUsed()
 	 */
 	@Override
-	public ISenderObjectStatusLocalSetZZZ getSenderStatusLocalUsed() throws ExceptionZZZ {
+	public ISenderObjectStatusLocalZZZ getSenderStatusLocalUsed() throws ExceptionZZZ {
 		if(this.objEventStatusLocalBroker==null) {
 			//++++++++++++++++++++++++++++++
 			//Nun geht es darum den Sender fuer Aenderungen am Status zu erstellen, der dann registrierte Objekte ueber Aenderung von Flags informiert
-			ISenderObjectStatusLocalSetZZZ objSenderStatusLocal = new KernelSenderObjectStatusLocalSetZZZ();
+			ISenderObjectStatusLocalZZZ objSenderStatusLocal = new KernelSenderObjectStatusLocalZZZ();
 			this.objEventStatusLocalBroker = objSenderStatusLocal;
 		}
 		return this.objEventStatusLocalBroker;
 	}
 
 	@Override
-	public void setSenderStatusLocalUsed(ISenderObjectStatusLocalSetZZZ objEventSender) {
+	public void setSenderStatusLocalUsed(ISenderObjectStatusLocalZZZ objEventSender) {
 		this.objEventStatusLocalBroker = objEventSender;
 	}
 		
 	
 	//### aus IEventBrokerStatusLocalSetUserZZZ
 	@Override
-	public void registerForStatusLocalEvent(IListenerObjectStatusBasicZZZ objEventListener)throws ExceptionZZZ {
+	public void registerForStatusLocalEvent(IListenerObjectStatusLocalZZZ objEventListener)throws ExceptionZZZ {
 		this.getSenderStatusLocalUsed().addListenerObject(objEventListener);		
 	}
 	
 	@Override
-	public void unregisterForStatusLocalEvent(IListenerObjectStatusBasicZZZ objEventListener) throws ExceptionZZZ {
+	public void unregisterForStatusLocalEvent(IListenerObjectStatusLocalZZZ objEventListener) throws ExceptionZZZ {
 		this.getSenderStatusLocalUsed().removeListenerObject(objEventListener);;
 	}
 	

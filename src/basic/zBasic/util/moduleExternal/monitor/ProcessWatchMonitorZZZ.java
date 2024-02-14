@@ -11,16 +11,12 @@ import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.abstractList.ArrayListUniqueZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.monitor.AbstractProcessWatchMonitorZZZ;
-import basic.zKernel.AbstractKernelUseObjectWithStatusListeningCascadedZZZ;
 import basic.zKernel.AbstractKernelUseObjectWithStatusZZZ;
 import basic.zKernel.IKernelZZZ;
 import basic.zKernel.flag.EventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IEventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.IEventBrokerStatusLocalSetUserZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalSetZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalSetZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalSetZZZ;
+import basic.zKernel.status.ISenderObjectStatusLocalZZZ;
 
 
 /**This class watches the ServerMainZZZ-class and the ServerConnectionListenerRuner-objects.
@@ -32,7 +28,7 @@ import basic.zKernel.status.ISenderObjectStatusLocalSetZZZ;
 //public class ServerThreadProcessWatchMonitorOVPN extends AbstractKernelUseObjectWithStatusListeningCascadedZZZ implements IServerThreadProcessWatchMonitorOVPN, Runnable, IListenerObjectStatusLocalSetOVPN, IEventBrokerStatusLocalSetUserOVPN{
 public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 	//private IServerMainOVPN objServerMain = null;
-	private ISenderObjectStatusLocalSetZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
+	private ISenderObjectStatusLocalZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
 	
 	
 	
@@ -413,7 +409,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		sLog = ReflectCodeZZZ.getPositionCurrent() + ": Erzeuge Event fuer '" + sStatusName + "'";
 		System.out.println(sLog);
 		this.getMainObject().logProtocolString(sLog);
-		IEventObject4ProcessWatchMonitorStatusLocalSetOVPN event = new EventObject4ProcessMonitorStatusLocalSetOVPN(this,1,enumStatus, bStatusValue);			
+		IEventObject4ProcessWatchMonitorStatusLocalOVPN event = new EventObject4ProcessMonitorStatusLocalOVPN(this,1,enumStatus, bStatusValue);			
 		event.setApplicationObjectUsed(this.getMainObject().getApplicationObject());
 					
 		//das ClientStarterObjekt nun auch noch dem Event hinzufuegen
@@ -438,7 +434,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 	 * @see use.openvpn.server.status.IListenerObjectStatusLocalSetOVPN#statusLocalChanged(use.openvpn.server.status.IEventObjectStatusLocalSetOVPN)
 	 */
 	@Override
-	public boolean changeStatusLocal(IEventObjectStatusLocalSetOVPN eventStatusLocalSet) throws ExceptionZZZ {
+	public boolean changeStatusLocal(IEventObjectStatusLocalOVPN eventStatusLocalSet) throws ExceptionZZZ {
 		//Der Monitor ist am ProcessWatchRunner registriert.
 		//Wenn ein Event geworfen wird, dann reagiert er darauf, hiermit....
 		boolean bReturn = false;
@@ -447,13 +443,13 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event gefangen.";
 			System.out.println(sLog);
-			this.getMainObject().logProtocolString(sLog);
+			this.logProtocolString(sLog);
 			
 			boolean bRelevant = this.isEventRelevant(eventStatusLocalSet); 
 			if(!bRelevant) {
 				sLog = 	ReflectCodeZZZ.getPositionCurrent() + ": Event / Status nicht relevant. Breche ab.";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				break main;
 			}
 			
@@ -462,7 +458,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			if(enumStatus==null) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Keinen Status aus dem Event-Objekt erhalten. Breche ab";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				break main;
 			}
 			
@@ -471,7 +467,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			if(hmEnum==null) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Keine Mapping Hashmap fuer das StatusMapping vorhanden. Breche ab";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				break main;
 			}
 			
@@ -480,7 +476,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			if(objEnum==null) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Keinen gemappten Status für en Status aus dem Event-Objekt erhalten. Breche ab";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				break main;
 			}
 			
@@ -510,12 +506,12 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			if(objApplication==null) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": KEIN Application-Objekt aus dem Event-Objekt erhalten.";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				break main;
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Application-Objekt aus dem Event-Objekt erhalten.";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				
 			}
 				
@@ -523,12 +519,12 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			if(objStarter==null) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": KEIN ConfigStarter-Objekt aus dem Event-Objekt erhalten.";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				break main;
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": ConfigStarter-Objekt aus dem Event-Objekt erhalten.";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				
 				iIndex = objStarter.getIndex();
 			}
@@ -537,7 +533,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			if(!bStatusLocalSet) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Lokaler Status nicht gesetzt, aus Gruenden. Breche ab";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				break main;
 			}
 			//++++++++++++++
@@ -545,29 +541,29 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			if(bEventHasError && bEventEnded){
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status bEventHasError && bEventEnded";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);					
+				this.glogProtocolString(sLog);					
 			}else if((!bEventHasError) && bEventEnded){
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status !bEventHasError && bEventEnded";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				
 			}else if(bEventHasConnection){
 				//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status bEventHasConnection";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				
 				String sVpnIp = objApplication.getVpnIpRemote();
 				int iId = eventStatusLocalSet.getProcessID();
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Thread # fuer Event mit der ID" + (iId) + " - Verbindung mit remote VPNIP='"+sVpnIp+"'";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);										
+				this.logProtocolString(sLog);										
 				
 				boolean bEndOnConnection = this.getFlag(IServerThreadProcessWatchMonitorOVPN.FLAGZ.END_ON_CONNECTION);
 				if(bEndOnConnection) {
 					sLog = ReflectCodeZZZ.getPositionCurrent()+": Beende den Monitor.";
 					System.out.println(sLog);
-					this.getMainObject().logProtocolString(sLog);
+					this.logProtocolString(sLog);
 				}
 				
 			}else if(bEventHasConnectionLost) {
@@ -575,18 +571,18 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status bEventHasConnectionLost";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				
 				String sVpnIp = objApplication.getVpnIpRemote();
 				int iId = eventStatusLocalSet.getProcessID();
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Thread # fuer Event mit der ID" + (iId) + " - Verbindung verloren mit remote VPNIP='"+sVpnIp+"'";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);										
+				this.logProtocolString(sLog);										
 	
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status '"+enumStatus.getAbbreviation()+"' nicht weiter behandelt";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);	
+				this.logProtocolString(sLog);	
 			}
 			
 			bReturn = true;
@@ -607,34 +603,34 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Pruefe Relevanz des Events.";
 			System.out.println(sLog);
-			this.getMainObject().logProtocolString(sLog);
+			this.logProtocolString(sLog);
 			
 			IEnumSetMappedZZZ enumStatus = eventStatusLocalSet.getStatusEnum();				
 			if(enumStatus==null) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": KEINEN enumStatus empfangen. Beende.";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);							
+				this.logProtocolString(sLog);							
 				break main;
 			}
 							
 			sLog = ReflectCodeZZZ.getPositionCurrent()+": Einen enumStatus empfangen.";
 			System.out.println(sLog);
-			this.getMainObject().logProtocolString(sLog);
+			this.logProtocolString(sLog);
 				
 			sLog = ReflectCodeZZZ.getPositionCurrent()+": enumStatus hat class='"+enumStatus.getClass()+"'";
 			System.out.println(sLog);
-			this.getMainObject().logProtocolString(sLog);	
+			this.logProtocolString(sLog);	
 				
 			sLog = ReflectCodeZZZ.getPositionCurrent()+": enumStatus='" + enumStatus.getAbbreviation()+"'";
 			System.out.println(sLog);
-			this.getMainObject().logProtocolString(sLog);
+			this.logProtocolString(sLog);
 			
 			//+++ Pruefungen
 			bReturn = this.isEventRelevantByClass(eventStatusLocalSet);
 			if(!bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Event werfenden Klasse ist fuer diese Klasse hinsichtlich eines Status nicht relevant. Breche ab.";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);				
+				this.logProtocolString(sLog);				
 				break main;
 			}
 			
@@ -642,7 +638,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			if(!bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status nicht geaendert. Breche ab.";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				break main;
 			}
 						
@@ -650,7 +646,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			if(!bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Statuswert nicht relevant. Breche ab.";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);				
+				this.logProtocolString(sLog);				
 				break main;
 			}
 			
@@ -658,7 +654,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			if(!bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status an sich aus dem Event ist fuer diese Klasse nicht relevant. Breche ab.";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);				
+				this.logProtocolString(sLog);				
 				break main;
 			}
 													
@@ -709,7 +705,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			if(eventStatusLocalSet.getStatusEnum() instanceof IProcessWatchRunnerOVPN.STATUSLOCAL){
 				String sLog = ReflectCodeZZZ.getPositionCurrent()+": Enum Klasse ist instanceof IProcessWatchRunnerOVPN. Damit relevant.";
 				System.out.println(sLog);
-				this.getMainObject().logProtocolString(sLog);
+				this.logProtocolString(sLog);
 				bReturn = true;
 				break main;
 			}		

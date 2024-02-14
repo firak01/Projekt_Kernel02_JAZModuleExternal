@@ -13,12 +13,9 @@ import java.util.Set;
 import base.files.EncodingMaintypeZZZ.TypeZZZ;
 import basic.zKernel.KernelZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.EventObject4ProcessWatchStatusLocalSetZZZ;
-import basic.zKernel.status.IEventBrokerStatusLocalSetUserZZZ;
+import basic.zKernel.status.IEventBrokerStatusLocalUserZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalSetZZZ;
-import basic.zKernel.status.KernelSenderObjectStatusLocalSetZZZ;
 import basic.zKernel.status.StatusLocalHelperZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
@@ -40,7 +37,7 @@ import basic.zKernel.AbstractKernelUseObjectZZZ;
  * @author 0823
  *
  */
-public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObjectWithStatusZZZ implements IProcessWatchRunnerZZZ, IProgramRunnableZZZ, IEventBrokerStatusLocalSetUserZZZ{
+public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObjectWithStatusZZZ implements IProcessWatchRunnerZZZ, IProgramRunnableZZZ, IEventBrokerStatusLocalUserZZZ{
 	protected volatile IModuleZZZ objModule = null;
 	protected volatile String sModuleName=null;
 	protected volatile String sProgramName = null;
@@ -98,7 +95,7 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 	}
 	
 	@Override
-	public boolean start() throws ExceptionZZZ, InterruptedException{
+	public boolean start() throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{			
 				check:{
@@ -144,9 +141,16 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 					//if(this.getFlag("hasOutput")) break;
 					try {
 						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						ExceptionZZZ ez = new ExceptionZZZ("An InterruptedException happened: '" + e.getMessage() + "''", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
-						throw ez;
+					}catch (InterruptedException e) {					
+						try {
+							String sLogIE = e.getMessage();
+							this.logProtocolString("An error happend: '" + sLogIE + "'");
+						} catch (ExceptionZZZ e1) {
+							System.out.println(e1.getDetailAllLast());
+							e1.printStackTrace();
+						}
+						System.out.println(e.getMessage());
+						e.printStackTrace();
 					}
 					
 					boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP);
@@ -179,17 +183,19 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 				System.out.println(ez.getDetailAllLast());
 				e1.printStackTrace();
 			}			
-		} catch (InterruptedException e) {					
-			try {
-				String sLog = e.getMessage();
-				this.logLineDate("An error happend: '" + sLog + "'");
-			} catch (ExceptionZZZ e1) {
-				System.out.println(e1.getDetailAllLast());
-				e1.printStackTrace();
-			}
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
+		} 
+		
+//		catch (InterruptedException e) {					
+//			try {
+//				String sLog = e.getMessage();
+//				this.logLineDate("An error happend: '" + sLog + "'");
+//			} catch (ExceptionZZZ e1) {
+//				System.out.println(e1.getDetailAllLast());
+//				e1.printStackTrace();
+//			}
+//			System.out.println(e.getMessage());
+//			e.printStackTrace();
+//		}
 	}
 	
 	//MErke: Die genaue Analyse muss im konkreten Process Watch Runner gemacht werden.

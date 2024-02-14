@@ -106,7 +106,7 @@ public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgra
 	}
 	
 	@Override
-	public boolean start() throws ExceptionZZZ, InterruptedException{
+	public boolean start() throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{	
 			
@@ -189,7 +189,18 @@ public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgra
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
-				e.printStackTrace();								
+				e.printStackTrace();
+//			catch (InterruptedException e) {					
+//					try {
+//						String sLog = e.getMessage();
+//						this.logLineDate("An error happend: '" + sLog + "'");
+//					} catch (ExceptionZZZ e1) {
+//						System.out.println(e1.getDetailAllLast());
+//						e1.printStackTrace();
+//					}
+//					System.out.println(e.getMessage());
+//					e.printStackTrace();
+//				}
 			} finally {
 				if(br!=null) {
 					IOUtils.closeQuietly(br);

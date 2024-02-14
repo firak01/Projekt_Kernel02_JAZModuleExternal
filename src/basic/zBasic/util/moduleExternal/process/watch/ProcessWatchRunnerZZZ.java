@@ -14,12 +14,11 @@ import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zKernel.AbstractKernelUseObjectZZZ;
 import basic.zKernel.IKernelZZZ;
-import basic.zKernel.status.EventObject4ProcessWatchStatusLocalSetZZZ;
-import basic.zKernel.status.IEventBrokerStatusLocalSetUserZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalSetZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalSetZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalSetZZZ;
-import basic.zKernel.status.KernelSenderObjectStatusLocalSetZZZ;
+import basic.zKernel.status.EventObject4ProcessWatchStatusLocalZZZ;
+import basic.zKernel.status.IEventObjectStatusLocalZZZ;
+import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
+import basic.zKernel.status.ISenderObjectStatusLocalZZZ;
+import basic.zKernel.status.KernelSenderObjectStatusLocalZZZ;
 
 /**This class receives the stream from a process, which was started by the ConfigStarterZZZ class.
  * This is necessary, because the process will only goon working, if the streams were "catched" by a target.
@@ -28,14 +27,14 @@ import basic.zKernel.status.KernelSenderObjectStatusLocalSetZZZ;
  *
  */
 public class ProcessWatchRunnerZZZ extends AbstractProcessWatchRunnerZZZ {	
-	protected ISenderObjectStatusLocalSetZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
+	protected ISenderObjectStatusLocalZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
 	
 	public ProcessWatchRunnerZZZ(IKernelZZZ objKernel, Process objProcess, int iNumber, String[] saFlag) throws ExceptionZZZ{
 		super(objKernel, objProcess, iNumber, saFlag);		
 	}
 
 	//##########################################################
-	public boolean start() throws ExceptionZZZ, InterruptedException {
+	public boolean start() {
 		boolean bReturn = false;
 		main:{
 			String sLog = "ProcessWatchRunner #"+ this.getNumber() + " started.";
@@ -61,7 +60,7 @@ public class ProcessWatchRunnerZZZ extends AbstractProcessWatchRunnerZZZ {
 				if(this.getSenderStatusLocalUsed()!=null) {
 					//IEventObjectStatusLocalSetZZZ event = new EventObjectStatusLocalSetZZZ(this,1,ClientMainOVPN.STATUSLOCAL.ISCONNECTED, true);
 					//TODOGOON20230914: Woher kommt nun das Enum? Es gibt ja kein konkretes Beispiel
-					IEventObjectStatusLocalSetZZZ event = new EventObject4ProcessWatchStatusLocalSetZZZ(this,1,(ProcessWatchRunnerZZZ.STATUSLOCAL)null, true);
+					IEventObjectStatusLocalZZZ event = new EventObject4ProcessWatchStatusLocalZZZ(this,1,(ProcessWatchRunnerZZZ.STATUSLOCAL)null, true);
 					this.getSenderStatusLocalUsed().fireEvent(event);
 				}			
 			
@@ -523,7 +522,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			//Dann erzeuge den Event und feuer ihn ab.
 			//Merke: Nun aber ueber das enum			
 			if(this.getSenderStatusLocalUsed()!=null) {
-				IEventObjectStatusLocalSetZZZ event = new EventObject4ProcessWatchStatusLocalSetZZZ(this,1,enumStatus, bStatusValue);
+				IEventObjectStatusLocalZZZ event = new EventObject4ProcessWatchStatusLocalZZZ(this,enumStatus, bStatusValue);
 				this.getSenderStatusLocalUsed().fireEvent(event);
 			}			
 			bFunction = true;								
@@ -556,7 +555,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 						//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
 						//Dann erzeuge den Event und feuer ihn ab.
 						if(this.getSenderStatusLocalUsed()!=null) {
-							IEventObjectStatusLocalSetZZZ event = new EventObject4ProcessWatchStatusLocalSetZZZ(this,1,sStatusName.toUpperCase(), bStatusValue);
+							IEventObjectStatusLocalZZZ event = new EventObject4ProcessWatchStatusLocalZZZ(this,sStatusName.toUpperCase(), bStatusValue);
 							this.getSenderStatusLocalUsed().fireEvent(event);
 						}
 						
@@ -569,13 +568,13 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 		}
 
 	@Override
-	public void registerForStatusLocalEvent(IListenerObjectStatusLocalSetZZZ objEventListener) throws ExceptionZZZ {
-		this.getSenderStatusLocalUsed().addListenerObjectStatusLocalSet(objEventListener);
+	public void registerForStatusLocalEvent(IListenerObjectStatusLocalZZZ objEventListener) throws ExceptionZZZ {
+		this.getSenderStatusLocalUsed().addListenerObjectStatusLocal(objEventListener);
 	}
 
 	@Override
-	public void unregisterForStatusLocalEvent(IListenerObjectStatusLocalSetZZZ objEventListener) throws ExceptionZZZ {
-		this.getSenderStatusLocalUsed().removeListenerObjectStatusLocalSet(objEventListener);
+	public void unregisterForStatusLocalEvent(IListenerObjectStatusLocalZZZ objEventListener) throws ExceptionZZZ {
+		this.getSenderStatusLocalUsed().removeListenerObjectStatusLocal(objEventListener);
 	}
 	
 	//### Aus ISenderObjectStatusLocalSetUserZZZ
@@ -583,18 +582,18 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	 * @see basic.zKernel.status.ISenderObjectStatusLocalSetUserZZZ#getSenderStatusLocalUsed()
 	 */
 	@Override
-	public ISenderObjectStatusLocalSetZZZ getSenderStatusLocalUsed() throws ExceptionZZZ {
+	public ISenderObjectStatusLocalZZZ getSenderStatusLocalUsed() throws ExceptionZZZ {
 		if(this.objEventStatusLocalBroker==null) {
 			//++++++++++++++++++++++++++++++
 			//Nun geht es darum den Sender fuer Aenderungen am Status zu erstellen, der dann registrierte Objekte ueber Aenderung von Flags informiert
-			ISenderObjectStatusLocalSetZZZ objSenderStatusLocal = new KernelSenderObjectStatusLocalSetZZZ();
+			ISenderObjectStatusLocalZZZ objSenderStatusLocal = new KernelSenderObjectStatusLocalZZZ();
 			this.objEventStatusLocalBroker = objSenderStatusLocal;
 		}
 		return this.objEventStatusLocalBroker;
 	}
 
 	@Override
-	public void setSenderStatusLocalUsed(ISenderObjectStatusLocalSetZZZ objEventSender) {
+	public void setSenderStatusLocalUsed(ISenderObjectStatusLocalZZZ objEventSender) {
 		this.objEventStatusLocalBroker = objEventSender;
 	}
 
@@ -643,7 +642,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 
 	//### aus IEventBrokerStatusLocalSetUserZZZ
 	@Override
-	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalSetZZZ objEventListener) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ objEventListener) throws ExceptionZZZ {
 		TODOGOON20240201;//Den Status so setzen, das der Monitor damit was anfangen kann		
 		//return this.setStatusLocal(objEventListener);
 	}

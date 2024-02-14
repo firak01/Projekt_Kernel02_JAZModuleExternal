@@ -72,7 +72,7 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	//#### GETTER / SETTER
 		
 	@Override
-	public boolean start() throws ExceptionZZZ, InterruptedException{
+	public boolean start() throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{	
 			
@@ -107,8 +107,16 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 					
 				}while(true);
 				
-			} catch (InterruptedException e) {				
-				e.printStackTrace();												
+			}catch (InterruptedException e) {					
+				try {
+					String sLogIE = e.getMessage();
+					this.logProtocolString("An error happend: '" + sLogIE + "'");
+				} catch (ExceptionZZZ e1) {
+					System.out.println(e1.getDetailAllLast());
+					e1.printStackTrace();
+				}
+				System.out.println(e.getMessage());
+				e.printStackTrace();
 			} finally {
 				
 	        }

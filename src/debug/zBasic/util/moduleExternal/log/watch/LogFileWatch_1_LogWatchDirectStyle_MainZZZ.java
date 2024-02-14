@@ -143,12 +143,19 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 			
 			
 			
-			try {
-				Thread.sleep(50000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				Thread.sleep(50000);
+//				catch (InterruptedException e) {					
+//				try {
+//					String sLogIE = e.getMessage();
+//					this.logProtocolString("An error happend: '" + sLogIE + "'");
+//				} catch (ExceptionZZZ e1) {
+//					System.out.println(e1.getDetailAllLast());
+//					e1.printStackTrace();
+//				}
+//				System.out.println(e.getMessage());
+//				e.printStackTrace();
+//			}
 
 // So kann man so den lauf anhalten...
 //	System.out.println("Versuche anzuhalten: LogFileCreateMockRunnerZZZ");
@@ -164,11 +171,10 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 //	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUESTSTOP gesetzt.
 //  Damit werden auch die anderen Threads angehalten.
 			
-			
-		} catch (ExceptionZZZ e) {
-			
-			e.printStackTrace();
-		}
+			  } catch (ExceptionZZZ e1) {
+					System.out.println(e1.getDetailAllLast());
+					e1.printStackTrace();
+			}				
 	}//end main:
    }
 
