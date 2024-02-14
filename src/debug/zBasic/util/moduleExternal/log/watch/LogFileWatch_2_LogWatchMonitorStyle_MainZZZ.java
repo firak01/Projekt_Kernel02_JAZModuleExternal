@@ -155,37 +155,46 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 		    //3. Schritt: Statt im Konstruktor des Monitors alles zu definieren...
 		    //            übergib die Objekte an den Monitor
 		    		    
-		    //TODO: Beim Übergeben der Objekte an den Monitor... diese dabei sofort am Monitor registrieren....
+	
+		    //Merke: Beim Übergeben der Objekte an den Monitor... diese dabei sofort am Monitor registrieren....
 		    objMonitor.addProgramRunnable(objWatcher);
 		    objMonitor.addProgramRunnable(objCreator);
 		    
 		    
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
-			objMonitor.registerForStatusLocalEvent(objWatcher);//Registriere den Monitor nun am ProcessWatchRunner
+			//objMonitor.registerForStatusLocalEvent(objWatcher);//Registriere den Monitor nun am ProcessWatchRunner
 				
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Creator daran.
-			objMonitor.registerForStatusLocalEvent((IListenerObjectStatusLocalZZZ) objCreator);//Registriere den Creator nun am ProcessWatchRunner
+			//objMonitor.registerForStatusLocalEvent((IListenerObjectStatusLocalZZZ) objCreator);//Registriere den Creator nun am ProcessWatchRunner
 			//++++++++++++++++++++++++++++++++++++
 			
 			//Registriere den Beispiellistener auch am Monitor
 			objMonitor.registerForStatusLocalEvent(objListener);
 			
 			//+++++++++++++++++++++++++++++++++++
-			//TODO: Beim Starten des Monitor-Threads die übergebenen Runner auch starten.						
+			//4. Schritt: Starte den Monitor
+			//Merke: Beim Starten des Monitor-Threads die übergebenen Runner auch starten.	
+			//TODOGOON 20240214;//Kann der Monitor sich selbst in einem eigenene Thread starten
+			objMonitor.start(); //???
+			
+//			Thread objThreadMonitor = new Thread(objMonitor);
+//			objThreadMonitor.start();
+ 
+			
 			//3. Starte die Threads
-			Thread objThreadWatcher = new Thread(objWatcher);
-			objThreadWatcher.start();
-			
-			
-			Thread objThreadCreator = new Thread(objCreator);
-			objThreadCreator.start();
-			//+++++++++++++++++++++++++++++++++++++
-			
-			Thread objThreadListener = new Thread(objListener);
-			objThreadListener.start();
-			
-			Thread objThreadMonitor = new Thread(objMonitor);
-			objThreadMonitor.start();
+//			Thread objThreadWatcher = new Thread(objWatcher);
+//			objThreadWatcher.start();
+//			
+//			
+//			Thread objThreadCreator = new Thread(objCreator);
+//			objThreadCreator.start();
+//			//+++++++++++++++++++++++++++++++++++++
+//			
+//			Thread objThreadListener = new Thread(objListener);
+//			objThreadListener.start();
+//			
+//			Thread objThreadMonitor = new Thread(objMonitor);
+//			objThreadMonitor.start();
 			
 			
 			try {

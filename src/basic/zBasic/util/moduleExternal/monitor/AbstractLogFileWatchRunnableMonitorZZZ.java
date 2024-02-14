@@ -11,6 +11,7 @@ import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zKernel.flag.EventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IEventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalMessageZZZ;
 import basic.zKernel.status.KernelSenderObjectStatusLocalMessageZZZ;
 
@@ -255,6 +256,4 @@ public abstract class AbstractLogFileWatchRunnableMonitorZZZ  extends AbstractPr
 		
 		return bFunction;	
 	}
-	
-	
 }
