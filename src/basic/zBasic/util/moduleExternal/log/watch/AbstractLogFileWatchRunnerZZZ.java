@@ -13,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramRunnableWithStatusMessageListeningZZZ;
+import basic.zBasic.component.AbstractProgramWithStatusOnStatusListeningRunnableZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
@@ -27,7 +27,7 @@ import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalMessageZZZ;
 import basic.zKernel.status.KernelSenderObjectStatusLocalMessageZZZ;
 
-public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramRunnableWithStatusMessageListeningZZZ implements ILogFileWatchRunnerZZZ{
+public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithStatusOnStatusListeningRunnableZZZ implements ILogFileWatchRunnerZZZ{
 	private static final long serialVersionUID = 6586079955658760005L;
 	protected volatile File objLogFile=null;
 	protected volatile String sLineFilter = null;
@@ -263,34 +263,11 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramRunna
 	public boolean proofFlagSetBefore(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
 		return this.proofFlagExists(objEnumFlag.name());
 	}
-
-	//#########################################################
-	//### aus IEventBrokerStatusLocalSetUserZZZ
-	@Override
-	public ISenderObjectStatusLocalMessageZZZ getSenderStatusLocalUsed() throws ExceptionZZZ {
-		if(this.objEventStatusLocalBroker==null) {
-			//Nun geht es darum den Sender fuer Aenderungen an den Flags zu erstellen, der dann registrierte Objekte ueber Aenderung von Flags informiert
-			ISenderObjectStatusLocalMessageZZZ objSenderStatusLocal = new KernelSenderObjectStatusLocalMessageZZZ();			
-			this.objEventStatusLocalBroker = objSenderStatusLocal;
-		}		
-		return this.objEventStatusLocalBroker;
-	}
-
-	@Override
-	public void setSenderStatusLocalUsed(ISenderObjectStatusLocalMessageZZZ objEventSender) {
-		this.objEventStatusLocalBroker = objEventSender;
-	}
-
-	@Override
-	public void registerForStatusLocalEvent(IListenerObjectStatusLocalZZZ objEventListener) throws ExceptionZZZ {
-		this.getSenderStatusLocalUsed().addListenerObject(objEventListener);
-	}
-
-	@Override
-	public void unregisterForStatusLocalEvent(IListenerObjectStatusLocalZZZ objEventListener) throws ExceptionZZZ {
-		this.getSenderStatusLocalUsed().removeListenerObject(objEventListener);
-	}
-
+	
+	//###########################################################
+	//### STATUS
+	//###########################################################
+	
 	//####### aus IStatusLocalUserZZZ
 	/* (non-Javadoc)
 	 * @see basic.zKernel.status.IStatusLocalUserZZZ#getStatusLocal(java.lang.Enum)

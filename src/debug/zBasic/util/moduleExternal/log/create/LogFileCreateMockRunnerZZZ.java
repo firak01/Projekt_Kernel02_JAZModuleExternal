@@ -9,21 +9,30 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramWithFlagRunnableOnStatusMessageListeningZZZ;
+import basic.zBasic.component.AbstractProgramRunnableWithStatusOnStatusListeningZZZ;
+import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZZ;
 import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
+import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
+import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventObjectStatusBasicZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalMessageReactZZZ;
+import basic.zKernel.status.IEventObjectStatusLocalMessageZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
+import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
+import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 
 /**Diese Klasse erzeugt laaangsam, Zeile fuer Zeile eine Log-Datei.
  * Der Inhalt der Log-Datei kommt aus einer anderen Dummy-Log-Datei, die fest im Projekt als Beispiel vorliegt.
@@ -35,7 +44,7 @@ import basic.zKernel.status.IEventObjectStatusLocalZZZ;
  * @author fl86kyvo
  *
  */
-public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableOnStatusMessageListeningZZZ implements ILogFileCreateRunnerZZZ {
+public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusListeningRunnableZZZ implements ILogFileCreateRunnerZZZ {
 	private static final long serialVersionUID = 6586079955658760005L;
 	private File objSourceFile = null;
 	private File objLogFile=null;
@@ -135,7 +144,8 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableO
 					}
 					bExists = FileEasyZZZ.exists(objFileSource);
 					if(!bExists) {
-						System.out.println("File not exists, waiting for: '" + objFileSource.getAbsolutePath() + "'.");
+						String sLog = "File not exists, waiting for: '" + objFileSource.getAbsolutePath() + "'.";
+						this.logProtocolString(sLog);
 						Thread.sleep(5000);
 					}
 				}while(!bExists);
@@ -162,8 +172,9 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableO
                     sLine = br.readLine();
                     if(sLine!=null)
                     {
-                    	icount++;                    	
-                    	System.out.println(ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: " + sLine);
+                    	icount++;          
+                    	String sLog = ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: " + sLine;
+                    	this.logProtocolString(sLog);
                     	objLogStream.write(sLine.getBytes());
                     	objLogStream.write(StringZZZ.crlf().getBytes());//Merke: Ohne diese explizite neue Zeile wird alles hintereinander geschrieben.
                     	
@@ -240,8 +251,11 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableO
 
 	//### aus IListenerObjectStatusLocalMessageReactZZZ
 	//### Reaktion darauf, wenn ein Event aufgefangen wurde
+	/* (non-Javadoc)
+	 * @see basic.zBasic.component.AbstractProgramWithFlagRunnableOnStatusMessageListeningZZZ#reactOnStatusLocalEvent(basic.zKernel.status.IEventObjectStatusBasicZZZ)
+	 */
 	@Override
-	public boolean reactOnStatusLocalEvent(IEventObjectStatusBasicZZZ eventStatusLocal) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
 		boolean bReturn = false;
 		String sLog=null;
 		
@@ -265,11 +279,107 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableO
 		}//end main:
 		return bReturn;	
 	}
-
-	@Override
-	public boolean isStatusLocalDifferent(String sStatusString, boolean bStatusValue) throws ExceptionZZZ {
-		return true;
-	}
+	
+	/* (non-Javadoc)
+	 * @see basic.zKernel.status.IListenerObjectStatusLocalZZZ#reactOnStatusLocalEvent(basic.zKernel.status.IEventObjectStatusLocalZZZ)
+	 */
+//	@Override
+//	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+//		boolean bReturn=false;
+//		main:{	
+//			if(eventStatusLocal==null)break main;
+//						
+//			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Fuer LogFileWatchEvent.";
+//			this.logLineDate(sLog);
+//			
+//			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageZZZ) {
+//				
+//				boolean bRelevant = this.isEventRelevant((IEventObjectStatusLocalZZZ) eventStatusLocal); 
+//				if(!bRelevant) {
+//					sLog = 	ReflectCodeZZZ.getPositionCurrent() + ": Event / Status nicht relevant. Breche ab.";
+//					this.logProtocolString(sLog);
+//					break main;
+//				}
+//				
+//				IEventObjectStatusLocalMessageZZZ eventStatusLocalSet = (IEventObjectStatusLocalMessageZZZ) eventStatusLocal;
+//				IEnumSetMappedZZZ enumStatus = eventStatusLocalSet.getStatusLocal();				
+//				
+//				
+//			
+//				//Weiter Daten holen... im OVPN - Projekt z.B. die IPAdresse...
+//			
+////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//			
+//			//+++++++++++++++++++++
+//			//Falls der empfangene Status in einen anderen, eigenen, lokalen Status uebersetzt werden muss.
+////			HashMap<IEnumSetMappedStatusZZZ,IEnumSetMappedStatusZZZ>hmEnum = this.getHashMapEnumSetForCascadingStatusLocal();
+////			IClientMainOVPN.STATUSLOCAL objEnum = (IClientMainOVPN.STATUSLOCAL) hmEnum.get(enumStatus);			
+////			if(objEnum==null) {
+////				sLog = ReflectCodeZZZ.getPositionCurrent()+": Keinen gemappten Status aus dem Event-Objekt erhalten. Breche ab";
+////				System.out.println(sLog);
+////				this.logLineDate(sLog);
+////				break main;
+////			}
+//			
+//			//Wenn wir den Status nicht weitersenden, sondern direkt verarbeiten ist solch ein Mapping nicht notwendig.
+//			//Also da wir mit objEnum als Variable weiterarbeiten wollen:
+//			ILogFileWatchRunnerZZZ.STATUSLOCAL objEnum = (STATUSLOCAL) enumStatus;
+//			//++++++++++++++++++++##
+//			
+//			boolean bValue = eventStatusLocalSet.getStatusValue();
+//			
+//			
+//			//Merke: Ein Interface ILogFileWatchListenerExampleZZZ mit dem STATUSLOCAL ist nicht implementiert.
+////			boolean bHasError = objEnum.equals(IProcessWatchRunnerOVPN.STATUSLOCAL.HASERROR)&& bValue;
+////			boolean bEnded = objEnum.equals(IProcessWatchRunnerOVPN.STATUSLOCAL.ISSTOPPED) && bValue;
+////			boolean bHasConnection = objEnum.equals(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTION) && bValue;
+////			boolean bHasConnectionLost = objEnum.equals(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTIONLOST) && bValue;
+//		
+//			boolean bEventHasError = objEnum.equals(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR)&& bValue;
+//			boolean bEventEnded = objEnum.equals(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED)&& bValue;
+//			
+//			//boolean bEventHasConnection = objEnum.equals(IClientMainOVPN.STATUSLOCAL.ISCONNECTED);
+//			//boolean bEventHasConnectionLost = objEnum.equals(IClientMainOVPN.STATUSLOCAL.ISCONNECTINTERUPTED);
+//			
+//			
+//			boolean bEventHasFilterFound = objEnum.equals(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND)&& bValue;
+//				
+//			//int iIndex = eventStatusLocalSet.getProcessID();
+//			String sStatusMessage = eventStatusLocalSet.getStatusMessage();	
+//			sLog = ReflectCodeZZZ.getPositionCurrent() + ": StatusMessage ist = '" + sStatusMessage + "'";
+//			this.logProtocolString(sLog);
+//			
+//
+//			//Einen Status Anzunehmen ist hier nicht implementiert			
+////			boolean bStatusLocalSet = this.offerStatusLocal(iIndex, objEnum, sStatusMessage, bValue);//Es wird ein Event gefeuert, an dem das Tray-Objekt und andere registriert sind und dann sich passend einstellen kann.
+////			if(!bStatusLocalSet) {
+////				sLog = ReflectCodeZZZ.getPositionCurrent()+": Lokaler Status nicht gesetzt, aus Gruenden. Breche ab";
+////				System.out.println(sLog);
+////				this.logLineDate(sLog);
+////				break main;
+////			}
+//			//++++++++++++++
+//			
+//			//Die Stati vom Monitor-Objekt mit dem Backend-Objekt mappen
+//			//if(IClientThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPRO==objStatusEnum) {
+//			//	this.setStatusLocal(IClientMainOVPN.STATUSLOCAL.ISCONNECTING, eventStatusLocalSet.getStatusValue());				
+//			//}else if(IClientThreadProcessWatchMonitorOVPN.STATUSLOCAL.ISCONNECTED==objStatusEnum) {
+//			
+//			if(bEventHasError && bEventEnded){
+//				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status bEventHasError && bEventEnded";
+//				this.logLineDate(sLog);					
+//			}else if((!bEventHasError) && bEventEnded){
+//				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status !bEventHasError && bEventEnded";
+//				this.logLineDate(sLog);
+//				
+//			}
+//		
+//			
+//			}//end if instanceof ...MessageSetZZZ
+//			bReturn = true;
+//		}//end main:
+//		return bReturn;
+//	}
 
 	@Override
 	public boolean isEventRelevant2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
@@ -304,11 +414,5 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagRunnableO
 			bReturn = true;
 		}//end main:
 		return bReturn;
-	}
-
-	@Override
-	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

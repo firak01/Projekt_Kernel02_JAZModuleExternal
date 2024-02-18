@@ -14,7 +14,7 @@ import org.apache.commons.io.IOUtils;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramWithFlagRunnableOnStatusMessageListeningZZZ;
+import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZZ;
 import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
@@ -39,7 +39,7 @@ import basic.zKernel.status.IListenerObjectStatusLocalMessageReactZZZ;
  * @author fl86kyvo
  *
  */
-public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgramWithFlagRunnableOnStatusMessageListeningZZZ implements ILogFileCreateRunnerOnMonitorListeningZZZ {
+public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgramWithFlagOnStatusListeningRunnableZZZ implements ILogFileCreateRunnerOnMonitorListeningZZZ {
 	private static final long serialVersionUID = 6586079955658760005L;
 	private File objSourceFile = null;
 	private File objLogFile=null;
@@ -256,7 +256,7 @@ public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgra
 	//### aus IListenerObjectStatusLocalMessageReactZZZ
 	//### Reaktion darauf, wenn ein Event aufgefangen wurde
 	@Override
-	public boolean reactOnStatusLocalEvent(IEventObjectStatusBasicZZZ eventStatusLocal) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
 		boolean bReturn = false;
 		String sLog=null;
 		
@@ -279,11 +279,6 @@ public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgra
 			}
 		}//end main:
 		return bReturn;	
-	}
-
-	@Override
-	public boolean isStatusLocalDifferent(String sStatusString, boolean bStatusValue) throws ExceptionZZZ {
-		return true;
 	}
 
 	@Override
@@ -319,11 +314,5 @@ public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgra
 			bReturn = true;
 		}//end main:
 		return bReturn;
-	}
-
-	@Override
-	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

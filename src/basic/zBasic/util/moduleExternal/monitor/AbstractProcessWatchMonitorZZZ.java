@@ -3,7 +3,7 @@ package basic.zBasic.util.moduleExternal.monitor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import basic.zBasic.AbstractObjectWithStatusListeningZZZ;
+import basic.zBasic.AbstractObjectWithStatusOnStatusListeningZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
@@ -21,7 +21,7 @@ import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalZZZ;
 import basic.zKernel.status.KernelSenderObjectStatusLocalZZZ;
 
-public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWithStatusListeningZZZ implements IProcessWatchMonitorZZZ, IListenerObjectStatusLocalZZZ, IEventBrokerStatusLocalUserZZZ{
+public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWithStatusOnStatusListeningZZZ implements IProcessWatchMonitorZZZ, IListenerObjectStatusLocalZZZ, IEventBrokerStatusLocalUserZZZ{
 	protected volatile ArrayList<Process> listaProcess = new ArrayList<Process>(); //Hierueber werden alle zu beobachtenden Processe verwaltet.
 	private ISenderObjectStatusLocalZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
 	

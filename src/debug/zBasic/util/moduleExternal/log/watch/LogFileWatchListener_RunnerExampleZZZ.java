@@ -1,5 +1,6 @@
 package debug.zBasic.util.moduleExternal.log.watch;
 
+import basic.zBasic.AbstractObjectWithFlagOnStatusListeningZZZ;
 import basic.zBasic.AbstractObjectZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
@@ -18,7 +19,7 @@ import basic.zKernel.status.IListenerObjectStatusLocalMessageZZZ;
  * @author fl86kyvo
  *
  */
-public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ implements IListenerObjectStatusLocalMessageZZZ, IListenerObjectStatusLocalMessageReactZZZ{
+public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFlagOnStatusListeningZZZ {//implements IListenerObjectStatusLocalMessageZZZ, IListenerObjectStatusLocalMessageReactZZZ{
 	private static final long serialVersionUID = -2338056174362726426L;
 
 	public LogFileWatchListener_RunnerExampleZZZ() throws ExceptionZZZ {
@@ -32,7 +33,6 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ imp
 			if(eventStatusLocal==null)break main;
 						
 			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Fuer LogFileWatchEvent.";
-			System.out.println(sLog);
 			this.logLineDate(sLog);
 			
 			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageZZZ) {
@@ -40,7 +40,6 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ imp
 				boolean bRelevant = this.isEventRelevant((IEventObjectStatusLocalZZZ) eventStatusLocal); 
 				if(!bRelevant) {
 					sLog = 	ReflectCodeZZZ.getPositionCurrent() + ": Event / Status nicht relevant. Breche ab.";
-					System.out.println(sLog);
 					this.logProtocolString(sLog);
 					break main;
 				}
@@ -111,11 +110,9 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ imp
 			
 			if(bEventHasError && bEventEnded){
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status bEventHasError && bEventEnded";
-				System.out.println(sLog);
 				this.logLineDate(sLog);					
 			}else if((!bEventHasError) && bEventEnded){
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status !bEventHasError && bEventEnded";
-				System.out.println(sLog);
 				this.logLineDate(sLog);
 				
 			}
@@ -127,15 +124,6 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectZZZ imp
 		return bReturn;
 	}
 	
-	
-	@Override
-	public boolean isStatusLocalDifferent(String sStatusString, boolean bStatusValue) throws ExceptionZZZ {
-		String sLog = ReflectCodeZZZ.getPositionCurrent() + ": Input Statusstring '" + sStatusString + "', bStatusValue '" + bStatusValue + "'";
-		System.out.println(sLog);
-		return true;
-	}
-
-
 	@Override
 	public boolean isEventRelevant(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
 		boolean bReturn = false;

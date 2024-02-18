@@ -1,33 +1,13 @@
 package debug.zBasic.util.moduleExternal.log.watch;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-
-import org.apache.commons.io.IOUtils;
-
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramWithFlagRunnableOnStatusMessageListeningZZZ;
-import basic.zBasic.component.IModuleZZZ;
+import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
-import basic.zBasic.util.datatype.string.StringZZZ;
-import basic.zBasic.util.file.FileEasyZZZ;
-import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.IEventObjectStatusBasicZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalMessageReactZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
-import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalMessageReactZZZ;
-import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
 
 /**Diese Klasse läuft einfach und ist an einem Monitor registriert.
  * Wirft der Monitor Events, reagiert sie darauf.
@@ -35,7 +15,7 @@ import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
  * @author fl86kyvo
  *
  */
-public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProgramWithFlagRunnableOnStatusMessageListeningZZZ implements ILogFileWatchOnMonitorListenerRunnerExampleZZZ {
+public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProgramWithFlagOnStatusListeningRunnableZZZ implements ILogFileWatchOnMonitorListenerRunnerExampleZZZ {
 	private static final long serialVersionUID = 6586079955658760005L;
 		
 	public LogFileWatchListenerOnMonitor_RunnerExampleZZZ() throws ExceptionZZZ {
@@ -167,7 +147,7 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	//### aus IListenerObjectStatusLocalMessageReactZZZ
 	//### Reaktion darauf, wenn ein Event aufgefangen wurde
 	@Override
-	public boolean reactOnStatusLocalEvent(IEventObjectStatusBasicZZZ eventStatusLocal) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
 		boolean bReturn = false;
 		String sLog=null;
 		
@@ -190,11 +170,6 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 			}
 		}//end main:
 		return bReturn;	
-	}
-
-	@Override
-	public boolean isStatusLocalDifferent(String sStatusString, boolean bStatusValue) throws ExceptionZZZ {
-		return true;
 	}
 
 	@Override
@@ -230,11 +205,5 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 			bReturn = true;
 		}//end main:
 		return bReturn;
-	}
-
-	@Override
-	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }
