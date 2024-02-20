@@ -179,27 +179,7 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 			//+++++++++++++++++++++++++++++++++++
 			//4. Schritt: Starte den Monitor
 			//Merke: Beim Starten des Monitor-Threads die übergebenen Runner auch starten.	
-			//TODOGOON 20240214;//Kann der Monitor sich selbst in einem eigenene Thread starten
-			objMonitor.startAsThread(); //???
-			
-//			Thread objThreadMonitor = new Thread(objMonitor);
-//			objThreadMonitor.start();
- 
-			
-			//3. Starte die Threads
-//			Thread objThreadWatcher = new Thread(objWatcher);
-//			objThreadWatcher.start();
-//			
-//			
-//			Thread objThreadCreator = new Thread(objCreator);
-//			objThreadCreator.start();
-//			//+++++++++++++++++++++++++++++++++++++
-//			
-//			Thread objThreadListener = new Thread(objListener);
-//			objThreadListener.start();
-//			
-//			Thread objThreadMonitor = new Thread(objMonitor);
-//			objThreadMonitor.start();
+			objMonitor.start();
 			
 			
 			try {
