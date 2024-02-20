@@ -134,16 +134,7 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 			//3. Starte die Programme. Jedes erzeugt seinen eigenen Thread.
 			objWatcher.startAsThread();
 			objCreator.startAsThread();
-			
-			//3. Starte die Threads
-//			Thread objThreadWatcher = new Thread(objWatcher);
-//			objThreadWatcher.start();
-//			
-//			Thread objThreadCreator = new Thread(objCreator);
-//			objThreadCreator.start();
-			
-			
-			
+						
 //			try {
 //				Thread.sleep(50000);
 //				catch (InterruptedException e) {					
