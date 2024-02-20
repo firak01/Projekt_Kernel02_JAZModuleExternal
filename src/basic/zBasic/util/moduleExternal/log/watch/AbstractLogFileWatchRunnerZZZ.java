@@ -22,9 +22,11 @@ import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.EventObject4LogFileWatchRunnerStatusLocalZZZ;
 import basic.zKernel.status.IEventObject4LogFileWatchRunnerStatusLocalZZZ;
+import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalMessageZZZ;
+import basic.zKernel.status.IStatusLocalMessageUserZZZ;
 import basic.zKernel.status.KernelSenderObjectStatusLocalMessageZZZ;
 
 public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithStatusOnStatusListeningRunnableZZZ implements ILogFileWatchRunnerZZZ{
@@ -100,7 +102,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 	}
 	
 	@Override
-	public boolean start() throws ExceptionZZZ{
+	public boolean startCustom() throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{	
 			
@@ -121,7 +123,6 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 		boolean bReturn= false;
 		main:{	
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + " LogFileWatchRunner started.";
-			System.out.println(sLog);
 			this.logLineDate(sLog);
 			
 			BufferedReader br=null;
@@ -132,10 +133,18 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				boolean bExists = false;
 				do {
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
+						sLog = ReflectCodeZZZ.getPositionCurrent() + ": Flag gesetzt ('" + IProgramRunnableZZZ.FLAGZ.REQUESTSTOP .name() + "'. Breche ab.";
+						this.logLineDate(sLog);
 						break main;
 					}
 					bExists = FileEasyZZZ.exists(objFileLog);
 					if(!bExists) {
+						sLog = ReflectCodeZZZ.getPositionCurrent() + ": Warte auf Existenz der Datei  ('"+ objFileLog.getAbsolutePath() +"') ...";
+						this.logLineDate(sLog);
+						Thread.sleep(5000);
+					}else {
+						sLog = ReflectCodeZZZ.getPositionCurrent() + ": Datei existiert ('"+ objFileLog.getAbsolutePath() +"')";
+						this.logLineDate(sLog);
 						Thread.sleep(5000);
 					}
 				}while(!bExists);
@@ -224,46 +233,89 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 		return bReturn;
 	}
 		
-	//###############################
-	//### FLAG HANDLING
-	//###############################
-	@Override
-	public boolean getFlag(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag) {
-		return this.getFlag(objEnumFlag.name());
-	}
-
-	@Override
-	public boolean setFlag(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
-		return this.setFlag(objEnumFlag.name(), bFlagValue);
-	}
-
-	@Override
-	public boolean[] setFlag(ILogFileWatchRunnerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
-		boolean[] baReturn=null;
-		main:{
-			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
-				baReturn = new boolean[objaEnumFlag.length];
-				int iCounter=-1;
-				for(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
-					iCounter++;
-					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
-					baReturn[iCounter]=bReturn;
-				}
-			}
-		}//end main:
-		return baReturn;
-	}
-
-	@Override
-	public boolean proofFlagExists(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
-		return this.proofFlagExists(objEnumFlag.name());
-	}
-
-	@Override
-	public boolean proofFlagSetBefore(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
-		return this.proofFlagExists(objEnumFlag.name());
-	}
 	
+	//###############################
+		//### FLAG HANDLING aus: ILogFileWatchRunnerZZZ
+		//###############################
+		@Override
+		public boolean getFlag(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag) {
+			return this.getFlag(objEnumFlag.name());
+		}
+
+		@Override
+		public boolean setFlag(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
+			return this.setFlag(objEnumFlag.name(), bFlagValue);
+		}
+
+		@Override
+		public boolean[] setFlag(ILogFileWatchRunnerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
+			boolean[] baReturn=null;
+			main:{
+				if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+					baReturn = new boolean[objaEnumFlag.length];
+					int iCounter=-1;
+					for(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+						iCounter++;
+						boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+						baReturn[iCounter]=bReturn;
+					}
+				}
+			}//end main:
+			return baReturn;
+		}
+
+		@Override
+		public boolean proofFlagExists(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+			return this.proofFlagExists(objEnumFlag.name());
+		}
+
+		@Override
+		public boolean proofFlagSetBefore(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
+			return this.proofFlagExists(objEnumFlag.name());
+		}
+		
+		//###############################
+		//### FLAG HANDLING II aus: IStatusLocalMessageUserZZZ
+		//###############################
+		@Override
+		public boolean getFlag(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag) {
+			return this.getFlag(objEnumFlag.name());
+		}
+
+		@Override
+		public boolean setFlag(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
+			return this.setFlag(objEnumFlag.name(), bFlagValue);
+		}
+
+		@Override
+		public boolean[] setFlag(IStatusLocalMessageUserZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
+			boolean[] baReturn=null;
+			main:{
+				if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+					baReturn = new boolean[objaEnumFlag.length];
+					int iCounter=-1;
+					for(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+						iCounter++;
+						boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+						baReturn[iCounter]=bReturn;
+					}
+				}
+			}//end main:
+			return baReturn;
+		}
+
+		@Override
+		public boolean proofFlagExists(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+			return this.proofFlagExists(objEnumFlag.name());
+		}
+
+		@Override
+		public boolean proofFlagSetBefore(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
+			return this.proofFlagExists(objEnumFlag.name());
+		}
+
+	
+
 	//###########################################################
 	//### STATUS
 	//###########################################################
@@ -295,94 +347,5 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 		}	// end main:
 		
 		return bFunction;	
-	}
-
-	@Override
-	public IEnumSetMappedStatusZZZ getStatusLocalEnumPrevious(int iIndexStepsBack) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean offerStatusLocal(int iIndexOfProcess, Enum enumStatusIn, String sStatusMessage, boolean bStatusValue)
-			throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean offerStatusLocal(Enum enumStatusIn, String sStatusMessage, boolean bStatusValue)
-			throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean setStatusLocal(Enum enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean setStatusLocal(Enum enumStatusIn, String sMessage, boolean bStatusValue) throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean setStatusLocal(int iIndexOfProcess, Enum enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean setStatusLocal(int iIndexOfProcess, Enum enumStatusIn, String sMessage, boolean bStatusValue)
-			throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean setStatusLocalEnum(IEnumSetMappedStatusZZZ enumStatusMapped, boolean bStatusValue)
-			throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean setStatusLocalEnum(IEnumSetMappedStatusZZZ enumStatusMapped, String sMessage, boolean bStatusValue)
-			throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean setStatusLocalEnum(int iIndexOfProcess, IEnumSetMappedStatusZZZ enumStatusMapped,
-			boolean bStatusValue) throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean setStatusLocalEnum(int iIndexOfProcess, IEnumSetMappedStatusZZZ enumStatusMapped, String sMessage,
-			boolean bStatusValue) throws ExceptionZZZ {
-		// TODO Auto-generated method stub
-		return false;
-	}	
-	
-	//#######################################
-	/* (non-Javadoc)
-	 * @see basic.zBasic.AbstractObjectWithStatusZZZ#isStatusLocalRelevant(basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ)
-	 */
-	@Override
-	public boolean isStatusLocalRelevant(IEnumSetMappedStatusZZZ objEnumStatusIn) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			if(objEnumStatusIn==null) break main;
-				
-			//Fuer das Main-Objekt ist erst einmal jeder Status relevant
-			bReturn = true;
-		}//end main:
-		return bReturn;
 	}
 }

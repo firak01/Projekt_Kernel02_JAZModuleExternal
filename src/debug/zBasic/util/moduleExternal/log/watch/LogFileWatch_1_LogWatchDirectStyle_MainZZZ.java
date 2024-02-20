@@ -80,7 +80,7 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 		    if (args.length > 0) {
 		    	sFilePath = args[0];
 		    } else {
-		    	System.out.print("\nLog Ziel-Datei auswaehlen (per Dialog)? (J/N): ");
+		    	System.out.print("\nLog Ziel-Datei auswaehlen (per Dialog). Merke: Sie wird geloescht und neu aufgebaut? (J/N): ");
 			    if (IoUtil.JaNein()) {	
 			    	DateiUtil objUtilFileLog = new DateiUtil();
 			    	objUtilFileLog.selectLoad();
@@ -92,6 +92,11 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 			    	sFilePath = sLogFilePathTotalDefault;
 			    }	    	
 		    }
+		    
+		    //Lösche zuerst die Zieldatei
+		    FileEasyZZZ.removeFile(sFilePath);
+		    
+		    //Erstelle nun die Datei wieder neu, erst einmal als Objekt
 		    File objLogFile = new File(sFilePath);
 			
 			//0. Schritt: Bereite den Listener vor, der als Beispiel für einen einfachen Listener fungiert.
@@ -125,15 +130,17 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 				
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Creator daran.
 			objWatcher.registerForStatusLocalEvent((IListenerObjectStatusLocalZZZ) objCreator);//Registriere den Creator nun am ProcessWatchRunner
-					
+				
+			//3. Starte die Programme. Jedes erzeugt seinen eigenen Thread.
+			objWatcher.startAsThread();
+			objCreator.startAsThread();
 			
 			//3. Starte die Threads
-			Thread objThreadWatcher = new Thread(objWatcher);
-			objThreadWatcher.start();
-			
-			
-			Thread objThreadCreator = new Thread(objCreator);
-			objThreadCreator.start();
+//			Thread objThreadWatcher = new Thread(objWatcher);
+//			objThreadWatcher.start();
+//			
+//			Thread objThreadCreator = new Thread(objCreator);
+//			objThreadCreator.start();
 			
 			
 			

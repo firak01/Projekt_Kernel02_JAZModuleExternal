@@ -82,225 +82,9 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	}
 
 	//#### GETTER / SETTER
-	@Override
-	public File getLogFileWatched() {
-		return this.objLogFile;
-	}
-
-	@Override
-	public void setLogFileWatched(File objLogFile) {
-		this.objLogFile = objLogFile;
-	}
 	
-	@Override
-	public String getLineFilter() {
-		return this.sLineFilter;
-	}
-	
-	@Override
-	public void setLineFilter(String sLineFilter) {
-		this.sLineFilter=sLineFilter;
-	}
-	
-	@Override
-	public boolean start() throws ExceptionZZZ{
-		boolean bReturn = false;
-		main:{	
-			
-			//Lies die Datei Zeile für Zeile aus.
-			bReturn = this.startServerProcessLogWatcher();
-
-		}//end main:
-		return bReturn;
-	}
-	
-	
-	/** Das klappt... man kann das LogFile auslesen,
-	 *  welches immer weiter neu vom OVPN-Server gefüllt wird.
-	 * @return
-	 * @author Fritz Lindhauer, 10.12.2023, 16:04:55
-	 */
-	public boolean startServerProcessLogWatcher() throws ExceptionZZZ{
-		boolean bReturn= false;
-		main:{	
-			String sLog = ReflectCodeZZZ.getPositionCurrent() + " LogFileWatchRunner started.";
-			this.logLineDate(sLog);
-			
-			BufferedReader br=null;
-			try {
-				File objFileLog = this.getLogFileWatched();
-				
-				//Warte auf die Existenz der Datei.
-				boolean bExists = false;
-				do {
-					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
-						break main;
-					}
-					bExists = FileEasyZZZ.exists(objFileLog);
-					if(!bExists) {
-						Thread.sleep(5000);
-					}
-				}while(!bExists);
-				
-				String sLineFilter = this.getLineFilter();
-				if(StringZZZ.isEmpty(sLineFilter)) {
-					ExceptionZZZ ez = new ExceptionZZZ("Keine Zeilenfilter gesetzt.", this.iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
-					throw ez;
-				}
-				
-				String sLine = null;
-				InputStream objStream = new FileInputStream(objFileLog);
-				br = new BufferedReader(new InputStreamReader(objStream));
-				
-				int icount=0;
-                while (true){
-                	Thread.sleep(100); //Bremse zum Debuggen ab. Sonst gehen mir die Zeilen aus... ;-))
-                	
-                	boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
-					if( bStopRequested) {
-						sLog = ReflectCodeZZZ.getPositionCurrent() + ": Breche Schleife ab.";
-						this.logLineDate(sLog);
-						break main;
-					}
-					
-                    sLine = br.readLine();
-                    if(sLine!=null)
-                    {
-                    	icount++;
-                    	System.out.println(ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: " + sLine);	                    	
-                    	if(StringZZZ.contains(sLine, sLineFilter)) {
-                    		System.out.println(ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: Zeilenfilter gefunden: '" + sLineFilter + "'");
-                    		
-                    		IEventObject4LogFileWatchRunnerStatusLocalZZZ event = new EventObject4LogFileWatchRunnerStatusLocalZZZ(this,ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, true);			                			
-                			this.getSenderStatusLocalUsed().fireEvent(event);
-                			
-                			//Das Anhalten wird dann im gemeinsamen Listener gemacht, an dem der WatchRunner registriert ist.
-                			//bzw. in der entsprechenden reaktions-Methode in dieser Klasse.....
-                			
-                			if(this.getFlag(ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
-                				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
-        						this.logLineDate(sLog);
-        						break;
-                			}
-                    	}
-                    }else{
-                    	//Warte auf weiter Ausgaben
-                        Thread.sleep(100);
-                    }
-                    
-                    this.logLineDate("");
-                    Thread.sleep(20);													
-					boolean bError = this.getStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR);
-					if(bError) break;
 		
-					//Nach irgendeiner Ausgabe enden ist hier falsch, in einer abstrakten Klasse vielleicht richtig, quasi als Muster.
-					//if(this.getFlag("hasOutput")) break;
-					//System.out.println("FGLTEST03");					
-				}//end while
-					
-				this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED,true);
-				this.logLineDate(ReflectCodeZZZ.getPositionCurrent() + ": LogFileWatchRunner ended.");
-				
-              	
-                bReturn = true;
-			} catch (InterruptedException e) {				
-				e.printStackTrace();
-				
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();								
-			} finally {
-				if(br!=null) {
-					IOUtils.closeQuietly(br);
-				}
-	        }
-		}//end main:
-		return bReturn;
-	}
-		
-	//###############################
-	//### FLAG HANDLING aus: ILogFileWatchRunnerZZZ
-	//###############################
-	@Override
-	public boolean getFlag(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag) {
-		return this.getFlag(objEnumFlag.name());
-	}
-
-	@Override
-	public boolean setFlag(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
-		return this.setFlag(objEnumFlag.name(), bFlagValue);
-	}
-
-	@Override
-	public boolean[] setFlag(ILogFileWatchRunnerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
-		boolean[] baReturn=null;
-		main:{
-			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
-				baReturn = new boolean[objaEnumFlag.length];
-				int iCounter=-1;
-				for(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
-					iCounter++;
-					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
-					baReturn[iCounter]=bReturn;
-				}
-			}
-		}//end main:
-		return baReturn;
-	}
-
-	@Override
-	public boolean proofFlagExists(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
-		return this.proofFlagExists(objEnumFlag.name());
-	}
-
-	@Override
-	public boolean proofFlagSetBefore(ILogFileWatchRunnerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
-		return this.proofFlagExists(objEnumFlag.name());
-	}
 	
-	//###############################
-	//### FLAG HANDLING II aus: IStatusLocalMessageUserZZZ
-	//###############################
-	@Override
-	public boolean getFlag(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag) {
-		return this.getFlag(objEnumFlag.name());
-	}
-
-	@Override
-	public boolean setFlag(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
-		return this.setFlag(objEnumFlag.name(), bFlagValue);
-	}
-
-	@Override
-	public boolean[] setFlag(IStatusLocalMessageUserZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
-		boolean[] baReturn=null;
-		main:{
-			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
-				baReturn = new boolean[objaEnumFlag.length];
-				int iCounter=-1;
-				for(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
-					iCounter++;
-					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
-					baReturn[iCounter]=bReturn;
-				}
-			}
-		}//end main:
-		return baReturn;
-	}
-
-	@Override
-	public boolean proofFlagExists(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
-		return this.proofFlagExists(objEnumFlag.name());
-	}
-
-	@Override
-	public boolean proofFlagSetBefore(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
-		return this.proofFlagExists(objEnumFlag.name());
-	}
-
 	//###########################################################
 	//### STATUS
 	//###########################################################
@@ -602,20 +386,17 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	}
 
 	//#######################################
-		/* (non-Javadoc)
-		 * @see basic.zBasic.AbstractObjectWithStatusZZZ#isStatusLocalRelevant(basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ)
-		 */
-		@Override
-		public boolean isStatusLocalRelevant(IEnumSetMappedStatusZZZ objEnumStatusIn) throws ExceptionZZZ {
-			boolean bReturn = false;
-			main:{
-				if(objEnumStatusIn==null) break main;
-					
-				//Fuer das Main-Objekt ist erst einmal jeder Status relevant
-				bReturn = true;
-			}//end main:
-			return bReturn;
-		}
+	@Override
+	public boolean isStatusLocalRelevant(IEnumSetMappedStatusZZZ objEnumStatusIn) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			if(objEnumStatusIn==null) break main;
+				
+			//Fuer das Main-Objekt ist erst einmal jeder Status relevant
+			bReturn = true;
+		}//end main:
+		return bReturn;
+	}
 	
 	@Override
 	public boolean isEventRelevant(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {

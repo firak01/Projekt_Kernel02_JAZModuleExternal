@@ -113,6 +113,11 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 			    	sFilePath = sLogFilePathTotalDefault;
 			    }	    	
 		    }
+		    
+		    //Lösche zuerst die Zieldatei
+		    FileEasyZZZ.removeFile(sFilePath);
+		    
+		    //Erstelle nun die Datei wieder neu, erst einmal als Objekt
 		    File objLogFile = new File(sFilePath);
 			
 		    		    
@@ -175,7 +180,7 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 			//4. Schritt: Starte den Monitor
 			//Merke: Beim Starten des Monitor-Threads die übergebenen Runner auch starten.	
 			//TODOGOON 20240214;//Kann der Monitor sich selbst in einem eigenene Thread starten
-			objMonitor.start(); //???
+			objMonitor.startAsThread(); //???
 			
 //			Thread objThreadMonitor = new Thread(objMonitor);
 //			objThreadMonitor.start();

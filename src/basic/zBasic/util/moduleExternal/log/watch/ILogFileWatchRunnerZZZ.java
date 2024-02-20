@@ -41,7 +41,7 @@ public interface ILogFileWatchRunnerZZZ {
 		HASOUTPUT(iSTATUSLOCAL_GROUPID,"hasoutput","Log hat Output",""),		
 		HASFILTERFOUND(iSTATUSLOCAL_GROUPID,"hasfilterfound","Log enthaelt aktuell den Filter",""),
 				
-		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isended","ProcessWatchRunner: Beendet",""),
+		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isstopped","ProcessWatchRunner: Beendet",""),
 		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","ProcessWatchRunner: Fehler","");
 									
 		private int iStatusGroupId;			

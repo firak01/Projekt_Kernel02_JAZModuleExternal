@@ -52,7 +52,7 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	//#### GETTER / SETTER
 		
 	@Override
-	public boolean start() throws ExceptionZZZ{
+	public boolean startCustom() throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{	
 			

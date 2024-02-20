@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramMonitoRunnablerZZZ;
-import basic.zBasic.component.IProgramRunnableMonitorZZZ;
+import basic.zBasic.component.AbstractProgramMonitorRunnablerZZZ;
+import basic.zBasic.component.IProgramMonitorZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
@@ -728,15 +728,15 @@ public class LogFileWatchRunnerMonitorZZZ extends AbstractLogFileWatchRunnableMo
 		main:{
 			
 			//Merke: Reine Lokale Statuswerte kommen nicht aus einem Event und werden daher nicht gemapped. 			
-			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTARTNEW, IProgramRunnableMonitorZZZ.STATUSLOCAL.HASPROCESSSTARTNEW);
-			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTARTING, IProgramRunnableMonitorZZZ.STATUSLOCAL.HASPROCESSSTARTING);
-			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTARTED, IProgramRunnableMonitorZZZ.STATUSLOCAL.HASPROCESSSTARTED);
-			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASOUTPUT, IProgramRunnableMonitorZZZ.STATUSLOCAL.HASPROCESSOUTPUT);
-			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, IProgramRunnableMonitorZZZ.STATUSLOCAL.HASPROCESSCONNECTION);
+			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTARTNEW, IProgramMonitorZZZ.STATUSLOCAL.HASPROCESSSTARTNEW);
+			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTARTING, IProgramMonitorZZZ.STATUSLOCAL.HASPROCESSSTARTING);
+			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTARTED, IProgramMonitorZZZ.STATUSLOCAL.HASPROCESSSTARTED);
+			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASOUTPUT, IProgramMonitorZZZ.STATUSLOCAL.HASPROCESSOUTPUT);
+			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, IProgramMonitorZZZ.STATUSLOCAL.HASPROCESSCONNECTION);
 			//hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASCONNECTIONLOST, IProgramRunnableMonitorZZZ.STATUSLOCAL.HASPROCESSCONNECTIONLOST);
 			
-			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, IProgramRunnableMonitorZZZ.STATUSLOCAL.HASPROCESSSTOPPED);
-			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR, IProgramRunnableMonitorZZZ.STATUSLOCAL.HASPROCESSERROR);
+			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, IProgramMonitorZZZ.STATUSLOCAL.HASPROCESSSTOPPED);
+			hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR, IProgramMonitorZZZ.STATUSLOCAL.HASPROCESSERROR);
 						
 		}//end main:
 		return hmReturn;	

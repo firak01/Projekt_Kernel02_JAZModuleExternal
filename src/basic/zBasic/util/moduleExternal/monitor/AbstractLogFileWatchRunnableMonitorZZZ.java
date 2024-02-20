@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import basic.zBasic.ExceptionZZZ;
-import basic.zBasic.component.AbstractProgramMonitoRunnablerZZZ;
+import basic.zBasic.component.AbstractProgramMonitorRunnablerZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
@@ -15,7 +15,7 @@ import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalMessageZZZ;
 import basic.zKernel.status.KernelSenderObjectStatusLocalMessageZZZ;
 
-public abstract class AbstractLogFileWatchRunnableMonitorZZZ  extends AbstractProgramMonitoRunnablerZZZ implements ILogFileWatchRunnerMonitorZZZ{
+public abstract class AbstractLogFileWatchRunnableMonitorZZZ  extends AbstractProgramMonitorRunnablerZZZ implements ILogFileWatchRunnerMonitorZZZ{
 	private static final long serialVersionUID = 968455281850239704L;
 	protected volatile File objLogFile = null;	
 		

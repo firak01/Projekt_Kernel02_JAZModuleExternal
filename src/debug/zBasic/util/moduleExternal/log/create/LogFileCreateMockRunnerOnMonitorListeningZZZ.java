@@ -106,7 +106,7 @@ public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgra
 	}
 	
 	@Override
-	public boolean start() throws ExceptionZZZ{
+	public boolean startCustom() throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{	
 			

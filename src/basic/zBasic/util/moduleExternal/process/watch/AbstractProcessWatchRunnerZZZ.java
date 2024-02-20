@@ -95,7 +95,7 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 	}
 	
 	@Override
-	public boolean start() throws ExceptionZZZ{
+	public boolean startAsThread() throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{			
 				check:{
@@ -167,7 +167,7 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 	@Override
 	public void run() {
 		try {
-			this.start();
+			this.startAsThread();
 		} catch (ExceptionZZZ ez) {
 			try {
 				this.logLineDate(ez.getDetailAllLast());

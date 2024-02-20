@@ -15,7 +15,6 @@ import org.apache.commons.io.IOUtils;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramRunnableWithStatusOnStatusListeningZZZ;
 import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZZ;
 import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
@@ -80,9 +79,10 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 				if(this.getFlag("init")) break main;
 			}
 			
+			this.objSourceFile = objSourceFile;			
 			this.objLogFile = objLogFile;
+			
 			this.objModule = objModule;
-			this.objLogFile = objLogFile;
 		}//end main:
 		return bReturn;
 	}
@@ -111,7 +111,7 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 	}
 	
 	@Override
-	public boolean start() throws ExceptionZZZ{
+	public boolean startCustom() throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{	
 			
@@ -134,12 +134,19 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 			BufferedReader br=null;
 			OutputStream objLogStream=null;
 			try {
-				
-				//Warte auf die Existenz der Datei.
+				//Die Quelldatei muss übergeben sein.
 				File objFileSource = this.getSourceFile();
+				if(objFileSource==null) {
+					ExceptionZZZ ez = new ExceptionZZZ("Source File missing", iERROR_PROPERTY_MISSING, this);
+					throw ez;
+				}
+				
+				//Warte auf die Existenz der Quell-Datei.
 				boolean bExists = false;
 				do {
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) {
+						String sLog = "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUESTSTOP.name() + "'. Breche ab.";
+						this.logProtocolString(sLog);
 						break main;
 					}
 					bExists = FileEasyZZZ.exists(objFileSource);
@@ -147,6 +154,9 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 						String sLog = "File not exists, waiting for: '" + objFileSource.getAbsolutePath() + "'.";
 						this.logProtocolString(sLog);
 						Thread.sleep(5000);
+					}else {
+						String sLog = "File exists: '" + objFileSource.getAbsolutePath() + "'.";
+						this.logProtocolString(sLog);
 					}
 				}while(!bExists);
 								
@@ -154,6 +164,11 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 				br = new BufferedReader(new InputStreamReader(objSourceStream));
 				
 				File objFileLog = this.getLogFile();
+				if(objFileLog==null) {
+					ExceptionZZZ ez = new ExceptionZZZ("Target File (as Log File) missing", iERROR_PROPERTY_MISSING, this);
+					throw ez;
+				}
+				
 				objLogStream = new FileOutputStream(objFileLog);
 				
 				//Merke: Der Ansatz mit dem Buffered Writer funktioniert nicht,
@@ -167,6 +182,8 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
                 while (true){
                 	Thread.sleep(300); //Bremse zum Debuggen ab. Sonst gehen mir die Zeilen aus... ;-))
                 	if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) {
+                		String sLog = "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUESTSTOP.name() + "'. Breche ab.";
+						this.logProtocolString(sLog);
     					break main;
     				}
                     sLine = br.readLine();
