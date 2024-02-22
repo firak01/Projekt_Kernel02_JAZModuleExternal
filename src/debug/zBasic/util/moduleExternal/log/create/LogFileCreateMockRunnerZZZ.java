@@ -27,8 +27,6 @@ import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventObjectStatusBasicZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalMessageReactZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalMessageZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
@@ -280,19 +278,23 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
 			this.logProtocolString(sLog);
 			
-			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageReactZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
-				IEventObjectStatusLocalMessageReactZZZ event = (IEventObjectStatusLocalMessageReactZZZ) eventStatusLocal;
+			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
+				IEventObjectStatusLocalZZZ event = (IEventObjectStatusLocalZZZ) eventStatusLocal;
 				boolean bStatusValue = event.getStatusValue();
 				if(bStatusValue!=true) break main;
-			}
-			
-			
-			if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
-				this.logProtocolString(sLog);
 				
-				this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
-			}
+				if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+					this.logProtocolString(sLog);
+					
+					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
+				}
+				
+				
+			}else {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event wird nicht behandelt, instanceof " + eventStatusLocal.getClass().getName();
+				this.logProtocolString(sLog);
+			}			
 		}//end main:
 		return bReturn;	
 	}
@@ -398,18 +400,9 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 //		return bReturn;
 //	}
 
-	@Override
-	public boolean isEventRelevant2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
-		return true;
-	}
-
+	
 	@Override
 	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
-		return true;
-	}
-
-	@Override
-	public boolean isEventRelevantByStatusLocal2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
 		return true;
 	}
 
@@ -431,5 +424,15 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 			bReturn = true;
 		}//end main:
 		return bReturn;
+	}
+
+	@Override
+	public HashMap createHashMapStatusLocalReactionCustom() {
+		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
+		main:{
+			
+		}//end main:
+		return hmReturn;
+		
 	}
 }

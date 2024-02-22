@@ -76,22 +76,27 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 			String sLogFile = "ovpn.log";
 			String sLogFilePathTotalDefault =	FileEasyZZZ.joinFilePathName(sLogDirectory, sLogFile);		
 							
-		    String sFilePath;
-		    if (args.length > 0) {
-		    	sFilePath = args[0];
-		    } else {
-		    	System.out.print("\nLog Ziel-Datei auswaehlen (per Dialog). Merke: Sie wird geloescht und neu aufgebaut? (J/N): ");
-			    if (IoUtil.JaNein()) {	
-			    	DateiUtil objUtilFileLog = new DateiUtil();
-			    	objUtilFileLog.selectLoad();
-			    	sFilePath = objUtilFileLog.computeFilePath();
-			    	if(StringZZZ.isEmpty(sFilePath)) {
-			    		break main;
-			    	}	
-			    }else {
-			    	sFilePath = sLogFilePathTotalDefault;
-			    }	    	
-		    }
+			  String sFilePath;
+			    if (args.length > 0) {
+			    	sFilePath = args[0];
+			    } else {
+			    	System.out.print("\nLog Ziel-Datei auswaehlen (per Dialog)? Sie wird dann zunaechst geloescht und danach aus einer Vorlage neu aufgebaut (J/N/A): ");
+			    	int iProof = IoUtil.JaNeinAbbrechen();
+				    if (IoUtil.isJa(iProof)) {	
+				    	DateiUtil objUtilFileLog = new DateiUtil();
+				    	objUtilFileLog.selectLoad();
+				    	sFilePath = objUtilFileLog.computeFilePath();
+				    	if(StringZZZ.isEmpty(sFilePath)) {
+				    		System.out.println("Keine Datei ausgewählt. Program wird abgebrochen.");
+				    		break main;
+				    	}
+				    }else if(IoUtil.isAbbrechen(iProof)) {
+				    	System.out.println("Program wird abgebrochen.");
+				    	break main;
+				    }else {
+				    	sFilePath = sLogFilePathTotalDefault;
+				    }	    	
+			    }
 		    
 		    //Lösche zuerst die Zieldatei
 		    FileEasyZZZ.removeFile(sFilePath);

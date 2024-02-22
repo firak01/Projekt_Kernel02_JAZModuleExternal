@@ -16,6 +16,7 @@ import basic.zKernel.IKernelZZZ;
 import basic.zKernel.flag.EventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IEventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalZZZ;
 
 
@@ -214,31 +215,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			
 	//### Getter / Setter
 		
-	/**
-	 * @param sStatusString
-	 * @return
-	 * @throws ExceptionZZZ
-	 * @author Fritz Lindhauer, 23.10.2023, 11:48:47
-	 */
-	public boolean isStatusChanged(String sStatusString) throws ExceptionZZZ{
-		boolean bReturn = false;
-		main:{
-			if(sStatusString == null) {
-				bReturn = this.getStatusLocalAbbreviation()==null;
-				break main;
-			}
-			
-			if(!sStatusString.equals(this.getStatusLocalAbbreviation())) {
-				bReturn = true;
-			}
-		}//end main:
-		if(bReturn) {
-			String sLog = ReflectCodeZZZ.getPositionCurrent()+ ": Status changed to '"+sStatusString+"'";
-			System.out.println(sLog);
-		    this.getLogObject().WriteLineDate(sLog);			
-		}
-		return bReturn;
-	}
+	
 	
 	
 	
@@ -715,26 +692,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		return bReturn;
 	}
 
-	/* (non-Javadoc)
-	 * @see use.openvpn.client.status.IListenerObjectStatusLocalSetOVPN#isEventRelevantByStatusLocal(use.openvpn.client.status.IEventObjectStatusLocalSetOVPN)
-	 */
-	@Override
-	public boolean isEventRelevantByStatusLocal(IEventObjectStatusLocalSetOVPN eventStatusLocalSet)	throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			IEnumSetMappedStatusZZZ enumStatus = eventStatusLocalSet.getStatusEnum();							
-			bReturn = this.isStatusLocalRelevant(enumStatus);
-			if(!bReturn) break main;
-			
-			
-			String sAbr = eventStatusLocalSet.getStatusAbbreviation();
-			if(!StringZZZ.startsWith(sAbr, "hasconnection")) break main;
-			
-			bReturn = true;
-		}//end main:
-		return bReturn;
-	}
-
+	
 	@Override
 	public boolean setStatusLocal(Enum enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
 		boolean bFunction = false;
@@ -879,5 +837,39 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 						
 		}//end main:
 		return hmReturn;	
+	}
+
+	@Override
+	public ArrayList<Process> getProcessList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setProcessList(ArrayList<Process> listaProcess) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocal)	throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public HashMap createHashMapStatusLocalReactionCustom() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }//END class

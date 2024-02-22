@@ -7,23 +7,13 @@ import base.io.IoUtil;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.IConstantZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.IProgramRunnableZZZ;
-import basic.zBasic.util.crypt.code.Vigenere256ZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.LogFileWatchRunnerZZZ;
-import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchRunnerMonitorZZZ;
 import basic.zBasic.util.moduleExternal.monitor.LogFileWatchRunnerMonitorZZZ;
-import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalMessageReactZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
-import basic.zKernel.status.ISenderObjectStatusBasicZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalMessageReactZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerOnMonitorListeningZZZ;
-import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
 import debug.zBasic.util.moduleExternal.log.create.LogFileCreateMockRunnerOnMonitorListeningZZZ;
-import debug.zBasic.util.moduleExternal.log.create.LogFileCreateMockRunnerZZZ;
 
 /** In dieser Klasse wird ein LogFile von dem einen Thread erzeugt 
  *  und gleichzeitig von einem anderen Thread ausgewertet.*  
@@ -101,14 +91,19 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 		    if (args.length > 0) {
 		    	sFilePath = args[0];
 		    } else {
-		    	System.out.print("\nLog Ziel-Datei auswaehlen (per Dialog)? (J/N): ");
-			    if (IoUtil.JaNein()) {	
+		    	System.out.print("\nLog Ziel-Datei auswaehlen (per Dialog)? Sie wird dann zunaechst geloescht und danach aus einer Vorlage neu aufgebaut (J/N/A): ");
+		    	int iProof = IoUtil.JaNeinAbbrechen();
+			    if (IoUtil.isJa(iProof)) {	
 			    	DateiUtil objUtilFileLog = new DateiUtil();
 			    	objUtilFileLog.selectLoad();
 			    	sFilePath = objUtilFileLog.computeFilePath();
 			    	if(StringZZZ.isEmpty(sFilePath)) {
+			    		System.out.println("Keine Datei ausgewählt. Program wird abgebrochen.");
 			    		break main;
-			    	}	
+			    	}
+			    }else if(IoUtil.isAbbrechen(iProof)) {
+			    	System.out.println("Program wird abgebrochen.");
+			    	break main;
 			    }else {
 			    	sFilePath = sLogFilePathTotalDefault;
 			    }	    	
@@ -127,7 +122,7 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 		    //wird der Monitor die an ihm registrierte Hauptklasse per neuem Event informieren.
 		    
 			//0. Schritt: Bereite den Listener vor, der als Beispiel für einen "Listener am Monitor" fungiert.
-		    LogFileWatchListenerOnMonitor_RunnerExampleZZZ objListener = new LogFileWatchListenerOnMonitor_RunnerExampleZZZ();
+		    LogFileWatchListenerOnMonitor_RunnerExampleZZZ objListenerOnMonitor = new LogFileWatchListenerOnMonitor_RunnerExampleZZZ();
 			
 		   
 			//1. Schritt: Mache den Log Creator, 
@@ -162,8 +157,8 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 		    		    
 	
 		    //Merke: Beim Übergeben der Objekte an den Monitor... diese dabei sofort am Monitor registrieren....
-		    objMonitor.addProgramRunnable(objWatcher);
-		    objMonitor.addProgramRunnable(objCreator);
+		    objMonitor.addProgram(objWatcher);
+		    objMonitor.addProgram(objCreator);
 		    
 		    
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
@@ -174,7 +169,7 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 			//++++++++++++++++++++++++++++++++++++
 			
 			//Registriere den Beispiellistener auch am Monitor
-			objMonitor.registerForStatusLocalEvent(objListener);
+			objMonitor.registerForStatusLocalEvent(objListenerOnMonitor);
 			
 			//+++++++++++++++++++++++++++++++++++
 			//4. Schritt: Starte den Monitor

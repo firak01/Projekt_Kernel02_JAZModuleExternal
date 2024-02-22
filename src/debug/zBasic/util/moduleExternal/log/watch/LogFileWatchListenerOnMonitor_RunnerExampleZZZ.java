@@ -1,12 +1,13 @@
 package debug.zBasic.util.moduleExternal.log.watch;
 
+import java.util.HashMap;
+
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalMessageReactZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 
 /**Diese Klasse läuft einfach und ist an einem Monitor registriert.
@@ -155,35 +156,30 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
 			this.logProtocolString(sLog);
 			
-			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageReactZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
-				IEventObjectStatusLocalMessageReactZZZ event = (IEventObjectStatusLocalMessageReactZZZ) eventStatusLocal;
+			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
+				IEventObjectStatusLocalZZZ event = (IEventObjectStatusLocalZZZ) eventStatusLocal;
 				boolean bStatusValue = event.getStatusValue();
 				if(bStatusValue!=true) break main;
-			}
-			
-			
-			if(this.getFlag(ILogFileWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ.END_ON_FILTERFOUND)) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
-				this.logProtocolString(sLog);
 				
-				this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
+				if(this.getFlag(ILogFileWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+					this.logProtocolString(sLog);
+					
+					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
+				}
+			}else {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event ist nicht instanceof IEventObjectStatusLocalZZZ und wird nicht behandelt. Klasse: " + eventStatusLocal.getClass().getName();
+				this.logProtocolString(sLog);				
 			}
+			
+			
+			
 		}//end main:
 		return bReturn;	
 	}
 
 	@Override
-	public boolean isEventRelevant2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
-		return true;
-	}
-
-	@Override
 	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
-		return true;
-	}
-
-	@Override
-	public boolean isEventRelevantByStatusLocal2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
 		return true;
 	}
 
@@ -193,17 +189,10 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	}
 
 	@Override
-	public boolean isEventRelevant(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			
-			if(!this.isEventRelevant2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByClass2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByStatusLocal2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByStatusLocalValue2ChangeStatusLocal(eventStatusLocal)) break main;
-			
-			bReturn = true;
-		}//end main:
-		return bReturn;
+	public HashMap createHashMapStatusLocalReactionCustom() {
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+	
 }

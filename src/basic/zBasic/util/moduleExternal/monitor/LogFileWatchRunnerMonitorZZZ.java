@@ -6,24 +6,16 @@ import java.util.HashMap;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramMonitorRunnablerZZZ;
 import basic.zBasic.component.IProgramMonitorZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
-import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
+import basic.zBasic.component.IProgramZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
-import basic.zBasic.util.abstractList.ArrayListUniqueZZZ;
-import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
-import basic.zBasic.util.moduleExternal.monitor.AbstractProcessWatchMonitorZZZ;
-import basic.zKernel.AbstractKernelUseObjectWithStatusZZZ;
-import basic.zKernel.IKernelZZZ;
-import basic.zKernel.flag.EventObjectFlagZsetZZZ;
-import basic.zKernel.flag.IEventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.IEventObjectStatusBasicZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalMessageReactRunnableZZZ;
+import basic.zKernel.status.IListenerObjectStatusLocalRunnableZZZ;
+import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
+import basic.zKernel.status.IListenerProgramStatusLocalZZZ;
 
 
 /**This class watches the ServerMainZZZ-class and the ServerConnectionListenerRuner-objects.
@@ -33,7 +25,8 @@ import basic.zKernel.status.IListenerObjectStatusLocalMessageReactRunnableZZZ;
  *
  */
 public class LogFileWatchRunnerMonitorZZZ extends AbstractLogFileWatchRunnableMonitorZZZ {
-	
+	private static final long serialVersionUID = 8209025974705509709L;
+
 	public LogFileWatchRunnerMonitorZZZ() throws ExceptionZZZ{
 		super();				
 	}
@@ -104,29 +97,6 @@ public class LogFileWatchRunnerMonitorZZZ extends AbstractLogFileWatchRunnableMo
 
 	//###### STATUS		
 	@Override
-	public boolean isStatusLocalRelevant(IEnumSetMappedStatusZZZ objEnumStatusIn) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			if(objEnumStatusIn==null) break main;
-			
-			
-			//Merke: enumStatus hat class='class use.openvpn.client.process.IProcessWatchRunnerOVPN$STATUSLOCAL'				
-//			if(!(objEnum instanceof IServerMainOVPN.STATUSLOCAL) ){
-//				String sLog = ReflectCodeZZZ.getPositionCurrent()+": enumStatus wird wg. unpassender Klasse ignoriert.";
-//				System.out.println(sLog);
-//				//this.objMain.logMessageString(sLog);
-//				break main;
-//		}	
-			
-			//Erst einmal ist jeder Status relevant
-			bReturn = true;
-		}//end main:
-		return bReturn;
-	}
-	
-	
-	
-	@Override
 	//Weil auf den Status anderer Thread gehoert wird und diese weitergeleitet werden sollen.
 	public HashMap<IEnumSetMappedStatusZZZ, IEnumSetMappedStatusZZZ> createHashMapEnumSetForCascadingStatusLocalCustom() {
 		
@@ -165,7 +135,7 @@ public class LogFileWatchRunnerMonitorZZZ extends AbstractLogFileWatchRunnableMo
 				//besser ueber eine geworfenen Event... und nicht direkt: this.objMain.setStatusLocal(ClientMainOVPN.STATUSLOCAL.ISCONNECTING, true);
 				//this.setStatusLocal(IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.ISSTARTNO, false);
 				//boolean bStartNewGoon = this.setStatusLocal(IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.ISSTARTING, true);
-				boolean bStatusLocalSet = this.switchStatusLocalForGroupTo(IProcessWatchMonitorZZZ.STATUSLOCAL.ISSTARTING, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
+				boolean bStatusLocalSet = this.switchStatusLocalForGroupTo(IProgramMonitorZZZ.STATUSLOCAL.ISSTARTING, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
 				if(!bStatusLocalSet) {
 					sLog = ReflectCodeZZZ.getPositionCurrent()+": Lokaler Status nicht gesetzt, aus Gruenden. Breche ab";
 					this.logProtocolString(sLog);
@@ -203,7 +173,7 @@ public class LogFileWatchRunnerMonitorZZZ extends AbstractLogFileWatchRunnableMo
 				//       DAS MUSS NUN VORHER PASSIEREN UND ENTSPRECHEND AN DEN MONITOR UEBERGEBEN WERDEN.
 				
 				//Erst mal sehn, was an Prozessen da ist.			
-				ArrayList<IProgramRunnableZZZ> listaProcessStarter = this.getProgramRunnableList(); 
+				ArrayList<IProgramZZZ> listaProcessStarter = this.getProgramList(); 
 				
 				
 				//Nun fuer alle in ServerMain bereitgestellten Konfigurationen einen OpenVPN.exe - Process bereitstellen.
@@ -212,7 +182,7 @@ public class LogFileWatchRunnerMonitorZZZ extends AbstractLogFileWatchRunnableMo
 				int iNumberOfProcessStarted = 0;
 				for(int icount=0; icount < listaProcessStarter.size(); icount++){
 					iNumberOfProcessStarted++;
-					IListenerObjectStatusLocalMessageReactRunnableZZZ objStarter = (IListenerObjectStatusLocalMessageReactRunnableZZZ) listaProcessStarter.get(icount);				
+					IListenerProgramStatusLocalZZZ objStarter = (IListenerProgramStatusLocalZZZ) listaProcessStarter.get(icount);				
 					if(objStarter==null){
 						//Hier nicht abbrechen, sondern die Verarbeitung bei der naechsten Datei fortfuehren
 						sLog = ReflectCodeZZZ.getPositionCurrent()+": Null as program for thread #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size();
@@ -227,12 +197,14 @@ public class LogFileWatchRunnerMonitorZZZ extends AbstractLogFileWatchRunnableMo
 						sLog = ReflectCodeZZZ.getPositionCurrent()+": Program found for thread #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size() +". Requesting thread start.";
 						this.logProtocolString(sLog);
 						
-						Thread objThreadStarter = new Thread(objStarter);
-						threadaOVPN[iNumberOfProcessStarted]=objThreadStarter; //Vielleicht als globale Variable erreichbar machen?
-						objThreadStarter.start();
+						objStarter.start(); //das hat eine doppelte Funktion. a) Einfache Programme werden gestartet. b) Runnable Programme werden im eigenen Thread gestartet
+						
+//						Thread objThreadStarter = new Thread(objStarter);
+//						threadaOVPN[iNumberOfProcessStarted]=objThreadStarter; //Vielleicht als globale Variable erreichbar machen?
+//						objThreadStarter.start();
 						
 						iNumberOfProcessStarted++;
-						sLog = ReflectCodeZZZ.getPositionCurrent()+": Finished starting thread #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size() + ".";
+						sLog = ReflectCodeZZZ.getPositionCurrent()+": Finished starting program #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size() + ".";
 						this.logProtocolString(sLog);
 	 				}
 				}//END for
@@ -268,30 +240,29 @@ public class LogFileWatchRunnerMonitorZZZ extends AbstractLogFileWatchRunnableMo
 	}	
 	
 	@Override
-	public boolean isEventRelevant2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-		return true;
-	}
-
-	@Override
 	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalSet)	throws ExceptionZZZ {
 		return true;
 	}
-
+	
 	@Override
-	public boolean isEventRelevantByStatusLocal2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalSet) throws ExceptionZZZ {
+	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
 		return true;
 	}
 
-	@Override
-	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalSet) throws ExceptionZZZ {
-		return true;
-	}
 
 	@Override
 	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
 		System.out.println("TODOGOON 20240218");
 		return false;
 	}
+
+	@Override
+	public HashMap createHashMapStatusLocalReactionCustom() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 	
 

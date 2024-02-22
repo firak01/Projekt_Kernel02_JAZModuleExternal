@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
 
@@ -16,17 +17,17 @@ import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZZ;
 import basic.zBasic.component.IModuleZZZ;
+import basic.zBasic.component.IProgramMonitorZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventObjectStatusBasicZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalMessageReactZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalMessageReactZZZ;
 
 /**Diese Klasse erzeugt laaangsam, Zeile fuer Zeile eine Log-Datei.
  * Der Inhalt der Log-Datei kommt aus einer anderen Dummy-Log-Datei, die fest im Projekt als Beispiel vorliegt.
@@ -261,38 +262,46 @@ public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgra
 		String sLog=null;
 		
 		main:{
-			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event empfangen: " + eventStatusLocal.getClass();
 			this.logProtocolString(sLog);
 			
-			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageReactZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
-				IEventObjectStatusLocalMessageReactZZZ event = (IEventObjectStatusLocalMessageReactZZZ) eventStatusLocal;
-				boolean bStatusValue = event.getStatusValue();
-				if(bStatusValue!=true) break main;
-			}
+			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Enum im Event: " + eventStatusLocal.getStatusLocal().getClass();
+			this.logProtocolString(sLog);
 			
+			boolean bRelevant = this.isEventRelevant(eventStatusLocal);
+			if(!bRelevant) break main;
 			
-			if(this.getFlag(ILogFileCreateRunnerOnMonitorListeningZZZ.FLAGZ.END_ON_EVENT_BYMONITOR)) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+			//TODOGOON; Reagiere auf den enum und nicht nur auf den Event.
+			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
 				this.logProtocolString(sLog);
 				
-				this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
+				IEventObjectStatusLocalZZZ event = (IEventObjectStatusLocalZZZ) eventStatusLocal;
+				boolean bStatusValue = event.getStatusValue();
+				if(bStatusValue!=true) break main;
+				
+				IEnumSetMappedStatusZZZ objEnumMapped = eventStatusLocal.getStatusLocal();					
+				if( objEnumMapped instanceof IProgramMonitorZZZ.STATUSLOCAL) {
+					System.out.println("TESTTESTTEST");					
+				}
+				
+				if(this.getFlag(ILogFileCreateRunnerOnMonitorListeningZZZ.FLAGZ.END_ON_EVENT_BYMONITOR)) {
+					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+					this.logProtocolString(sLog);
+					
+					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
+				}
 			}
+			
+			
+			
 		}//end main:
 		return bReturn;	
 	}
 
-	@Override
-	public boolean isEventRelevant2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
-		return true;
-	}
 
 	@Override
 	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
-		return true;
-	}
-
-	@Override
-	public boolean isEventRelevantByStatusLocal2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
 		return true;
 	}
 
@@ -302,17 +311,8 @@ public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgra
 	}
 
 	@Override
-	public boolean isEventRelevant(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			
-			if(!this.isEventRelevant2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByClass2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByStatusLocal2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByStatusLocalValue2ChangeStatusLocal(eventStatusLocal)) break main;
-			
-			bReturn = true;
-		}//end main:
-		return bReturn;
+	public HashMap<IEnumSetMappedStatusZZZ, String> createHashMapStatusLocalReactionCustom() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -11,7 +11,7 @@ import basic.zBasic.util.moduleExternal.process.watch.ProcessWatchRunnerZZZ;
  *  
  * @author Fritz Lindhauer, 02.04.2023, 12:00:33  
  */
-public class EventObject4ProcessWatchStatusLocalZZZ extends AbstractEventObjectStatusLocalMessageZZZ implements Comparable<IEventObjectStatusLocalZZZ>{
+public class EventObject4ProcessWatchStatusLocalZZZ extends AbstractEventObjectStatusLocalZZZ implements Comparable<IEventObjectStatusLocalZZZ>{
 	private static final long serialVersionUID = -5542596378774583040L;
 	private ProcessWatchRunnerZZZ.STATUSLOCAL objStatusEnum=null;	
 	

@@ -6,22 +6,17 @@ import java.util.HashMap;
 import basic.zBasic.AbstractObjectWithStatusOnStatusListeningZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
-import basic.zKernel.AbstractKernelUseObjectWithStatusListeningMonitoredZZZ;
-import basic.zKernel.IKernelZZZ;
 import basic.zKernel.flag.EventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IEventObjectFlagZsetZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventBrokerStatusLocalUserZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalMessageZZZ;
-import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalReactZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalZZZ;
 import basic.zKernel.status.KernelSenderObjectStatusLocalZZZ;
 
 public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWithStatusOnStatusListeningZZZ implements IProcessWatchMonitorZZZ, IListenerObjectStatusLocalZZZ, IEventBrokerStatusLocalUserZZZ{
+	private static final long serialVersionUID = 4532365489539285236L;
 	protected volatile ArrayList<Process> listaProcess = new ArrayList<Process>(); //Hierueber werden alle zu beobachtenden Processe verwaltet.
 	private ISenderObjectStatusLocalZZZ objEventStatusLocalBroker=null;//Das Broker Objekt, an dem sich andere Objekte regristrieren können, um ueber Aenderung eines StatusLocal per Event informiert zu werden.
 	
@@ -223,9 +218,6 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWith
 	public void unregisterForStatusLocalEvent(IListenerObjectStatusLocalZZZ objEventListener) throws ExceptionZZZ {
 		this.getSenderStatusLocalUsed().removeListenerObject(objEventListener);;
 	}
-	
-	@Override
-	public abstract boolean isStatusLocalRelevant(IEnumSetMappedStatusZZZ objEnumStatusIn) throws ExceptionZZZ;
 	
 	@Override
 	public boolean getStatusLocal(Enum objEnumStatusIn) throws ExceptionZZZ {

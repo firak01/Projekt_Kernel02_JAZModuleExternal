@@ -11,8 +11,8 @@ import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.EventObject4LogFileWatchRunnerStatusLocalZZZ;
 import basic.zKernel.status.IEventObject4LogFileWatchRunnerStatusLocalZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalMessageZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
+import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
 
 public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	private static final long serialVersionUID = 6586079955658760005L;
@@ -282,6 +282,9 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	//### Aus IListenerObjectStatusBasicZZZ
 	//### Reaktion darauf, wenn ein Event aufgefangen wurde
 	//##############################################
+	/* (non-Javadoc)
+	 * @see basic.zKernel.status.IEventBrokerStatusLocalUserZZZ#reactOnStatusLocalEvent(basic.zKernel.status.IEventObjectStatusLocalZZZ)
+	 */
 	@Override
 	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
 		boolean bReturn = false;
@@ -291,20 +294,23 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
 			this.logProtocolString(sLog);
 			
-			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
-				IEventObjectStatusLocalMessageZZZ event = (IEventObjectStatusLocalMessageZZZ) eventStatusLocal;
+			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {
+				IEventObjectStatusLocalZZZ event = (IEventObjectStatusLocalZZZ) eventStatusLocal;
 				boolean bStatusValue = event.getStatusValue();
 				if(bStatusValue!=true) break main;
 				
-				
+				if(this.getFlag(ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+					this.logProtocolString(sLog);
+					
+					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
+				}				
+			}else {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + ": instanceof Event nicht behandelt. ("+ eventStatusLocal.getClass().getName() + ").";
+				this.logProtocolString(sLog);
 			}
 			
-			if(this.getFlag(ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
-				this.logProtocolString(sLog);
-				
-				this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
-			}
+
 			
 			bReturn = true;
 		}//end main:
@@ -312,55 +318,21 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	}
 
 	//#######################################
-	@Override
-	public boolean isStatusLocalRelevant(IEnumSetMappedStatusZZZ objEnumStatusIn) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			if(objEnumStatusIn==null) break main;
-				
-			//Fuer das Main-Objekt ist erst einmal jeder Status relevant
-			bReturn = true;
-		}//end main:
-		return bReturn;
-	}
-	
-	@Override
-	public boolean isEventRelevant(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
 			
-			if(!this.isEventRelevant2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByClass2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByStatusLocal2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByStatusLocalValue2ChangeStatusLocal(eventStatusLocal)) break main;
-			
-			bReturn = true;
-		}//end main:
-		return bReturn;
-	}
-	
-	@Override
-	public boolean isStatusLocalDifferent(String sStatusString, boolean bStatusValue) throws ExceptionZZZ {
-		return true;
-	}
-	
-	@Override
-	public boolean isEventRelevant2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalSet) throws ExceptionZZZ {
-		return true;
-	}
 
 	@Override
 	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalSet) throws ExceptionZZZ {
 		return true;
 	}
-
+	
 	@Override
-	public boolean isEventRelevantByStatusLocal2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalSet) throws ExceptionZZZ {
+	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocal)	throws ExceptionZZZ {
 		return true;
 	}
 
 	@Override
-	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalSet) throws ExceptionZZZ {
-		return true;
+	public HashMap createHashMapStatusLocalReactionCustom() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

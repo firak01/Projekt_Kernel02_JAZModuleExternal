@@ -13,7 +13,7 @@ import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSL
  *  
  * @author Fritz Lindhauer, 02.04.2023, 12:00:33  
  */
-public class EventObject4LogFileWatchRunnerStatusLocalZZZ  extends AbstractEventObjectStatusLocalMessageZZZ implements IEventObject4LogFileWatchRunnerStatusLocalZZZ, Comparable<IEventObject4LogFileWatchRunnerStatusLocalZZZ>{
+public class EventObject4LogFileWatchRunnerStatusLocalZZZ  extends AbstractEventObjectStatusLocalZZZ implements IEventObject4LogFileWatchRunnerStatusLocalZZZ{
 	private STATUSLOCAL objStatusEnum=null;
 	                                             
 	//Merke: Diese Strings sind wichtig für das Interface und kommen nicht aus der abstrakten Klasse
@@ -84,27 +84,8 @@ public class EventObject4LogFileWatchRunnerStatusLocalZZZ  extends AbstractEvent
 	}
 
 	
-	//### Aus dem Interface Comparable
-	@Override
-	public int compareTo(IEventObject4LogFileWatchRunnerStatusLocalZZZ o) {
-		//Das macht lediglich .sort funktionsfähig und wird nicht bei .equals(...) verwendet.
-		int iReturn = 0;
-		main:{
-			if(o==null)break main;
-			
-			String sTextToCompare = o.getStatusText();
-			boolean bValueToCompare = o.getStatusValue();
-			
-			String sText = this.getStatusText();
-			boolean bValue = this.getStatusValue();
-			
-			if(sTextToCompare.equals(sText) && bValueToCompare==bValue) iReturn = 1;		
-			
-		}
-		return iReturn;
-	}
-	
-   @Override 
+	//### Aus dem Interface Comparable	
+	@Override 
    public boolean equals(Object aThat) {
      if (this == aThat) return true;
      if (!(aThat instanceof EventObject4LogFileWatchRunnerStatusLocalZZZ)) return false;

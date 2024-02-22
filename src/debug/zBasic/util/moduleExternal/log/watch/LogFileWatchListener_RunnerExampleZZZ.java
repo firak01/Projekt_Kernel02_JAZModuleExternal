@@ -1,19 +1,14 @@
 package debug.zBasic.util.moduleExternal.log.watch;
 
+import java.util.HashMap;
+
 import basic.zBasic.AbstractObjectWithFlagOnStatusListeningZZZ;
-import basic.zBasic.AbstractObjectZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
-import basic.zKernel.status.IEventObjectStatusBasicZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalMessageReactZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalMessageZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalMessageReactZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalMessageZZZ;
 
 /** Ein Beispiel-Broker, an dem sich die "hoerenden" Klassen registieren.
  * @author fl86kyvo
@@ -35,7 +30,7 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Fuer LogFileWatchEvent.";
 			this.logLineDate(sLog);
 			
-			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageZZZ) {
+			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {
 				
 				boolean bRelevant = this.isEventRelevant((IEventObjectStatusLocalZZZ) eventStatusLocal); 
 				if(!bRelevant) {
@@ -44,7 +39,7 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 					break main;
 				}
 				
-				IEventObjectStatusLocalMessageZZZ eventStatusLocalSet = (IEventObjectStatusLocalMessageZZZ) eventStatusLocal;
+				IEventObjectStatusLocalZZZ eventStatusLocalSet = (IEventObjectStatusLocalZZZ) eventStatusLocal;
 				IEnumSetMappedZZZ enumStatus = eventStatusLocalSet.getStatusLocal();				
 				
 				
@@ -117,7 +112,9 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 				
 			}
 		
-			
+			}else {
+				sLog = ReflectCodeZZZ.getPositionCurrent()+": Event ist kein instanceof IEventObjectStatusLocalZZZ. Klasse: " + eventStatusLocal.getClass().getName();
+				this.logLineDate(sLog);
 			}//end if instanceof ...MessageSetZZZ
 			bReturn = true;
 		}//end main:
@@ -125,37 +122,19 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 	}
 	
 	@Override
-	public boolean isEventRelevant(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			
-			if(!this.isEventRelevant2ChangeStatusLocal(eventStatusBasic)) break main;
-			if(!this.isEventRelevantByClass2ChangeStatusLocal(eventStatusBasic)) break main;
-			if(!this.isEventRelevantByStatusLocal2ChangeStatusLocal(eventStatusBasic)) break main;
-			if(!this.isEventRelevantByStatusLocalValue2ChangeStatusLocal(eventStatusBasic)) break main;
-			
-			bReturn = true;
-		}//end main:
-		return bReturn;
-	}
-
-	@Override
-	public boolean isEventRelevant2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
-		return true;
-	}
-
-	@Override
 	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
 		return true;
 	}
 
-	@Override
-	public boolean isEventRelevantByStatusLocal2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
-		return true;
-	}
 
 	@Override
 	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
 	return true;
+	}
+
+	@Override
+	public HashMap createHashMapStatusLocalReactionCustom() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
