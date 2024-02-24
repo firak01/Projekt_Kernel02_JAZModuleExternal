@@ -24,7 +24,9 @@ import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
+import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
 import basic.zKernel.status.IEventObjectStatusBasicZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
@@ -40,21 +42,21 @@ import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
  * @author fl86kyvo
  *
  */
-public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgramWithFlagOnStatusListeningRunnableZZZ implements ILogFileCreateRunnerOnMonitorListeningZZZ {
+public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgramWithFlagOnStatusListeningRunnableZZZ implements ILogFileCreateRunnerOnMonitorListeningZZZ {
 	private static final long serialVersionUID = 6586079955658760005L;
 	private File objSourceFile = null;
 	private File objLogFile=null;
 	
-	public LogFileCreateMockRunnerOnMonitorListeningZZZ() throws ExceptionZZZ {
+	public LogFileCreateRunnerMockOnMonitorListeningZZZ() throws ExceptionZZZ {
 		super();		
 	}
 
-	public LogFileCreateMockRunnerOnMonitorListeningZZZ(File objSourceFile, File objLogFile) throws ExceptionZZZ {
+	public LogFileCreateRunnerMockOnMonitorListeningZZZ(File objSourceFile, File objLogFile) throws ExceptionZZZ {
 		super();	
 		LogFileCreateMockRunnerNew_(null, objSourceFile, objLogFile, null);
 	}
 	
-	public LogFileCreateMockRunnerOnMonitorListeningZZZ(File objSourceFile, File objLogFile, String[] saFlag) throws ExceptionZZZ {
+	public LogFileCreateRunnerMockOnMonitorListeningZZZ(File objSourceFile, File objLogFile, String[] saFlag) throws ExceptionZZZ {
 		super();	
 		LogFileCreateMockRunnerNew_(null, objSourceFile, objLogFile, saFlag);
 	}
@@ -262,41 +264,47 @@ public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgra
 		String sLog=null;
 		
 		main:{
-			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event empfangen: " + eventStatusLocal.getClass();
+			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Einen Event auf den zu reagieren ist gefunden.";
 			this.logProtocolString(sLog);
 			
-			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Enum im Event: " + eventStatusLocal.getStatusLocal().getClass();
+			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event="+eventStatusLocal.toString();
 			this.logProtocolString(sLog);
 			
-			boolean bRelevant = this.isEventRelevant(eventStatusLocal);
-			if(!bRelevant) break main;
-			
-			//TODOGOON; Reagiere auf den enum und nicht nur auf den Event.
-			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
+			if(eventStatusLocal instanceof IEventObject4LogFileWatchMonitorStatusLocalZZZ) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event vom Monitor!!!";
 				this.logProtocolString(sLog);
 				
-				IEventObjectStatusLocalZZZ event = (IEventObjectStatusLocalZZZ) eventStatusLocal;
-				boolean bStatusValue = event.getStatusValue();
-				if(bStatusValue!=true) break main;
-				
-				IEnumSetMappedStatusZZZ objEnumMapped = eventStatusLocal.getStatusLocal();					
-				if( objEnumMapped instanceof IProgramMonitorZZZ.STATUSLOCAL) {
-					System.out.println("TESTTESTTEST");					
-				}
-				
-				if(this.getFlag(ILogFileCreateRunnerOnMonitorListeningZZZ.FLAGZ.END_ON_EVENT_BYMONITOR)) {
-					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+				if(eventStatusLocal.getStatusEnum().equals(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR)){
+					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Es git im Monitor einen Fehler.";
 					this.logProtocolString(sLog);
 					
-					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
-				}
+					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Halte an.";
+					this.logProtocolString(sLog);
+					
+					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+				}else if(eventStatusLocal.getStatusEnum().equals(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED)){
+					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Monitor stoppt.";
+					this.logProtocolString(sLog);
+					
+					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Halte an.";
+					this.logProtocolString(sLog);
+					
+					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+				}else {
+					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Monitor Event nicht beachtet. Sollte nicht in der Reaction HashMap sein.";
+					this.logProtocolString(sLog);
+					
+				}				
+			}else {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + ": instanceof Event nicht behandelt. ("+ eventStatusLocal.getClass().getName() + ").";
+				this.logProtocolString(sLog);
 			}
 			
+
 			
-			
+			bReturn = true;
 		}//end main:
-		return bReturn;	
+		return bReturn;
 	}
 
 
@@ -312,7 +320,10 @@ public class LogFileCreateMockRunnerOnMonitorListeningZZZ extends AbstractProgra
 
 	@Override
 	public HashMap<IEnumSetMappedStatusZZZ, String> createHashMapStatusLocalReactionCustom() {
-		// TODO Auto-generated method stub
-		return null;
+		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
+		
+		//Reagiere auf alle Events
+		
+		return hmReturn;
 	}
 }

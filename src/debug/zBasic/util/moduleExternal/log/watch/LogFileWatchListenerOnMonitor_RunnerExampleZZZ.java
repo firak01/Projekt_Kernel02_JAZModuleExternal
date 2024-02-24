@@ -7,6 +7,7 @@ import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 
@@ -189,9 +190,14 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	}
 
 	@Override
-	public HashMap createHashMapStatusLocalReactionCustom() {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap<IEnumSetMappedStatusZZZ, String> createHashMapStatusLocalReactionCustom() {
+		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
+		
+		//Reagiere nur auf den "Filter" gefunden Event
+		
+		//und den "Monitor beendet" Event
+		
+		return hmReturn;
 	}
 
 	

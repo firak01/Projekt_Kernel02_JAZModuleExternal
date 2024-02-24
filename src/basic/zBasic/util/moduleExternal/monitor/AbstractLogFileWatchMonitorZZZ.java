@@ -7,11 +7,11 @@ import basic.zBasic.component.AbstractProgramMonitorZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 
-public abstract class AbstractLogFileWatchRunnableMonitorZZZ  extends AbstractProgramMonitorZZZ implements ILogFileWatchRunnerMonitorZZZ{
+public abstract class AbstractLogFileWatchMonitorZZZ  extends AbstractProgramMonitorZZZ implements ILogFileWatchMonitorZZZ{
 	private static final long serialVersionUID = 968455281850239704L;
 	protected volatile File objLogFile = null;	
 		
-	public AbstractLogFileWatchRunnableMonitorZZZ() throws ExceptionZZZ{
+	public AbstractLogFileWatchMonitorZZZ() throws ExceptionZZZ{
 		super();
 	}
 	
@@ -30,23 +30,23 @@ public abstract class AbstractLogFileWatchRunnableMonitorZZZ  extends AbstractPr
 	//###################################################
 	
 	@Override
-	public boolean getFlag(ILogFileWatchRunnerMonitorZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(ILogFileWatchMonitorZZZ.FLAGZ objEnumFlag) {
 		return this.getFlag(objEnumFlag.name());
 	}
 	
 	@Override
-	public boolean setFlag(ILogFileWatchRunnerMonitorZZZ.FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
+	public boolean setFlag(ILogFileWatchMonitorZZZ.FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
 		return this.setFlag(objEnumFlag.name(), bFlagValue);
 	}
 	
 	@Override
-	public boolean[] setFlag(ILogFileWatchRunnerMonitorZZZ.FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
+	public boolean[] setFlag(ILogFileWatchMonitorZZZ.FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
 		boolean[] baReturn=null;
 		main:{
 			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
 				baReturn = new boolean[objaEnumFlag.length];
 				int iCounter=-1;
-				for(ILogFileWatchRunnerMonitorZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+				for(ILogFileWatchMonitorZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
 					iCounter++;
 					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
 					baReturn[iCounter]=bReturn;
@@ -61,12 +61,12 @@ public abstract class AbstractLogFileWatchRunnableMonitorZZZ  extends AbstractPr
 	}
 	
 	@Override
-	public boolean proofFlagExists(ILogFileWatchRunnerMonitorZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+	public boolean proofFlagExists(ILogFileWatchMonitorZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.proofFlagExists(objEnumFlag.name());
 	}
 
 	@Override
-	public boolean proofFlagSetBefore(ILogFileWatchRunnerMonitorZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+	public boolean proofFlagSetBefore(ILogFileWatchMonitorZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.proofFlagSetBefore(objEnumFlag.name());
 	}
 }

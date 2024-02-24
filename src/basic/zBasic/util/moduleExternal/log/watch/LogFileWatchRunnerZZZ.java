@@ -8,8 +8,10 @@ import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
+import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.EventObject4LogFileWatchRunnerStatusLocalZZZ;
+import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
 import basic.zKernel.status.IEventObject4LogFileWatchRunnerStatusLocalZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
@@ -291,22 +293,39 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		String sLog=null;
 		
 		main:{
-			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Einen Event auf den zu reagieren ist gefunden.";
 			this.logProtocolString(sLog);
 			
-			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {
-				IEventObjectStatusLocalZZZ event = (IEventObjectStatusLocalZZZ) eventStatusLocal;
-				boolean bStatusValue = event.getStatusValue();
-				if(bStatusValue!=true) break main;
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Event="+eventStatusLocal.toString();
+			this.logProtocolString(sLog);
+			
+			if(eventStatusLocal instanceof IEventObject4LogFileWatchMonitorStatusLocalZZZ) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Event vom Monitor!!!";
+				this.logProtocolString(sLog);
 				
-				if(this.getFlag(ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
-					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+				if(eventStatusLocal.getStatusEnum().equals(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR)){
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "Es gibt im Monitor einen Fehler.";
 					this.logProtocolString(sLog);
 					
-					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "Halte an.";
+					this.logProtocolString(sLog);
+					
+					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+				}else if(eventStatusLocal.getStatusEnum().equals(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED)){
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "Monitor stoppt.";
+					this.logProtocolString(sLog);
+					
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "Halte an.";
+					this.logProtocolString(sLog);
+					
+					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+				}else {
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "Monitor Event nicht beachtet. Sollte nicht in der Reaction HashMap sein.";
+					this.logProtocolString(sLog);
+					
 				}				
 			}else {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + ": instanceof Event nicht behandelt. ("+ eventStatusLocal.getClass().getName() + ").";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "instanceof Event nicht behandelt. ("+ eventStatusLocal.getClass().getName() + ").";
 				this.logProtocolString(sLog);
 			}
 			
@@ -331,8 +350,11 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	}
 
 	@Override
-	public HashMap createHashMapStatusLocalReactionCustom() {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap<IEnumSetMappedStatusZZZ, String>createHashMapStatusLocalReactionCustom() {
+		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
+		
+		//reagiere noch auf alle Events
+		
+		return hmReturn;
 	}
 }

@@ -11,9 +11,9 @@ import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.LogFileWatchRunnerZZZ;
-import basic.zBasic.util.moduleExternal.monitor.LogFileWatchRunnerMonitorZZZ;
+import basic.zBasic.util.moduleExternal.monitor.LogFileWatchMonitorZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerOnMonitorListeningZZZ;
-import debug.zBasic.util.moduleExternal.log.create.LogFileCreateMockRunnerOnMonitorListeningZZZ;
+import debug.zBasic.util.moduleExternal.log.create.LogFileCreateRunnerMockOnMonitorListeningZZZ;
 
 /** In dieser Klasse wird ein LogFile von dem einen Thread erzeugt 
  *  und gleichzeitig von einem anderen Thread ausgewertet.*  
@@ -133,7 +133,7 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 			
 			File objSourceFile = new File(sSourceFilePathTotalDefault); 
 			String[]saFlagCreate= {ILogFileCreateRunnerOnMonitorListeningZZZ.FLAGZ.END_ON_EVENT_BYMONITOR.name()};
-			LogFileCreateMockRunnerOnMonitorListeningZZZ objCreator = new LogFileCreateMockRunnerOnMonitorListeningZZZ(objSourceFile, objLogFile, saFlagCreate);
+			LogFileCreateRunnerMockOnMonitorListeningZZZ objCreator = new LogFileCreateRunnerMockOnMonitorListeningZZZ(objSourceFile, objLogFile, saFlagCreate);
 			
 			//2. Mache den Log Watcher mit dem "Reaktionsstring".
 		    String[]saFlag= {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
@@ -150,7 +150,7 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 		    }
 		    
 		    //String[] saFlagMonitor = {ILogFileWatchRunnerMonitorZZZ.FLAGZ.END_ON_FILTERFOUND.name()};		    
-		    LogFileWatchRunnerMonitorZZZ objMonitor = new LogFileWatchRunnerMonitorZZZ(objLogFile);//, sFilterSequence, saFlagMonitor);
+		    LogFileWatchMonitorZZZ objMonitor = new LogFileWatchMonitorZZZ(objLogFile);//, sFilterSequence, saFlagMonitor);
 		    
 		    //3. Schritt: Statt im Konstruktor des Monitors alles zu definieren...
 		    //            übergib die Objekte an den Monitor
