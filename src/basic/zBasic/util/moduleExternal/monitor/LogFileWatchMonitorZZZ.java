@@ -66,7 +66,7 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 		boolean bReturn = false;
 		main:{
 			try {	
-				String sLog = ReflectCodeZZZ.getPositionCurrent()+": Trying to use an external thread.";				
+				String sLog = ReflectCodeZZZ.getPositionCurrent()+": Starting Monitor, switching Status of Monitor.";				
 				this.logProtocolString(sLog);
 			
 				//NUN DAS BACKEND-AUFRUFEN. Merke, dass muss in einem eigenen Thread geschehen, damit das Icon anclickbar bleibt.								
@@ -82,74 +82,35 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 				}			
 				Thread.sleep(5000);
 						
-				
-				//Vom Handling.. 
-				//Hole im die List der ProcessXYZWatchRunnerZZZ 
-				//und starte diesen einzeln...
-				
 				//Merke: Im OVPN Projekt wurde nun anhand der OVPN-Konfigurationen die Prozesse und eine Liste der Prozesse gebaut.
 				//       siehe: objServerMain.getServerConfigStarterList();
-				/*
-				
-				//Vorbereitend: Process bereitstellen, der die Ausgabe des gestarteten Processes ueberwacht.
-				//              Das funktioniert beim Client per direktem Standard.out.
-				//              Beim Server aber nur per Beobachten des Log Files
-				ProcessWatchRunnerZZZ[] runneraProcessOVPN = null;
-				boolean bUseLogFileWatch = this.getFlag(ILogFileWatchRunnerMonitorZZZ.FLAGZ.USE_LOGFILE_WATCHRUNNER); 
-				if(bUseLogFileWatch) {
-					//TODOGOON20240127;
-				}else {
-					//Die Liste der Processe einfach abholen.
-					//TODOGOON20240131;//Sie muss vorher gefüllt worden sein.
-					
-					runneraProcessOVPN = this.getProcessList();
-					new ProcessWatchRunnerZZZ[listaProcessStarter.size()];
-				}
-				
-				 */
-				
-				
-				//       DAS MUSS NUN VORHER PASSIEREN UND ENTSPRECHEND AN DEN MONITOR UEBERGEBEN WERDEN.
-				
-				//Erst mal sehn, was an Prozessen da ist.			
+
+				//Vom Handling.. 
+				//Hole im die List der Programme und starte diesen einzeln...
+				//Merke: Je nach Programtyp erzeugt dann das Program beim Start für sich ggfs. einen eigenen Thread
 				ArrayList<IProgramZZZ> listaProcessStarter = this.getProgramList(); 
 				
-				
-				//Nun fuer alle in ServerMain bereitgestellten Konfigurationen einen OpenVPN.exe - Process bereitstellen.
-				//Den passenden WatchRunner starten den Monitor Prozess daran registrieren.				
-				Thread[] threadaOVPN = new Thread[listaProcessStarter.size()];			
-				int iNumberOfProcessStarted = 0;
+				int iNumberOfProcessStarted=0;
 				for(int icount=0; icount < listaProcessStarter.size(); icount++){
 					iNumberOfProcessStarted++;
-					IListenerProgramStatusLocalZZZ objStarter = (IListenerProgramStatusLocalZZZ) listaProcessStarter.get(icount);				
-					if(objStarter==null){
+					IProgramZZZ objProgram = (IProgramZZZ) listaProcessStarter.get(icount);				
+					if(objProgram==null){
 						//Hier nicht abbrechen, sondern die Verarbeitung bei der naechsten Datei fortfuehren
 						sLog = ReflectCodeZZZ.getPositionCurrent()+": Null as program for thread #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size();
 						this.logProtocolString(sLog);
-					}else {
-						//Merke: In OVPN wird an dieser Stelle die ovpn.exe gestartet.
-						//       Das soll hier nicht passieren. Statt dessen den erzeugten Prozess an an eine Klasse wie XYZ...WatchProcess...ReactRunnable... uebergeben. !!!
-						//       s. Process objProcess = objStarter.requestStart();
-						//          ....
-						//       und dieses Objekt dann hier in der Liste als "Watcher" Starten. 
-
+					}else {						
 						sLog = ReflectCodeZZZ.getPositionCurrent()+": Program found for thread #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size() +". Requesting thread start.";
 						this.logProtocolString(sLog);
 						
-						objStarter.start(); //das hat eine doppelte Funktion. a) Einfache Programme werden gestartet. b) Runnable Programme werden im eigenen Thread gestartet
+						objProgram.start(); //das hat eine doppelte Funktion. a) Einfache Programme werden gestartet. b) Runnable Programme werden im eigenen Thread gestartet
 						
-//						Thread objThreadStarter = new Thread(objStarter);
-//						threadaOVPN[iNumberOfProcessStarted]=objThreadStarter; //Vielleicht als globale Variable erreichbar machen?
-//						objThreadStarter.start();
-						
-						iNumberOfProcessStarted++;
 						sLog = ReflectCodeZZZ.getPositionCurrent()+": Finished starting program #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size() + ".";
 						this.logProtocolString(sLog);
 	 				}
 				}//END for
 				if(iNumberOfProcessStarted==0) {
 					//Hier nicht abbrechen, sondern den Status wieder zurücksetzen.
-					sLog = ReflectCodeZZZ.getPositionCurrent()+": No thread started.";										
+					sLog = ReflectCodeZZZ.getPositionCurrent()+": No program started.";										
 					this.logProtocolString(sLog);
 					
 					bStatusLocalSet = this.switchStatusLocalForGroupTo(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTARTNO, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
@@ -159,7 +120,7 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 						break main;
 					}			
 				}else if(iNumberOfProcessStarted>=1) {
-					sLog = ReflectCodeZZZ.getPositionCurrent()+": " + iNumberOfProcessStarted + " threads started.";
+					sLog = ReflectCodeZZZ.getPositionCurrent()+": " + iNumberOfProcessStarted + " programs started.";
 					this.logProtocolString(sLog);
 					
 					bStatusLocalSet = this.switchStatusLocalForGroupTo(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTARTED, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
@@ -180,7 +141,13 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 	
 	@Override
 	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-		System.out.println("TODOGOON 20240218");
+		String sLog = "TODOGOON 20240218: Event mappen und werfen... ("+ ReflectCodeZZZ.getPositionCurrent() + ")";
+		this.logProtocolString(sLog);
+		
+		//Nun den einkommenden Event auf einen eigenen Event mappen.
+		//Diesen eigenen Event werfen,
+		//so dass andere Listener (die an dem Monitor registriert sind) auf den MonitorEvent reagieren können.
+		
 		return false;
 	}
 	
@@ -320,12 +287,12 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 				sStatusMessageToSet = sStatusMessage;
 			}
 			
-			String sLog = ReflectCodeZZZ.getPositionCurrent() + " LogFileWatchMonitor verarbeite sStatusMessageToSet='" + sStatusMessageToSet + "'";
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + " Verarbeite sStatusMessageToSet='" + sStatusMessageToSet + "'";
 			this.logProtocolString(sLog);
 
 			//Falls eine Message extra uebergeben worden ist, ueberschreibe...
 			if(sStatusMessageToSet!=null) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + " LogFileWatchMonitor setze sStatusMessageToSet='" + sStatusMessageToSet + "'";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + " Setze sStatusMessageToSet='" + sStatusMessageToSet + "'";
 				this.logProtocolString(sLog);
 			}
 			//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte...
@@ -336,7 +303,7 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 			//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
 			//Dann erzeuge den Event und feuer ihn ab.	
 			if(this.getSenderStatusLocalUsed()==null) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + " LogFileWatchMonitor would like to fire event '" + enumStatus.getAbbreviation() + "', but no objEventStatusLocalBroker available, any registered?";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + " Would like to fire event '" + enumStatus.getAbbreviation() + "', but no objEventStatusLocalBroker available, any registered?";
 				this.logProtocolString(sLog);		
 				break main;
 			}
@@ -351,7 +318,7 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 			
 					
 			//Feuere den Event ueber den Broker ab.
-			sLog = ReflectCodeZZZ.getPositionCurrent() + " LogFileWatchMonitor for Process fires event '" + enumStatus.getAbbreviation() + "'";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + " Fires event '" + enumStatus.getAbbreviation() + "'";
 			this.logProtocolString(sLog);
 			this.getSenderStatusLocalUsed().fireEvent(event);
 					

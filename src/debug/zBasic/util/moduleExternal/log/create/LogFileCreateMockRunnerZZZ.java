@@ -418,7 +418,7 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 			
 			if(!this.isEventRelevant2ChangeStatusLocal(eventStatusLocal)) break main;
 			if(!this.isEventRelevantByClass2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByStatusLocal2ChangeStatusLocal(eventStatusLocal)) break main;
+			if(!this.isEventRelevantByReactionHashMap2ChangeStatusLocal(eventStatusLocal)) break main;
 			if(!this.isEventRelevantByStatusLocalValue2ChangeStatusLocal(eventStatusLocal)) break main;
 			
 			bReturn = true;

@@ -136,11 +136,6 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 			LogFileCreateRunnerMockOnMonitorListeningZZZ objCreator = new LogFileCreateRunnerMockOnMonitorListeningZZZ(objSourceFile, objLogFile, saFlagCreate);
 			
 			//2. Mache den Log Watcher mit dem "Reaktionsstring".
-		    String[]saFlag= {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
-			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(saFlag);			
-			
-			
-			//2. Schritt: Mache den Monitor
 		    String sFilterSentence;    
 		    if (args.length > 1) {
 		    	sFilterSentence = (args[1]);
@@ -148,34 +143,33 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 		    	sFilterSentence = "Peer Connection Initiated with";
 		    	//sFilterSentence = "local_port";
 		    }
-		    
+		    String[]saFlag= {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
+			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence, saFlag);			
+			
+			
+			//3. Schritt: Mache den Monitor
+					//	IDEE: Flag END_ON_FILTERFOUND
+					//	Jetzt wird der CreatorThread und der LogFileWatch thread am monitor registriert.
+					//	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUESTSTOP gesetzt.
+					//  Damit werden auch die anderen Threads angehalten.
 		    //String[] saFlagMonitor = {ILogFileWatchRunnerMonitorZZZ.FLAGZ.END_ON_FILTERFOUND.name()};		    
 		    LogFileWatchMonitorZZZ objMonitor = new LogFileWatchMonitorZZZ(objLogFile);//, sFilterSequence, saFlagMonitor);
 		    
-		    //3. Schritt: Statt im Konstruktor des Monitors alles zu definieren...
+		    //4. Schritt: Statt im Konstruktor des Monitors alles zu definieren...
 		    //            übergib die Objekte an den Monitor
 		    		    
-	
 		    //Merke: Beim Übergeben der Objekte an den Monitor... diese dabei sofort am Monitor registrieren....
 		    objMonitor.addProgram(objWatcher);
 		    objMonitor.addProgram(objCreator);
 		    
-		    
-			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
-			//objMonitor.registerForStatusLocalEvent(objWatcher);//Registriere den Monitor nun am ProcessWatchRunner
-				
-			//Hole den Broker aus dem Watcher - Objekt und registriere den Creator daran.
-			//objMonitor.registerForStatusLocalEvent((IListenerObjectStatusLocalZZZ) objCreator);//Registriere den Creator nun am ProcessWatchRunner
-			//++++++++++++++++++++++++++++++++++++
-			
-			//Registriere den Beispiellistener auch am Monitor
+			//Registriere auch den Beispiellistener am Monitor, der dann quasi auf die Events des Monitors reagieren kann.
+		    //Diese Events des Monitors sind dasn weitergeleitetet Events der Programme
 			objMonitor.registerForStatusLocalEvent(objListenerOnMonitor);
 			
 			//+++++++++++++++++++++++++++++++++++
-			//4. Schritt: Starte den Monitor
+			//5. Schritt: Starte den Monitor
 			//Merke: Beim Starten des Monitor-Threads die übergebenen Runner auch starten.	
 			objMonitor.start();
-			
 			
 			try {
 				Thread.sleep(50000);
@@ -183,29 +177,21 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 				e.printStackTrace();
 			}
 
-			//20240207:
+			//20240207: TODOGOON
 			//Idee: Teste den Monitor Thread anzuhalten.
 			//      Dann sollte er einen Event werfen "ich stoppe"
-			//      Dann sollten alle anderen Threads ebenfalls aufhören.
+			//      Dann sollten alle anderen Threads/Programme ebenfalls aufhören.
 			
 			
-			
-			
-// So kann man so den Lauf anhalten...
-//	System.out.println("Versuche anzuhalten: LogFileCreateMockRunnerZZZ");
-//	objCreator.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
-//	System.out.println("Versuche anzuhalten... Erfolgreich?");
-//			
-//	System.out.println("Versuche anzuhalten: LogFileWatchRunnerZZZ");
-//	objWatcher.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
-//	System.out.println("Versuche anzuhalten... Erfolgreich?");
-			
-//	IDEE: Flag END_ON_FILTERFOUND
-//	Jetzt wird der CreatorThread und der MonitorThread an dem LogFileWatch thread registrier.
-//	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUESTSTOP gesetzt.
-//  Damit werden auch die anderen Threads angehalten.
-			
-			
+			// So kann man so den Lauf der einzelnen Programme anhalten...
+			//	System.out.println("Versuche anzuhalten: LogFileCreateMockRunnerZZZ");
+			//	objCreator.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+			//	System.out.println("Versuche anzuhalten... Erfolgreich?");
+			//			
+			//	System.out.println("Versuche anzuhalten: LogFileWatchRunnerZZZ");
+			//	objWatcher.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+			//	System.out.println("Versuche anzuhalten... Erfolgreich?");
+								
 		} catch (ExceptionZZZ e) {
 			
 			e.printStackTrace();

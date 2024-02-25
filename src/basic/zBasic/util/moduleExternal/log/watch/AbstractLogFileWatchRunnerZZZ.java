@@ -171,7 +171,8 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
                     	icount++;
                     	System.out.println(ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: " + sLine);	                    	
                     	if(StringZZZ.contains(sLine, sLineFilter)) {
-                    		System.out.println(ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: Zeilenfilter gefunden: '" + sLineFilter + "'");
+                    		sLog = ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: Zeilenfilter gefunden: '" + sLineFilter + "'";
+                    		this.logLineDate(sLog);
                     		
                     		IEventObject4LogFileWatchRunnerStatusLocalZZZ event = new EventObject4LogFileWatchRunnerStatusLocalZZZ(this,ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, true);			                			
                 			this.getSenderStatusLocalUsed().fireEvent(event);

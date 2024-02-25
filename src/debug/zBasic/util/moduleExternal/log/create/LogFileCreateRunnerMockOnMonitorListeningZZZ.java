@@ -78,10 +78,25 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 				if(this.getFlag("init")) break main;
 			}
 			
-			this.objLogFile = objLogFile;
 			this.objModule = objModule;
+			this.objSourceFile= objSourceFile;
 			this.objLogFile = objLogFile;
 		}//end main:
+		return bReturn;
+	}
+	
+	
+	//Methode wird in der ReactionHashMap angegeben....
+	public boolean doStop(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			if(eventStatusLocal==null) break main;
+			
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "EventMessage: " + eventStatusLocal.getStatusMessage();
+			this.logProtocolString(sLog);
+			
+			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+		}//end main
 		return bReturn;
 	}
 	
@@ -264,47 +279,60 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 		String sLog=null;
 		
 		main:{
-			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Einen Event auf den zu reagieren ist gefunden.";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Einen Event von einem Objekt, an dem registriert worden ist empfangen.";
 			this.logProtocolString(sLog);
 			
-			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event="+eventStatusLocal.toString();
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Event="+eventStatusLocal.toString();
 			this.logProtocolString(sLog);
 			
+			boolean bEventRelevant = this.isEventRelevant(eventStatusLocal);
+			if(!bEventRelevant) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Event ist NICHT relevant.";
+				this.logProtocolString(sLog);
+				break main;
+			}else {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Event ist relevant.";
+				this.logProtocolString(sLog);
+			}
+			
+			String sAction = null;
 			if(eventStatusLocal instanceof IEventObject4LogFileWatchMonitorStatusLocalZZZ) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event vom Monitor!!!";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Relevanter Event vom Monitor!!!";
 				this.logProtocolString(sLog);
 				
 				if(eventStatusLocal.getStatusEnum().equals(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR)){
-					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Es git im Monitor einen Fehler.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "Es gibt im Monitor einen Fehler.";
 					this.logProtocolString(sLog);
 					
-					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Halte an.";
-					this.logProtocolString(sLog);
+					sAction = (String) this.getHashMapStatusLocalReaction().get(eventStatusLocal.getStatusLocal());
 					
-					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
 				}else if(eventStatusLocal.getStatusEnum().equals(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED)){
-					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Monitor stoppt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "Monitor stoppt.";
 					this.logProtocolString(sLog);
 					
-					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Halte an.";
-					this.logProtocolString(sLog);
-					
-					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
 				}else {
-					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Monitor Event nicht beachtet. Sollte nicht in der Reaction HashMap sein.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "Monitor Event nicht beachtet. Sollte nicht in der Reaction HashMap sein.";
 					this.logProtocolString(sLog);
 					
 				}				
 			}else {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + ": instanceof Event nicht behandelt. ("+ eventStatusLocal.getClass().getName() + ").";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "instanceof Event nicht behandelt. ("+ eventStatusLocal.getClass().getName() + ").";
 				this.logProtocolString(sLog);
 			}
 			
-
 			
-			bReturn = true;
+			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
+			switch(sAction) {
+			case "doStop":
+				bReturn = doStop(eventStatusLocal);	
+				break;
+			default:
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
+				this.logProtocolString(sLog);
+			}
+		
 		}//end main:
-		return bReturn;
+		return bReturn;		
 	}
 
 
@@ -322,8 +350,10 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	public HashMap<IEnumSetMappedStatusZZZ, String> createHashMapStatusLocalReactionCustom() {
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
-		//Reagiere auf alle Events
-		
+		//Reagiere auf diee Events... mit dem angegebenen Alias.
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR, "doStop");
+			
 		return hmReturn;
 	}
 }
