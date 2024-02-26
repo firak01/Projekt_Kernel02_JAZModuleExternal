@@ -163,6 +163,9 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 				if(bStatusValue!=true) break main;
 				
 				if(this.getFlag(ILogFileWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+					
+					TODOGOON: Das ist an dieser Stelle falsch
+					
 					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
 					this.logProtocolString(sLog);
 					
