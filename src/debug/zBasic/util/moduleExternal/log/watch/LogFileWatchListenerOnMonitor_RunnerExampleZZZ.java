@@ -8,8 +8,11 @@ import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZ
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
+import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerOnMonitorListeningZZZ;
 
 /**Diese Klasse läuft einfach und ist an einem Monitor registriert.
  * Wirft der Monitor Events, reagiert sie darauf.
@@ -105,6 +108,36 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		}//end main:
 		return bReturn;
 	}
+	
+		//Methode wird in der ReactionHashMap angegeben....
+		public boolean doStop(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+			boolean bReturn = false;
+			main:{
+				if(eventStatusLocal==null) break main;
+				
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + "EventMessage: " + eventStatusLocal.getStatusMessage();
+				this.logProtocolString(sLog);
+				
+				bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+			}//end main
+			return bReturn;
+		}
+		
+		//Methode wird in der ReactionHashMap angegeben....
+		public boolean doFilterFound(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+			boolean bReturn = false;
+			main:{
+				if(eventStatusLocal==null) break main;
+				
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + "EventMessage: " + eventStatusLocal.getStatusMessage();
+				this.logProtocolString(sLog);
+				
+				if(this.getFlag(ILogFileWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+					bReturn = this.doStop(eventStatusLocal);
+				}
+			}//end main
+			return bReturn;
+		}
 		
 	//###############################
 	//### FLAG HANDLING
@@ -154,30 +187,39 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		String sLog=null;
 		
 		main:{
-			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Einen Event von einem Objekt, an dem registriert worden ist empfangen.";
 			this.logProtocolString(sLog);
 			
-			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
-				IEventObjectStatusLocalZZZ event = (IEventObjectStatusLocalZZZ) eventStatusLocal;
-				boolean bStatusValue = event.getStatusValue();
-				if(bStatusValue!=true) break main;
-				
-				if(this.getFlag(ILogFileWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ.END_ON_FILTERFOUND)) {
-					
-					TODOGOON: Das ist an dieser Stelle falsch
-					
-					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
-					this.logProtocolString(sLog);
-					
-					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
-				}
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Event="+eventStatusLocal.toString();
+			this.logProtocolString(sLog);
+			
+			boolean bEventRelevant = this.isEventRelevant(eventStatusLocal);
+			if(!bEventRelevant) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Event ist NICHT relevant.";
+				this.logProtocolString(sLog);
+				break main;
 			}else {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event ist nicht instanceof IEventObjectStatusLocalZZZ und wird nicht behandelt. Klasse: " + eventStatusLocal.getClass().getName();
-				this.logProtocolString(sLog);				
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Event ist relevant.";
+				this.logProtocolString(sLog);
 			}
 			
+			String sAction = (String) this.getHashMapStatusLocalReaction().get(eventStatusLocal.getStatusLocal());
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Gefundenen Action: '" + sAction + "'";
+			this.logProtocolString(sLog);
 			
-			
+			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
+			switch(sAction) {
+			case "doStop":
+				bReturn = doStop(eventStatusLocal);	
+				break;
+			case "doFilterFound":
+				bReturn = doFilterFound(eventStatusLocal);	
+				break;
+			default:
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
+				this.logProtocolString(sLog);
+			}
+		
 		}//end main:
 		return bReturn;	
 	}
@@ -197,8 +239,12 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
 		//Reagiere nur auf den "Filter" gefunden Event
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASLOGFILEWATCHRUNNERFILTERFOUND, "filterFound");
 		
-		//und den "Monitor beendet" Event
+		//und den "Monitor beendet" Event, bzw. Fehler
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR, "doStop");
+		
 		
 		return hmReturn;
 	}

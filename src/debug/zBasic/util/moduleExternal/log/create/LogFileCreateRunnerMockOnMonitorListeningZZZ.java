@@ -96,6 +96,24 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 			this.logProtocolString(sLog);
 			
 			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+			
+		}//end main
+		return bReturn;
+	}
+	
+	
+	//Methode wird in der ReactionHashMap angegeben....
+	public boolean doFilterFound(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			if(eventStatusLocal==null) break main;
+			
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "EventMessage: " + eventStatusLocal.getStatusMessage();
+			this.logProtocolString(sLog);
+			
+			if(this.getFlag(ILogFileCreateRunnerOnMonitorListeningZZZ.FLAGZ.END_ON_EVENT_BYMONITOR)) {
+				bReturn = this.doStop(eventStatusLocal);
+			}
 		}//end main
 		return bReturn;
 	}
@@ -274,7 +292,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	//### aus IListenerObjectStatusLocalMessageReactZZZ
 	//### Reaktion darauf, wenn ein Event aufgefangen wurde
 	@Override
-	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {			
 		boolean bReturn = false;
 		String sLog=null;
 		
@@ -295,42 +313,23 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 				this.logProtocolString(sLog);
 			}
 			
-			String sAction = null;
-			if(eventStatusLocal instanceof IEventObject4LogFileWatchMonitorStatusLocalZZZ) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "Relevanter Event vom Monitor!!!";
-				this.logProtocolString(sLog);
-				
-				if(eventStatusLocal.getStatusEnum().equals(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR)){
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "Es gibt im Monitor einen Fehler.";
-					this.logProtocolString(sLog);
-					
-					sAction = (String) this.getHashMapStatusLocalReaction().get(eventStatusLocal.getStatusLocal());
-					
-				}else if(eventStatusLocal.getStatusEnum().equals(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED)){
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "Monitor stoppt.";
-					this.logProtocolString(sLog);
-					
-				}else {
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "Monitor Event nicht beachtet. Sollte nicht in der Reaction HashMap sein.";
-					this.logProtocolString(sLog);
-					
-				}				
-			}else {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "instanceof Event nicht behandelt. ("+ eventStatusLocal.getClass().getName() + ").";
-				this.logProtocolString(sLog);
-			}
-			
+			String sAction = (String) this.getHashMapStatusLocalReaction().get(eventStatusLocal.getStatusLocal());
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Gefundenen Action: '" + sAction + "'";
+			this.logProtocolString(sLog);
 			
 			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
 			switch(sAction) {
 			case "doStop":
 				bReturn = doStop(eventStatusLocal);	
 				break;
+			case "doFilterFound":
+				bReturn = doFilterFound(eventStatusLocal);	
+				break;
 			default:
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
 				this.logProtocolString(sLog);
 			}
-		
+					
 		}//end main:
 		return bReturn;		
 	}
@@ -350,7 +349,10 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	public HashMap<IEnumSetMappedStatusZZZ, String> createHashMapStatusLocalReactionCustom() {
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
-		//Reagiere auf diee Events... mit dem angegebenen Alias.
+		//Den Monitor "Filter Found" Event verwenden
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASLOGFILEWATCHRUNNERFILTERFOUND,"doFilterFound");
+				
+		//und den "Monitor beendet" Event, bzw. Fehler
 		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
 		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR, "doStop");
 			

@@ -174,8 +174,13 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
                     		sLog = ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: Zeilenfilter gefunden: '" + sLineFilter + "'";
                     		this.logLineDate(sLog);
                     		
-                    		IEventObject4LogFileWatchRunnerStatusLocalZZZ event = new EventObject4LogFileWatchRunnerStatusLocalZZZ(this,ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, true);			                			
-                			this.getSenderStatusLocalUsed().fireEvent(event);
+                    		//Das waere der direkte Weg
+                    		//IEventObject4LogFileWatchRunnerStatusLocalZZZ event = new EventObject4LogFileWatchRunnerStatusLocalZZZ(this,ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, true);			                			
+                			//this.getSenderStatusLocalUsed().fireEvent(event);
+                    		
+                    		//...aber ein Event soll auch beim Setzen des passenden Flags erzeugt und geworfen werden.
+                    		this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND,true);
+            				this.logLineDate(ReflectCodeZZZ.getPositionCurrent() + ": LogFileWatchRunner HASFILTERFOUND Status gesetzt.");
                 			
                 			if(this.getFlag(ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
                 				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
@@ -204,11 +209,17 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
               	
                 bReturn = true;
 			} catch (InterruptedException e) {				
-				e.printStackTrace();				
+				e.printStackTrace();
+				this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
+				this.logLineDate(ReflectCodeZZZ.getPositionCurrent() + ": LogFileWatchRunner HASERROR Status gesetzt.");
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
+				this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
+				this.logLineDate(ReflectCodeZZZ.getPositionCurrent() + ": LogFileWatchRunner HASERROR Status gesetzt.");
 			} catch (IOException e) {
 				e.printStackTrace();	
+				this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
+				this.logLineDate(ReflectCodeZZZ.getPositionCurrent() + ": LogFileWatchRunner HASERROR Status gesetzt.");
 //			catch (InterruptedException e) {					
 //					try {
 //						String sLog = e.getMessage();

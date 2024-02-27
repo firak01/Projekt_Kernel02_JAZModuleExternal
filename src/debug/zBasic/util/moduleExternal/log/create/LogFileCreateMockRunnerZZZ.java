@@ -121,6 +121,37 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 		return bReturn;
 	}
 	
+	//Methode wird in der ReactionHashMap angegeben....
+	public boolean doStop(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			if(eventStatusLocal==null) break main;
+			
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "EventMessage: " + eventStatusLocal.getStatusMessage();
+			this.logProtocolString(sLog);
+
+			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+		}//end main
+		return bReturn;
+	}
+	
+	
+	//Methode wird in der ReactionHashMap angegeben....
+	public boolean doFilterFound(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			if(eventStatusLocal==null) break main;
+			
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "EventMessage: " + eventStatusLocal.getStatusMessage();
+			this.logProtocolString(sLog);
+			
+			if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+				bReturn = this.doStop(eventStatusLocal);
+			}
+		}//end main
+		return bReturn;
+	}
+	
 	
 	/** Ein Dummy-Logfile auslesen und langsam(!) Zeile fuer Zeile ausgeben
 	 * @return
@@ -271,32 +302,74 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 	 */
 	@Override
 	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+//		boolean bReturn = false;
+//		String sLog=null;
+//		
+//		main:{
+//			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
+//			this.logProtocolString(sLog);
+//			
+//			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
+//				IEventObjectStatusLocalZZZ event = (IEventObjectStatusLocalZZZ) eventStatusLocal;
+//				boolean bStatusValue = event.getStatusValue();
+//				if(bStatusValue!=true) break main;
+//				
+//				if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+//					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+//					this.logProtocolString(sLog);
+//					
+//					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
+//				}
+//				
+//				
+//			}else {
+//				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event wird nicht behandelt, instanceof " + eventStatusLocal.getClass().getName();
+//				this.logProtocolString(sLog);
+//			}			
+//		}//end main:
+//		return bReturn;	
+//		
+//		
+//		
 		boolean bReturn = false;
 		String sLog=null;
 		
 		main:{
-			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Einen Event von einem Objekt, an dem registriert worden ist empfangen.";
 			this.logProtocolString(sLog);
 			
-			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
-				IEventObjectStatusLocalZZZ event = (IEventObjectStatusLocalZZZ) eventStatusLocal;
-				boolean bStatusValue = event.getStatusValue();
-				if(bStatusValue!=true) break main;
-				
-				if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
-					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
-					this.logProtocolString(sLog);
-					
-					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
-				}
-				
-				
-			}else {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event wird nicht behandelt, instanceof " + eventStatusLocal.getClass().getName();
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Event="+eventStatusLocal.toString();
+			this.logProtocolString(sLog);
+			
+			boolean bEventRelevant = this.isEventRelevant(eventStatusLocal);
+			if(!bEventRelevant) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Event ist NICHT relevant.";
 				this.logProtocolString(sLog);
-			}			
+				break main;
+			}else {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Event ist relevant.";
+				this.logProtocolString(sLog);
+			}
+			
+			String sAction = (String) this.getHashMapStatusLocalReaction().get(eventStatusLocal.getStatusLocal());
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Gefundenen Action: '" + sAction + "'";
+			this.logProtocolString(sLog);
+			
+			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
+			switch(sAction) {
+			case "doStop":
+				bReturn = doStop(eventStatusLocal);	
+				break;
+			case "doFilterFound":
+				bReturn = doFilterFound(eventStatusLocal);	
+				break;
+			default:
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
+				this.logProtocolString(sLog);
+			}
+					
 		}//end main:
-		return bReturn;	
+		return bReturn;		
 	}
 	
 	/* (non-Javadoc)
@@ -411,20 +484,20 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 		return true;
 	}
 
-	@Override
-	public boolean isEventRelevant(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			
-			if(!this.isEventRelevant2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByClass2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByReactionHashMap2ChangeStatusLocal(eventStatusLocal)) break main;
-			if(!this.isEventRelevantByStatusLocalValue2ChangeStatusLocal(eventStatusLocal)) break main;
-			
-			bReturn = true;
-		}//end main:
-		return bReturn;
-	}
+//	@Override
+//	public boolean isEventRelevant(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+//		boolean bReturn = false;
+//		main:{
+//			
+//			if(!this.isEventRelevant2ChangeStatusLocal(eventStatusLocal)) break main;
+//			if(!this.isEventRelevantByClass2ChangeStatusLocal(eventStatusLocal)) break main;
+//			if(!this.isEventRelevantByReactionHashMap2ChangeStatusLocal(eventStatusLocal)) break main;
+//			if(!this.isEventRelevantByStatusLocalValue2ChangeStatusLocal(eventStatusLocal)) break main;
+//			
+//			bReturn = true;
+//		}//end main:
+//		return bReturn;
+//	}
 
 	@Override
 	public HashMap createHashMapStatusLocalReactionCustom() {
