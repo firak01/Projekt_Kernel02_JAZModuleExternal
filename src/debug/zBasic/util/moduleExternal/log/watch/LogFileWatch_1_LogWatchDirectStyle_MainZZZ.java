@@ -13,7 +13,7 @@ import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.LogFileWatchRunnerZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
-import debug.zBasic.util.moduleExternal.log.create.LogFileCreateMockRunnerZZZ;
+import debug.zBasic.util.moduleExternal.log.create.LogFileCreateRunnerMockZZZ;
 
 /** In dieser Klasse wird ein LogFile von dem einen Thread erzeugt 
  *  und gleichzeitig von einem anderen Thread ausgewertet.*  
@@ -116,7 +116,7 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 			
 			File objSourceFile = new File(sSourceFilePathTotalDefault); 
 			String[]saFlagCreate= {ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
-			LogFileCreateMockRunnerZZZ objCreator = new LogFileCreateMockRunnerZZZ(objSourceFile, objLogFile, saFlagCreate);
+			LogFileCreateRunnerMockZZZ objCreator = new LogFileCreateRunnerMockZZZ(objSourceFile, objLogFile, saFlagCreate);
 			
 			//2. Schritt: Mache den Log Watcher mit dem "Reaktionsstring".
 		    String sFilterSentence;    

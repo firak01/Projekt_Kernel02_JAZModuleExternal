@@ -42,21 +42,21 @@ import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
  * @author fl86kyvo
  *
  */
-public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusListeningRunnableZZZ implements ILogFileCreateRunnerZZZ {
+public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusListeningRunnableZZZ implements ILogFileCreateRunnerZZZ {
 	private static final long serialVersionUID = 6586079955658760005L;
 	private File objSourceFile = null;
 	private File objLogFile=null;
 	
-	public LogFileCreateMockRunnerZZZ() throws ExceptionZZZ {
+	public LogFileCreateRunnerMockZZZ() throws ExceptionZZZ {
 		super();		
 	}
 
-	public LogFileCreateMockRunnerZZZ(File objSourceFile, File objLogFile) throws ExceptionZZZ {
+	public LogFileCreateRunnerMockZZZ(File objSourceFile, File objLogFile) throws ExceptionZZZ {
 		super();	
 		LogFileCreateMockRunnerNew_(null, objSourceFile, objLogFile, null);
 	}
 	
-	public LogFileCreateMockRunnerZZZ(File objSourceFile, File objLogFile, String[] saFlag) throws ExceptionZZZ {
+	public LogFileCreateRunnerMockZZZ(File objSourceFile, File objLogFile, String[] saFlag) throws ExceptionZZZ {
 		super();	
 		LogFileCreateMockRunnerNew_(null, objSourceFile, objLogFile, saFlag);
 	}
