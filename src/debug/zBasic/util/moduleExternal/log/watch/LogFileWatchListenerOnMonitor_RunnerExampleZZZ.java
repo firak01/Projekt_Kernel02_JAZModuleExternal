@@ -8,6 +8,7 @@ import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZ
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
@@ -207,15 +208,20 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "Gefundenen Action: '" + sAction + "'";
 			this.logProtocolString(sLog);
 			
-			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
-			switch(sAction) {
-			case "doStop":
-				bReturn = doStop(eventStatusLocal);	
-				break;
-			case "doFilterFound":
-				bReturn = doFilterFound(eventStatusLocal);	
-				break;
-			default:
+			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.			
+			if(!StringZZZ.isEmpty(sAction)) {
+				switch(sAction) {
+				case "doStop":
+					bReturn = doStop(eventStatusLocal);	
+					break;
+				case "doFilterFound":
+					bReturn = doFilterFound(eventStatusLocal);	
+					break;
+				default:
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
+					this.logProtocolString(sLog);
+				}
+			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
 				this.logProtocolString(sLog);
 			}

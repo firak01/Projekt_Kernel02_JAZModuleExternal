@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramMonitorZZZ;
+import basic.zBasic.component.AbstractProgramMonitorRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
@@ -13,11 +13,18 @@ import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.EventObject4LogFileWatchMonitorStatusLocalZZZ;
 import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
 
-public abstract class AbstractLogFileWatchMonitorZZZ  extends AbstractProgramMonitorZZZ implements ILogFileWatchMonitorZZZ{
+/**Beachte: Es wird ILogFileWatchMonitorZZZ implementiert
+ *          und nicht etwa ein ILogFileWatchMonitorRunnableZZZ.
+ *          Ich gehe erst einmal von keinen Unterschieden aus. 
+ *          
+ * @author Fritz Lindhauer, 27.02.2024, 20:59:33
+ * 
+ */
+public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractProgramMonitorRunnableZZZ implements ILogFileWatchMonitorZZZ{
 	private static final long serialVersionUID = 968455281850239704L;
 	protected volatile File objLogFile = null;	
 		
-	public AbstractLogFileWatchMonitorZZZ() throws ExceptionZZZ{
+	public AbstractLogFileWatchMonitorRunnableZZZ() throws ExceptionZZZ{
 		super();
 	}
 	
@@ -75,7 +82,6 @@ public abstract class AbstractLogFileWatchMonitorZZZ  extends AbstractProgramMon
 	public boolean proofFlagSetBefore(ILogFileWatchMonitorZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.proofFlagSetBefore(objEnumFlag.name());
 	}
-	
 	
 	//####################################
 	//### STATUS: ILogFileWatchMonitorZZZ

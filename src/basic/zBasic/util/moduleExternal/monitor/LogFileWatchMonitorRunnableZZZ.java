@@ -1,13 +1,13 @@
 package basic.zBasic.util.moduleExternal.monitor;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
+import basic.zBasic.component.IProgramMonitorRunnableZZZ;
+import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.component.IProgramZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
@@ -15,22 +15,22 @@ import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 
 
-/* Monitor Klasse, der selbst NICHT in einem eigenen Thread (NICHT runnable) laeuft.
+/* Monitor Klasse, der selbst in einem eigenen Thread (runnable) laeuft.
  */
-public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
+public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorRunnableZZZ {
 	private static final long serialVersionUID = 8209025974705509709L;
 
-	public LogFileWatchMonitorZZZ() throws ExceptionZZZ{
+	public LogFileWatchMonitorRunnableZZZ() throws ExceptionZZZ{
 		super();				
 	}
 	
-	public LogFileWatchMonitorZZZ(File objFile) throws ExceptionZZZ{
+	public LogFileWatchMonitorRunnableZZZ(File objFile) throws ExceptionZZZ{
 		super();				
 		ProcessWatchMonitorNew_(objFile,null);
 	}
 
 	
-	public LogFileWatchMonitorZZZ(String[] saFlagControl) throws ExceptionZZZ{
+	public LogFileWatchMonitorRunnableZZZ(String[] saFlagControl) throws ExceptionZZZ{
 		super();		
 		ProcessWatchMonitorNew_(null, saFlagControl);
 	}
@@ -54,6 +54,20 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 	}//END main
 }
 				
+	//Methode wird in der ReactionHashMap angegeben....
+	public boolean doStop(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			if(eventStatusLocal==null) break main;
+			
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "EventMessage: " + eventStatusLocal.getStatusMessage();
+			this.logProtocolString(sLog);
+			
+			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+		}//end main
+		return bReturn;
+	}
+	
 	@Override
 	public boolean startCustom() throws ExceptionZZZ {
 		boolean bReturn = false;
@@ -123,11 +137,48 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 						break main;
 					}	
 				}
-			} catch (InterruptedException e) {								
+				
+				
+				//#############################################
+				//### Mache mal einen runnable - Teil, noch ohne irgendetwas sinnvolles
+				//#############################################
+				
+				int icount=0;
+                while (true){
+                	
+                	boolean bStopRequested = this.getFlag(IProgramMonitorRunnableZZZ.FLAGZ.REQUEST_STOP);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
+					if( bStopRequested) {
+						sLog = ReflectCodeZZZ.getPositionCurrent() + ": Breche Schleife ab.";
+						this.logProtocolString(sLog);
+						break main;
+					}
+					
+                   
+                   	//Warte auf weiter Ausgaben
+                    Thread.sleep(200);
+               
+                    icount++;
+                    sLog = ReflectCodeZZZ.getPositionCurrent()+"Zaehler in Schleife " + icount;
+                    this.logProtocolString(sLog);
+                    Thread.sleep(20);													
+					boolean bError = this.getStatusLocal(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR);
+					if(bError) break;
+		
+					//Nach irgendeiner Ausgabe enden ist hier falsch, in einer abstrakten Klasse vielleicht richtig, quasi als Muster.
+					//if(this.getFlag("hasOutput")) break;
+					//System.out.println("FGLTEST03");					
+				}//end while
+					
+				this.setStatusLocal(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED,true);
+				this.logLineDate(ReflectCodeZZZ.getPositionCurrent() + ": LogFileWatchRunner ended.");
+				
+              	
+                bReturn = true;
+			} catch (InterruptedException e) {				
 				e.printStackTrace();
 				this.setStatusLocal(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR,true);
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + ": HASERROR Status gesetzt.";
-				this.logLineDate(sLog);
+				this.logLineDate(sLog);		
 			} finally {
 				
 	        }
@@ -170,19 +221,17 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 		return bReturn;
 	}
 	
+	
 	//### Getter / Setter
 		
-	
 	//###### FLAGS
 	
 
 	//###########################################################
 	//### STATUS
 	//###########################################################
-			
-		
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
+		
 	@Override
 	//Weil auf den Status anderer Thread gehoert wird und diese weitergeleitet werden sollen.
 	public HashMap<IEnumSetMappedStatusZZZ, IEnumSetMappedStatusZZZ> createHashMapEnumSetForCascadingStatusLocalCustom() {

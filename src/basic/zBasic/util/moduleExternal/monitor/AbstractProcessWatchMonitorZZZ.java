@@ -13,7 +13,6 @@ import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventBrokerStatusLocalUserZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalZZZ;
-import basic.zKernel.status.KernelSenderObjectStatusLocalZZZ;
 
 public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractObjectWithStatusOnStatusListeningZZZ implements IProcessWatchMonitorZZZ, IListenerObjectStatusLocalZZZ, IEventBrokerStatusLocalUserZZZ{
 	private static final long serialVersionUID = 4532365489539285236L;

@@ -25,6 +25,7 @@ import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
+import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventObjectStatusBasicZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
@@ -356,14 +357,19 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 			this.logProtocolString(sLog);
 			
 			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
-			switch(sAction) {
-			case "doStop":
-				bReturn = doStop(eventStatusLocal);	
-				break;
-			case "doFilterFound":
-				bReturn = doFilterFound(eventStatusLocal);	
-				break;
-			default:
+			if(!StringZZZ.isEmpty(sAction)) {
+				switch(sAction) {
+				case "doStop":
+					bReturn = doStop(eventStatusLocal);	
+					break;
+				case "doFilterFound":
+					bReturn = doFilterFound(eventStatusLocal);	
+					break;
+				default:
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
+					this.logProtocolString(sLog);
+				}
+			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
 				this.logProtocolString(sLog);
 			}
@@ -502,9 +508,17 @@ public class LogFileCreateMockRunnerZZZ extends AbstractProgramWithFlagOnStatusL
 	@Override
 	public HashMap createHashMapStatusLocalReactionCustom() {
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
-		main:{
-			
-		}//end main:
+		
+		//Merke: Bei der "direkten" verbindung zwischen creator und watchRunner ohne Monitor arbeiten...
+		//       Mit Monitor wuerden soch die STATUSLOCAL Werte auf den Monitor beziehen.
+		//Reagiere nur auf den "Filter" gefunden Event
+		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "filterFound");
+		
+		//und den "Runner beendet" Event, bzw. Fehler
+		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
+		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR, "doStop");
+		
+		
 		return hmReturn;
 		
 	}

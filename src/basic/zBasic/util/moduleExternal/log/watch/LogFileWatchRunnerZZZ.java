@@ -214,7 +214,7 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		}
 		
 		//Erzeuge fuer das Enum einen eigenen Event. Die daran registrierten Klassen koennen in einer HashMap definieren, ob der Event fuer sie interessant ist.		
-		sLog = ReflectCodeZZZ.getPositionCurrent() + "Erzeuge Event fuer '" + sStatusName + "'";		
+		sLog = ReflectCodeZZZ.getPositionCurrent() + "Erzeuge Event fuer '" + sStatusName + "', bValue='"+ bStatusValue + "', sMessage='"+sStatusMessage+"'";
 		this.logProtocolString(sLog);
 		IEventObject4LogFileWatchRunnerStatusLocalZZZ event = new EventObject4LogFileWatchRunnerStatusLocalZZZ(this,enumStatus, bStatusValue);			
 		
@@ -350,12 +350,17 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 			}
 			
 			
-			//Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
-			switch(sAction) {
-			case "doStop":
-				bReturn = doStop(eventStatusLocal);	
-				break;
-			default:
+			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
+			if(!StringZZZ.isEmpty(sAction)) {
+				switch(sAction) {
+				case "doStop":
+					bReturn = doStop(eventStatusLocal);	
+					break;				
+				default:
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
+					this.logProtocolString(sLog);
+				}
+			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
 				this.logProtocolString(sLog);
 			}

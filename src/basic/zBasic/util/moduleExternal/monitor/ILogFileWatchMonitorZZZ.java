@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.EnumSet;
 
 import basic.zBasic.ExceptionZZZ;
-import basic.zBasic.component.AbstractProgramMonitorRunnablerZZZ;
+import basic.zBasic.component.AbstractProgramMonitorRunnableZZZ;
 import basic.zBasic.component.IProgramMonitorZZZ;
 import basic.zBasic.component.IProgramMonitorZZZ.FLAGZ;
 import basic.zBasic.component.IProgramMonitorZZZ.STATUSLOCAL;
@@ -101,7 +101,7 @@ public interface ILogFileWatchMonitorZZZ{
 			Class<STATUSLOCAL> enumClass = STATUSLOCAL.class;
 			EnumSet<STATUSLOCAL> set = EnumSet.noneOf(enumClass);//Erstelle ein leeres EnumSet
 			
-			for(Object obj : AbstractProgramMonitorRunnablerZZZ.class.getEnumConstants()){
+			for(Object obj : AbstractProgramMonitorRunnableZZZ.class.getEnumConstants()){
 				//System.out.println(obj + "; "+obj.getClass().getName());
 				set.add((STATUSLOCAL) obj);
 			}

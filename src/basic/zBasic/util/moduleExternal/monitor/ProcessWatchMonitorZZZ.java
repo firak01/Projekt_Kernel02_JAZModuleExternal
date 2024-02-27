@@ -326,16 +326,14 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		bFunction = this.proofStatusLocalExists(sStatusName);															
 		if(!bFunction) {
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + " ServerThreadProcessWatchMonitor for Process would like to fire event, but this status is not available: '" + sStatusName + "'";
-			System.out.println(sLog);
-			this.getMainObject().logProtocolString(sLog);			
+			this.logProtocolString(sLog);			
 			break main;
 		}
 			
 		bFunction = this.proofStatusLocalValueChanged(sStatusName, bStatusValue);
 		if(!bFunction) {
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + " ServerThreadProcessWatchMonitor would like to fire event, but this status has not changed: '" + sStatusName + "'";
-			System.out.println(sLog);
-			this.getMainObject().logProtocolString(sLog);
+			this.logProtocolString(sLog);
 			break main;
 		}	
 		
@@ -359,14 +357,12 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		}
 		
 		String sLog = ReflectCodeZZZ.getPositionCurrent() + " ServerMain verarbeite sStatusMessageToSet='" + sStatusMessageToSet + "'";
-		System.out.println(sLog);
-		this.getMainObject().logProtocolString(sLog);
+		this.logProtocolString(sLog);
 
 		//Falls eine Message extra uebergeben worden ist, ueberschreibe...
 		if(sStatusMessageToSet!=null) {
 			sLog = ReflectCodeZZZ.getPositionCurrent() + " ServerMain setze sStatusMessageToSet='" + sStatusMessageToSet + "'";
-			System.out.println(sLog);
-			this.getMainObject().logProtocolString(sLog);
+			this.logProtocolString(sLog);
 		}
 		//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte...
 		this.offerStatusLocalEnum(enumStatus, bStatusValue, sStatusMessageToSet);
@@ -376,30 +372,26 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
 		//Dann erzeuge den Event und feuer ihn ab.	
 		if(this.getSenderStatusLocalUsed()==null) {
-			sLog = ReflectCodeZZZ.getPositionCurrent() + " ServerThreadProcessWatchMonitor for Process would like to fire event '" + enumStatus.getAbbreviation() + "', but no objEventStatusLocalBroker available, any registered?";
-			System.out.println(sLog);
-			this.getMainObject().logProtocolString(sLog);		
+			sLog = ReflectCodeZZZ.getPositionCurrent() + " ServerThreadProcessWatchMonitor for Process would like to fire event '" + enumStatus.getAbbreviation() + "', but no objEventStatusLocalBroker available, any registered?";			
+			this.logProtocolString(sLog);		
 			break main;
 		}
 		
 		//Erzeuge fuer das Enum einen eigenen Event. Die daran registrierten Klassen koennen in einer HashMap definieren, ob der Event fuer sie interessant ist.		
-		sLog = ReflectCodeZZZ.getPositionCurrent() + ": Erzeuge Event fuer '" + sStatusName + "'";
-		System.out.println(sLog);
-		this.getMainObject().logProtocolString(sLog);
+		sLog = ReflectCodeZZZ.getPositionCurrent() + ": Erzeuge Event fuer '" + sStatusName + "', bValue='"+ bStatusValue + "', sMessage='"+sStatusMessage+"'";		
+		this.logProtocolString(sLog);
 		IEventObject4ProcessWatchMonitorStatusLocalOVPN event = new EventObject4ProcessMonitorStatusLocalOVPN(this,1,enumStatus, bStatusValue);			
 		event.setApplicationObjectUsed(this.getMainObject().getApplicationObject());
 					
 		//das ClientStarterObjekt nun auch noch dem Event hinzufuegen
 		sLog = ReflectCodeZZZ.getPositionCurrent() + " ServerThreadProcessWatchMonitor for Process iIndex= '" + iIndexOfProcess + "'";
-		System.out.println(sLog);
-		this.getMainObject().logProtocolString(sLog);
+		this.logProtocolString(sLog);
 		if(iIndexOfProcess>=0) {
 			event.setServerConfigStarterObjectUsed(this.getMainObject().getServerConfigStarterList().get(iIndexOfProcess));
 		}		
 		
 		sLog = ReflectCodeZZZ.getPositionCurrent() + " ServerThreadProcessWatchMonitor for Process fires event '" + enumStatus.getAbbreviation() + "'";
-		System.out.println(sLog);
-		this.getMainObject().logProtocolString(sLog);
+		this.logProtocolString(sLog);
 		this.getSenderStatusLocalUsed().fireEvent(event);
 				
 		bFunction = true;				

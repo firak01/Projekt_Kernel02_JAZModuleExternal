@@ -219,25 +219,25 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
                     	//Warte auf weiter Ausgaben
                         Thread.sleep(300);
                     }
-                }								
+                }		
+            
 			} catch (InterruptedException e) {				
-				e.printStackTrace();				
+				e.printStackTrace();
+				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + ": HASERROR Status gesetzt.";
+				this.logProtocolString(sLog);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
+				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + ": HASERROR Status gesetzt.";
+				this.logProtocolString(sLog);
 			} catch (IOException e) {
-				e.printStackTrace();
-//			catch (InterruptedException e) {					
-//					try {
-//						String sLog = e.getMessage();
-//						this.logLineDate("An error happend: '" + sLog + "'");
-//					} catch (ExceptionZZZ e1) {
-//						System.out.println(e1.getDetailAllLast());
-//						e1.printStackTrace();
-//					}
-//					System.out.println(e.getMessage());
-//					e.printStackTrace();
-//				}
+				e.printStackTrace();	
+				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + ": HASERROR Status gesetzt.";
+				this.logProtocolString(sLog);
 			} finally {
+				
 				if(br!=null) {
 					IOUtils.closeQuietly(br);
 				}
@@ -318,14 +318,19 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 			this.logProtocolString(sLog);
 			
 			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
-			switch(sAction) {
-			case "doStop":
-				bReturn = doStop(eventStatusLocal);	
-				break;
-			case "doFilterFound":
-				bReturn = doFilterFound(eventStatusLocal);	
-				break;
-			default:
+			if(!StringZZZ.isEmpty(sAction)) {
+				switch(sAction) {
+				case "doStop":
+					bReturn = doStop(eventStatusLocal);	
+					break;
+				case "doFilterFound":
+					bReturn = doFilterFound(eventStatusLocal);	
+					break;
+				default:
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
+					this.logProtocolString(sLog);
+				}
+			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
 				this.logProtocolString(sLog);
 			}
@@ -350,6 +355,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
 		//Den Monitor "Filter Found" Event verwenden
+		//Merke: anders als beim Beispiel mit der direkten Verbindung von Creator zu WatchRunner wird hier der Status des Monitors verwendet.
 		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASLOGFILEWATCHRUNNERFILTERFOUND,"doFilterFound");
 				
 		//und den "Monitor beendet" Event, bzw. Fehler
