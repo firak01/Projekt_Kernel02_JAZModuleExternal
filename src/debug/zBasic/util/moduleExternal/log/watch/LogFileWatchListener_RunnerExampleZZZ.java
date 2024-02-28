@@ -32,7 +32,7 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 			
 			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {
 				
-				boolean bRelevant = this.isEventRelevant((IEventObjectStatusLocalZZZ) eventStatusLocal); 
+				boolean bRelevant = this.isEventRelevantAny((IEventObjectStatusLocalZZZ) eventStatusLocal); 
 				if(!bRelevant) {
 					sLog = 	ReflectCodeZZZ.getPositionCurrent() + ": Event / Status nicht relevant. Breche ab.";
 					this.logProtocolString(sLog);
@@ -122,13 +122,13 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 	}
 	
 	@Override
-	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
+	public boolean isEventRelevant2ChangeStatusLocalByClass(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
 		return true;
 	}
 
 
 	@Override
-	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
+	public boolean isEventRelevant2ChangeStatusLocalByStatusLocalValue(IEventObjectStatusLocalZZZ eventStatusBasic) throws ExceptionZZZ {
 	return true;
 	}
 

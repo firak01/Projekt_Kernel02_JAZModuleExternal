@@ -597,24 +597,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 		this.objEventStatusLocalBroker = objEventSender;
 	}
 
-	//### aus iStatusLocalUser
-	@Override
-	public boolean isStatusLocalRelevant(IEnumSetMappedStatusZZZ objEnumStatusIn) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			//Merke: enumStatus hat class='class use.openvpn.client.process.IProcessWatchRunnerOVPN$STATUSLOCAL'				
-			if(!(objEnumStatusIn instanceof IProcessWatchRunnerZZZ.STATUSLOCAL) ){
-				String sLog = ReflectCodeZZZ.getPositionCurrent()+": enumStatus wird wg. unpassender Klasse ignoriert.";
-				System.out.println(sLog);
-				//this.objMain.logMessageString(sLog);
-				break main;
-			}		
-			bReturn = true;
-
-		}//end main:
-		return bReturn;
-	}
-	
+	//### aus iStatusLocalUser	
 	public boolean getStatusLocal(Enum objEnumStatusIn) throws ExceptionZZZ {
 		boolean bFunction = false;
 		main:{

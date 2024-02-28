@@ -303,7 +303,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "Event="+eventStatusLocal.toString();
 			this.logProtocolString(sLog);
 			
-			boolean bEventRelevant = this.isEventRelevant(eventStatusLocal);
+			boolean bEventRelevant = this.isEventRelevantAny(eventStatusLocal);
 			if(!bEventRelevant) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Event ist NICHT relevant.";
 				this.logProtocolString(sLog);
@@ -341,12 +341,12 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 
 
 	@Override
-	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
+	public boolean isEventRelevant2ChangeStatusLocalByClass(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
 		return true;
 	}
 
 	@Override
-	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
+	public boolean isEventRelevant2ChangeStatusLocalByStatusLocalValue(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
 		return true;
 	}
 

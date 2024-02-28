@@ -25,15 +25,19 @@ import debug.zBasic.util.moduleExternal.log.create.LogFileCreateRunnerMockOnMoni
  *  Als Beispielsreaktion auf den Event werden diese nun beendet.  
  *  
  *  
- *  TODOGOON20240204; 
+ *  As gibt mehrere Debug-Varianten.
  *  In dieser Variante soll mit einem Monitor gearbeitet werden, der die Threads verwaltet
  *  und die entsprechenden Stati durchreicht an die jeweilige Hauptklasse.
  *  Das passiert durch einen Event, der vom Monitor geworfen wird. 
  *  Dabei wird der Event auf einen anderen Event gemappt.
  *  
- *  Auf eben diesen anderen Event "horcht" die Hauptklasse.
+ *  Auf eben diesen anderen Event "horcht" die Hauptklasse
+ *  sowie das Objekt, dass immer wieder neue Log-Einträge erzeugt.
  *  
- *  
+ *  Merke:
+ *  In dieser Variante laeuft der Monitor als runnable - Thread in einer Endlosschleife.
+ *  D.h. er muss explizit auf den Event der "Beobachter"-Klasse auch reagieren, um sich zu beenden. 
+ * 
  * @author fl86kyvo
  *
  */

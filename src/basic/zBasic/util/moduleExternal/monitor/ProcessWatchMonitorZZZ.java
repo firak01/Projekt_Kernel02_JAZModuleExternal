@@ -225,26 +225,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 	
 
 	//###### STATUS		
-	@Override
-	public boolean isStatusLocalRelevant(IEnumSetMappedStatusZZZ objEnumStatusIn) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			if(objEnumStatusIn==null) break main;
-			
-			
-			//Merke: enumStatus hat class='class use.openvpn.client.process.IProcessWatchRunnerOVPN$STATUSLOCAL'				
-//			if(!(objEnum instanceof IServerMainOVPN.STATUSLOCAL) ){
-//				String sLog = ReflectCodeZZZ.getPositionCurrent()+": enumStatus wird wg. unpassender Klasse ignoriert.";
-//				System.out.println(sLog);
-//				//this.objMain.logMessageString(sLog);
-//				break main;
-//		}	
-			
-			//Erst einmal ist jeder Status relevant
-			bReturn = true;
-		}//end main:
-		return bReturn;
-	}
+	
 	
 	
 	
@@ -559,84 +540,12 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		return bReturn;
 	}
 	
-	
-	//#########################################################
-	/* (non-Javadoc)
-	 * @see use.openvpn.client.status.IListenerObjectStatusLocalSetOVPN#isEventRelevant(use.openvpn.client.status.IEventObjectStatusLocalSetOVPN)
-	 */
-	@Override
-	public boolean isEventRelevant(IEventObjectStatusLocalSetOVPN eventStatusLocalSet) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			if(eventStatusLocalSet==null)break main;
-			
-			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Pruefe Relevanz des Events.";
-			System.out.println(sLog);
-			this.logProtocolString(sLog);
-			
-			IEnumSetMappedZZZ enumStatus = eventStatusLocalSet.getStatusEnum();				
-			if(enumStatus==null) {
-				sLog = ReflectCodeZZZ.getPositionCurrent()+": KEINEN enumStatus empfangen. Beende.";
-				System.out.println(sLog);
-				this.logProtocolString(sLog);							
-				break main;
-			}
-							
-			sLog = ReflectCodeZZZ.getPositionCurrent()+": Einen enumStatus empfangen.";
-			System.out.println(sLog);
-			this.logProtocolString(sLog);
-				
-			sLog = ReflectCodeZZZ.getPositionCurrent()+": enumStatus hat class='"+enumStatus.getClass()+"'";
-			System.out.println(sLog);
-			this.logProtocolString(sLog);	
-				
-			sLog = ReflectCodeZZZ.getPositionCurrent()+": enumStatus='" + enumStatus.getAbbreviation()+"'";
-			System.out.println(sLog);
-			this.logProtocolString(sLog);
-			
-			//+++ Pruefungen
-			bReturn = this.isEventRelevantByClass(eventStatusLocalSet);
-			if(!bReturn) {
-				sLog = ReflectCodeZZZ.getPositionCurrent()+": Event werfenden Klasse ist fuer diese Klasse hinsichtlich eines Status nicht relevant. Breche ab.";
-				System.out.println(sLog);
-				this.logProtocolString(sLog);				
-				break main;
-			}
-			
-			bReturn = this.isStatusChanged(eventStatusLocalSet.getStatusText());
-			if(!bReturn) {
-				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status nicht geaendert. Breche ab.";
-				System.out.println(sLog);
-				this.logProtocolString(sLog);
-				break main;
-			}
-						
-			bReturn = this.isEventRelevantByStatusLocalValue(eventStatusLocalSet);
-			if(!bReturn) {
-				sLog = ReflectCodeZZZ.getPositionCurrent()+": Statuswert nicht relevant. Breche ab.";
-				System.out.println(sLog);
-				this.logProtocolString(sLog);				
-				break main;
-			}
-			
-			bReturn = this.isEventRelevantByStatusLocal(eventStatusLocalSet);
-			if(!bReturn) {
-				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status an sich aus dem Event ist fuer diese Klasse nicht relevant. Breche ab.";
-				System.out.println(sLog);
-				this.logProtocolString(sLog);				
-				break main;
-			}
-													
-			bReturn = true;
-		}//end main:
-		return bReturn;
-	}
-	
+		
 	/* (non-Javadoc)
 	 * @see use.openvpn.client.status.IListenerObjectStatusLocalSetOVPN#isEventRelevantByStatusLocalValue(use.openvpn.client.status.IEventObjectStatusLocalSetOVPN)
 	 */
 	@Override
-	public boolean isEventRelevantByStatusLocalValue(IEventObjectStatusLocalSetOVPN eventStatusLocalSet) throws ExceptionZZZ {
+	public boolean isEventRelevant2ChangeStatusLocalByStatusLocalValue(IEventObjectStatusLocalSetOVPN eventStatusLocalSet) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
 			if(eventStatusLocalSet==null)break main;
@@ -649,42 +558,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		}
 		return bReturn;
 	}
-	
-	@Override
-	public boolean isEventRelevantByClass(IEventObjectStatusLocalSetOVPN eventStatusLocalSet) throws ExceptionZZZ {
-		/* Loesung: DOWNCASTING mit instanceof , s.: https://www.positioniseverything.net/typeof-java/
-	 	class Animal { }
-		class Dog2 extends Animal {
-			static void method(Animal j) {
-			if(j instanceof Dog2){
-			Dog2 d=(Dog2)j;//downcasting
-			System.out.println(“downcasting done”);
-			}
-			}
-			public static void main (String [] args) {
-			Animal j=new Dog2();
-			Dog2.method(j);
-			}
-		}
-	 */
-	
-		boolean bReturn = false;
-		main:{
-			//Merke: enumStatus hat class='class use.openvpn.client.process.IProcessWatchRunnerOVPN$STATUSLOCAL'				
-			if(eventStatusLocalSet.getStatusEnum() instanceof IProcessWatchRunnerOVPN.STATUSLOCAL){
-				String sLog = ReflectCodeZZZ.getPositionCurrent()+": Enum Klasse ist instanceof IProcessWatchRunnerOVPN. Damit relevant.";
-				System.out.println(sLog);
-				this.logProtocolString(sLog);
-				bReturn = true;
-				break main;
-			}		
-			
-			
-		}//end main:
-		return bReturn;
-	}
-
-	
+		
 	@Override
 	public boolean setStatusLocal(Enum enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
 		boolean bFunction = false;
@@ -850,13 +724,37 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 	}
 
 	@Override
-	public boolean isEventRelevantByClass2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-		return true;
-	}
-
-	@Override
-	public boolean isEventRelevantByStatusLocalValue2ChangeStatusLocal(IEventObjectStatusLocalZZZ eventStatusLocal)	throws ExceptionZZZ {
-		return true;
+	public boolean isEventRelevant2ChangeStatusLocalByClass(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		/* Loesung: DOWNCASTING mit instanceof , s.: https://www.positioniseverything.net/typeof-java/
+	 	class Animal { }
+		class Dog2 extends Animal {
+			static void method(Animal j) {
+			if(j instanceof Dog2){
+			Dog2 d=(Dog2)j;//downcasting
+			System.out.println(“downcasting done”);
+			}
+			}
+			public static void main (String [] args) {
+			Animal j=new Dog2();
+			Dog2.method(j);
+			}
+		}
+	 */
+	
+		boolean bReturn = false;
+		main:{
+			//Merke: enumStatus hat class='class use.openvpn.client.process.IProcessWatchRunnerOVPN$STATUSLOCAL'				
+			if(eventStatusLocal.getStatusEnum() instanceof IProcessWatchRunnerOVPN.STATUSLOCAL){
+				String sLog = ReflectCodeZZZ.getPositionCurrent()+": Enum Klasse ist instanceof IProcessWatchRunnerOVPN. Damit relevant.";
+				System.out.println(sLog);
+				this.logProtocolString(sLog);
+				bReturn = true;
+				break main;
+			}		
+			
+			
+		}//end main:
+		return bReturn;
 	}
 
 	@Override

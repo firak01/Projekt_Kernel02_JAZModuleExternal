@@ -20,7 +20,7 @@ import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
  * @author Fritz Lindhauer, 27.02.2024, 20:59:33
  * 
  */
-public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractProgramMonitorRunnableZZZ implements ILogFileWatchMonitorZZZ{
+public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractProgramMonitorRunnableZZZ implements ILogFileWatchMonitorRunnableZZZ{
 	private static final long serialVersionUID = 968455281850239704L;
 	protected volatile File objLogFile = null;	
 		
@@ -39,7 +39,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 	}
 	
 	//###################################################
-	//### FLAGS ILogFileWatchRunnerMonitorZZZ ###########
+	//### FLAGS ILogFileWatchrMonitorZZZ ###########
 	//###################################################
 	
 	@Override
@@ -83,8 +83,53 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		return this.proofFlagSetBefore(objEnumFlag.name());
 	}
 	
+	//###################################################
+	//### FLAGS ILogFileWatchMonitorRunnableZZZ ###########
+	//###################################################
+	
+	@Override
+	public boolean getFlag(ILogFileWatchMonitorRunnableZZZ.FLAGZ objEnumFlag) {
+		return this.getFlag(objEnumFlag.name());
+	}
+	
+	@Override
+	public boolean setFlag(ILogFileWatchMonitorRunnableZZZ.FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
+		return this.setFlag(objEnumFlag.name(), bFlagValue);
+	}
+	
+	@Override
+	public boolean[] setFlag(ILogFileWatchMonitorRunnableZZZ.FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
+		boolean[] baReturn=null;
+		main:{
+			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+				baReturn = new boolean[objaEnumFlag.length];
+				int iCounter=-1;
+				for(ILogFileWatchMonitorRunnableZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+					iCounter++;
+					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+					baReturn[iCounter]=bReturn;
+				}
+				
+				//!!! Ein mögliches init-Flag ist beim direkten setzen der Flags unlogisch.
+			//    Es wird entfernt.
+			this.setFlag(IFlagZUserZZZ.FLAGZ.INIT, false);
+		}
+	}//end main:
+		return baReturn;
+	}
+	
+	@Override
+	public boolean proofFlagExists(ILogFileWatchMonitorRunnableZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean proofFlagSetBefore(ILogFileWatchMonitorRunnableZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+		return this.proofFlagSetBefore(objEnumFlag.name());
+	}
+	
 	//####################################
-	//### STATUS: ILogFileWatchMonitorZZZ
+	//### STATUS: ILogFileWatchMonitorRunanbleZZZ
 	//####################################
 
 	//####### aus IStatusLocalUserZZZ
@@ -94,7 +139,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		main:{
 			if(objEnumStatusIn==null) break main;
 			
-			ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) objEnumStatusIn;
+			ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL) objEnumStatusIn;
 			String sStatusName = enumStatus.name();
 			if(StringZZZ.isEmpty(sStatusName)) break main;
 										
@@ -121,7 +166,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		main:{
 			if(enumStatusIn==null) break main;
 			
-			ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) enumStatusIn;
+			ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL) enumStatusIn;
 			
 			bFunction = this.offerStatusLocal_(enumStatus, "", bStatusValue);				
 		}//end main;
@@ -135,7 +180,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		main:{
 			if(enumStatusIn==null) break main;
 			
-			ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) enumStatusIn;
+			ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL) enumStatusIn;
 			
 			bFunction = this.offerStatusLocal_(enumStatus, sStatusMessage, bStatusValue);				
 		}//end main;
@@ -149,7 +194,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 			
 		
 			//Merke: In anderen Klassen, die dieses Design-Pattern anwenden ist das eine andere Klasse fuer das Enum
-			ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) enumStatusIn;
+			ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL) enumStatusIn;
 			String sStatusName = enumStatus.name();
 			bFunction = this.proofStatusLocalExists(sStatusName);															
 			if(!bFunction) {
@@ -235,7 +280,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		main:{
 			if(enumStatusIn==null) break main;
 			
-			ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) enumStatusIn;
+			ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL) enumStatusIn;
 							
 			bFunction = this.offerStatusLocal(enumStatus, null, bStatusValue);
 		}//end main:
@@ -251,7 +296,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		main:{
 			if(enumStatusIn==null) break main;
 
-			ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) enumStatusIn;
+			ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL) enumStatusIn;
 			
 			bReturn = this.offerStatusLocal(enumStatus, null, bStatusValue);
 		}//end main:
@@ -265,7 +310,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		main:{
 			if(enumStatusIn==null) break main;
 			
-			ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) enumStatusIn;
+			ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL) enumStatusIn;
 			
 			bFunction = this.offerStatusLocal(enumStatus, sMessage, bStatusValue);
 		}//end main:
@@ -278,7 +323,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		main:{
 			if(enumStatusIn==null) break main;
 			
-			ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) enumStatusIn;
+			ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL) enumStatusIn;
 			
 			bReturn = this.offerStatusLocal(enumStatus, sMessage, bStatusValue);
 		}//end main:
