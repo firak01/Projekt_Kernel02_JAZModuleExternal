@@ -68,7 +68,7 @@ public class ProcessWatchRunnerZZZ extends AbstractProcessWatchRunnerZZZ {
 				//if(this.getFlag("hasOutput")) break;
 				Thread.sleep(10);
 
-				boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP);
+				boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 				if(bStopRequested) break;					
 		}while(true);
 		this.setStatusLocal(ProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, true);
@@ -151,7 +151,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					boolean bAny = this.analyseInputLineCustom(s);
 														
 					Thread.sleep(20);
-					boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
+					boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
 					if( bStopRequested) break main;
 				}								
 			} catch (IOException e) {

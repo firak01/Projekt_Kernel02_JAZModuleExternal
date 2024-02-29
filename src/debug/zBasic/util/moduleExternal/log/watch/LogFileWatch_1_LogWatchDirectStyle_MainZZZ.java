@@ -127,7 +127,7 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 		    	//sFilterSentence = "local_port";
 		    }
 			
-		    String[]saFlag= {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
+		    String[]saFlag= {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
 			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence,saFlag);			
 			
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
@@ -156,16 +156,16 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 
 // So kann man so den lauf anhalten...
 //	System.out.println("Versuche anzuhalten: LogFileCreateMockRunnerZZZ");
-//	objCreator.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+//	objCreator.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
 //	System.out.println("Versuche anzuhalten... Erfolgreich?");
 //			
 //	System.out.println("Versuche anzuhalten: LogFileWatchRunnerZZZ");
-//	objWatcher.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+//	objWatcher.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
 //	System.out.println("Versuche anzuhalten... Erfolgreich?");
 			
 //	IDEE: Flag END_ON_FILTERFOUND
 //	Jetzt wird der CreatorThread und der MonitorThread an dem LogFileWatch thread registrier.
-//	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUESTSTOP gesetzt.
+//	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUEST_STOP gesetzt.
 //  Damit werden auch die anderen Threads angehalten.
 			
 			  } catch (ExceptionZZZ e1) {

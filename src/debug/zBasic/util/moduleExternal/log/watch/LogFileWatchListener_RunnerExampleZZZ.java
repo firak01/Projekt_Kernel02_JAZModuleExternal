@@ -5,9 +5,11 @@ import java.util.HashMap;
 import basic.zBasic.AbstractObjectWithFlagOnStatusListeningZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
+import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 
 /** Ein Beispiel-Broker, an dem sich die "hoerenden" Klassen registieren.
@@ -133,8 +135,21 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 	}
 
 	@Override
-	public HashMap createHashMapStatusLocalReactionCustom() {
+	public HashMap createHashMapStatusLocal4ReactionCustom() {
+		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
+		
+		//Reagiere auf diee Events... mit dem angegebenen Alias.
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASLOGFILEWATCHRUNNERFILTERFOUND, "doFilterFound");
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR, "doStop");
+		
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASLOGFILEWATCHRUNNERSTOPPED, "doStop");
+				
+		return hmReturn;
+	}
+
+	@Override
+	public boolean reactOnStatusLocalEventCustomAction(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 }

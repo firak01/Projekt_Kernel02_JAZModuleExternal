@@ -123,36 +123,34 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 	}
 	
 	//Methode wird in der ReactionHashMap angegeben....
-	public boolean doStop(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+	public boolean doStop(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
-			if(eventStatusLocal==null) break main;
 			
-			String sLog = ReflectCodeZZZ.getPositionCurrent() + "EventMessage: " + eventStatusLocal.getStatusMessage();
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 			this.logProtocolString(sLog);
-
-			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+			
+			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
 		}//end main
 		return bReturn;
 	}
 	
 	
 	//Methode wird in der ReactionHashMap angegeben....
-	public boolean doFilterFound(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+	public boolean doFilterFound(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
-			if(eventStatusLocal==null) break main;
 			
-			String sLog = ReflectCodeZZZ.getPositionCurrent() + "EventMessage: " + eventStatusLocal.getStatusMessage();
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 			this.logProtocolString(sLog);
 			
 			if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
-				bReturn = this.doStop(eventStatusLocal);
+				bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
 			}
+						
 		}//end main
 		return bReturn;
 	}
-	
 	
 	/** Ein Dummy-Logfile auslesen und langsam(!) Zeile fuer Zeile ausgeben
 	 * @return
@@ -174,8 +172,8 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 				//Warte auf die Existenz der Quell-Datei.
 				boolean bExists = false;
 				do {
-					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) {
-						String sLog = "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUESTSTOP.name() + "'. Breche ab.";
+					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) {
+						String sLog = "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'. Breche ab.";
 						this.logProtocolString(sLog);
 						break main;
 					}
@@ -211,8 +209,8 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 				int icount=0;
                 while (true){
                 	Thread.sleep(300); //Bremse zum Debuggen ab. Sonst gehen mir die Zeilen aus... ;-))
-                	if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) {
-                		String sLog = "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUESTSTOP.name() + "'. Breche ab.";
+                	if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) {
+                		String sLog = "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'. Breche ab.";
 						this.logProtocolString(sLog);
     					break main;
     				}
@@ -296,190 +294,11 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 		return this.proofFlagExists(objEnumFlag.name());
 	}
 
-	//### aus IListenerObjectStatusLocalMessageReactZZZ
+	//##############################################
+	//### Aus IListenerObjectStatusLocalZZZ
 	//### Reaktion darauf, wenn ein Event aufgefangen wurde
-	/* (non-Javadoc)
-	 * @see basic.zBasic.component.AbstractProgramWithFlagRunnableOnStatusMessageListeningZZZ#reactOnStatusLocalEvent(basic.zKernel.status.IEventObjectStatusBasicZZZ)
-	 */
-	@Override
-	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-//		boolean bReturn = false;
-//		String sLog=null;
-//		
-//		main:{
-//			sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und mache den changeStatusLocal Event.";
-//			this.logProtocolString(sLog);
-//			
-//			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {// .getClass().getSimpleName().equals("LogFileCreateMockRunnerZZZ")) {
-//				IEventObjectStatusLocalZZZ event = (IEventObjectStatusLocalZZZ) eventStatusLocal;
-//				boolean bStatusValue = event.getStatusValue();
-//				if(bStatusValue!=true) break main;
-//				
-//				if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
-//					sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
-//					this.logProtocolString(sLog);
-//					
-//					this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);								
-//				}
-//				
-//				
-//			}else {
-//				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Event wird nicht behandelt, instanceof " + eventStatusLocal.getClass().getName();
-//				this.logProtocolString(sLog);
-//			}			
-//		}//end main:
-//		return bReturn;	
-//		
-//		
-//		
-		boolean bReturn = false;
-		String sLog=null;
+	//##############################################
 		
-		main:{
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "Einen Event von einem Objekt, an dem registriert worden ist empfangen.";
-			this.logProtocolString(sLog);
-			
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "Event="+eventStatusLocal.toString();
-			this.logProtocolString(sLog);
-			
-			boolean bEventRelevant = this.isEventRelevantAny(eventStatusLocal);
-			if(!bEventRelevant) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "Event ist NICHT relevant.";
-				this.logProtocolString(sLog);
-				break main;
-			}else {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "Event ist relevant.";
-				this.logProtocolString(sLog);
-			}
-			
-			String sAction = (String) this.getHashMapStatusLocalReaction().get(eventStatusLocal.getStatusLocal());
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "Gefundenen Action: '" + sAction + "'";
-			this.logProtocolString(sLog);
-			
-			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
-			if(!StringZZZ.isEmpty(sAction)) {
-				switch(sAction) {
-				case "doStop":
-					bReturn = doStop(eventStatusLocal);	
-					break;
-				case "doFilterFound":
-					bReturn = doFilterFound(eventStatusLocal);	
-					break;
-				default:
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-					this.logProtocolString(sLog);
-				}
-			}else {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-				this.logProtocolString(sLog);
-			}
-					
-		}//end main:
-		return bReturn;		
-	}
-	
-	/* (non-Javadoc)
-	 * @see basic.zKernel.status.IListenerObjectStatusLocalZZZ#reactOnStatusLocalEvent(basic.zKernel.status.IEventObjectStatusLocalZZZ)
-	 */
-//	@Override
-//	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-//		boolean bReturn=false;
-//		main:{	
-//			if(eventStatusLocal==null)break main;
-//						
-//			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Fuer LogFileWatchEvent.";
-//			this.logLineDate(sLog);
-//			
-//			if(eventStatusLocal instanceof IEventObjectStatusLocalMessageZZZ) {
-//				
-//				boolean bRelevant = this.isEventRelevant((IEventObjectStatusLocalZZZ) eventStatusLocal); 
-//				if(!bRelevant) {
-//					sLog = 	ReflectCodeZZZ.getPositionCurrent() + ": Event / Status nicht relevant. Breche ab.";
-//					this.logProtocolString(sLog);
-//					break main;
-//				}
-//				
-//				IEventObjectStatusLocalMessageZZZ eventStatusLocalSet = (IEventObjectStatusLocalMessageZZZ) eventStatusLocal;
-//				IEnumSetMappedZZZ enumStatus = eventStatusLocalSet.getStatusLocal();				
-//				
-//				
-//			
-//				//Weiter Daten holen... im OVPN - Projekt z.B. die IPAdresse...
-//			
-////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//			
-//			//+++++++++++++++++++++
-//			//Falls der empfangene Status in einen anderen, eigenen, lokalen Status uebersetzt werden muss.
-////			HashMap<IEnumSetMappedStatusZZZ,IEnumSetMappedStatusZZZ>hmEnum = this.getHashMapEnumSetForCascadingStatusLocal();
-////			IClientMainOVPN.STATUSLOCAL objEnum = (IClientMainOVPN.STATUSLOCAL) hmEnum.get(enumStatus);			
-////			if(objEnum==null) {
-////				sLog = ReflectCodeZZZ.getPositionCurrent()+": Keinen gemappten Status aus dem Event-Objekt erhalten. Breche ab";
-////				System.out.println(sLog);
-////				this.logLineDate(sLog);
-////				break main;
-////			}
-//			
-//			//Wenn wir den Status nicht weitersenden, sondern direkt verarbeiten ist solch ein Mapping nicht notwendig.
-//			//Also da wir mit objEnum als Variable weiterarbeiten wollen:
-//			ILogFileWatchRunnerZZZ.STATUSLOCAL objEnum = (STATUSLOCAL) enumStatus;
-//			//++++++++++++++++++++##
-//			
-//			boolean bValue = eventStatusLocalSet.getStatusValue();
-//			
-//			
-//			//Merke: Ein Interface ILogFileWatchListenerExampleZZZ mit dem STATUSLOCAL ist nicht implementiert.
-////			boolean bHasError = objEnum.equals(IProcessWatchRunnerOVPN.STATUSLOCAL.HASERROR)&& bValue;
-////			boolean bEnded = objEnum.equals(IProcessWatchRunnerOVPN.STATUSLOCAL.ISSTOPPED) && bValue;
-////			boolean bHasConnection = objEnum.equals(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTION) && bValue;
-////			boolean bHasConnectionLost = objEnum.equals(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTIONLOST) && bValue;
-//		
-//			boolean bEventHasError = objEnum.equals(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR)&& bValue;
-//			boolean bEventEnded = objEnum.equals(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED)&& bValue;
-//			
-//			//boolean bEventHasConnection = objEnum.equals(IClientMainOVPN.STATUSLOCAL.ISCONNECTED);
-//			//boolean bEventHasConnectionLost = objEnum.equals(IClientMainOVPN.STATUSLOCAL.ISCONNECTINTERUPTED);
-//			
-//			
-//			boolean bEventHasFilterFound = objEnum.equals(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND)&& bValue;
-//				
-//			//int iIndex = eventStatusLocalSet.getProcessID();
-//			String sStatusMessage = eventStatusLocalSet.getStatusMessage();	
-//			sLog = ReflectCodeZZZ.getPositionCurrent() + ": StatusMessage ist = '" + sStatusMessage + "'";
-//			this.logProtocolString(sLog);
-//			
-//
-//			//Einen Status Anzunehmen ist hier nicht implementiert			
-////			boolean bStatusLocalSet = this.offerStatusLocal(iIndex, objEnum, sStatusMessage, bValue);//Es wird ein Event gefeuert, an dem das Tray-Objekt und andere registriert sind und dann sich passend einstellen kann.
-////			if(!bStatusLocalSet) {
-////				sLog = ReflectCodeZZZ.getPositionCurrent()+": Lokaler Status nicht gesetzt, aus Gruenden. Breche ab";
-////				System.out.println(sLog);
-////				this.logLineDate(sLog);
-////				break main;
-////			}
-//			//++++++++++++++
-//			
-//			//Die Stati vom Monitor-Objekt mit dem Backend-Objekt mappen
-//			//if(IClientThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPRO==objStatusEnum) {
-//			//	this.setStatusLocal(IClientMainOVPN.STATUSLOCAL.ISCONNECTING, eventStatusLocalSet.getStatusValue());				
-//			//}else if(IClientThreadProcessWatchMonitorOVPN.STATUSLOCAL.ISCONNECTED==objStatusEnum) {
-//			
-//			if(bEventHasError && bEventEnded){
-//				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status bEventHasError && bEventEnded";
-//				this.logLineDate(sLog);					
-//			}else if((!bEventHasError) && bEventEnded){
-//				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status !bEventHasError && bEventEnded";
-//				this.logLineDate(sLog);
-//				
-//			}
-//		
-//			
-//			}//end if instanceof ...MessageSetZZZ
-//			bReturn = true;
-//		}//end main:
-//		return bReturn;
-//	}
-
-	
 	@Override
 	public boolean isEventRelevant2ChangeStatusLocalByClass(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
 		return true;
@@ -489,30 +308,43 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 	public boolean isEventRelevant2ChangeStatusLocalByStatusLocalValue(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
 		return true;
 	}
-
-//	@Override
-//	public boolean isEventRelevant(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
-//		boolean bReturn = false;
-//		main:{
-//			
-//			if(!this.isEventRelevant2ChangeStatusLocal(eventStatusLocal)) break main;
-//			if(!this.isEventRelevantByClass2ChangeStatusLocal(eventStatusLocal)) break main;
-//			if(!this.isEventRelevantByReactionHashMap2ChangeStatusLocal(eventStatusLocal)) break main;
-//			if(!this.isEventRelevantByStatusLocalValue2ChangeStatusLocal(eventStatusLocal)) break main;
-//			
-//			bReturn = true;
-//		}//end main:
-//		return bReturn;
-//	}
-
+	
 	@Override
-	public HashMap createHashMapStatusLocalReactionCustom() {
+	public boolean reactOnStatusLocalEventCustomAction(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			String sLog;
+	
+			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
+			if(!StringZZZ.isEmpty(sAction)) {
+				switch(sAction) {
+				case "doStop":
+					bReturn = this.doStop(enumStatus, bStatusValue, sStatusMessage);	
+					break;
+				case "doFilterFound":
+					bReturn = this.doFilterFound(enumStatus, bStatusValue, sStatusMessage);		
+					break;
+				default:
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
+					this.logProtocolString(sLog);
+				}
+			}else {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
+				this.logProtocolString(sLog);
+			}
+	
+	}//end main:
+	return bReturn;	
+	}
+	
+	@Override
+	public HashMap<IEnumSetMappedStatusZZZ, String> createHashMapStatusLocal4ReactionCustom() {
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
 		//Merke: Bei der "direkten" verbindung zwischen creator und watchRunner ohne Monitor arbeiten...
 		//       Mit Monitor wuerden soch die STATUSLOCAL Werte auf den Monitor beziehen.
 		//Reagiere nur auf den "Filter" gefunden Event
-		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "filterFound");
+		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
 		
 		//und den "Runner beendet" Event, bzw. Fehler
 		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, "doStop");

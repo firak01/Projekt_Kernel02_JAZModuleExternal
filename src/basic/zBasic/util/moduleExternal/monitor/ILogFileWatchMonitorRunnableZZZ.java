@@ -20,7 +20,7 @@ public interface ILogFileWatchMonitorRunnableZZZ extends ILogFileWatchMonitorZZZ
 	//### FLAGZ
 	//#############################################################
 	public enum FLAGZ{
-		DUMMY,REQUEST_STOP,END_ON_FILTERFOUND
+		DUMMY,REQUEST_STOP,END_ON_FILTER_FOUND
 	}
 		
 	boolean getFlag(FLAGZ objEnumFlag);

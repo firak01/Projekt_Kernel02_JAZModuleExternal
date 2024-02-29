@@ -13,6 +13,7 @@ import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.LogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.LogFileWatchMonitorZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerOnMonitorListeningZZZ;
+import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
 import debug.zBasic.util.moduleExternal.log.create.LogFileCreateRunnerMockOnMonitorListeningZZZ;
 
 /** In dieser Klasse wird ein LogFile von dem einen Thread erzeugt 
@@ -132,7 +133,7 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 			
 			
 			File objSourceFile = new File(sSourceFilePathTotalDefault); 
-			String[]saFlagCreate= {ILogFileCreateRunnerOnMonitorListeningZZZ.FLAGZ.END_ON_EVENT_BYMONITOR.name()};
+			String[]saFlagCreate= {ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
 			LogFileCreateRunnerMockOnMonitorListeningZZZ objCreator = new LogFileCreateRunnerMockOnMonitorListeningZZZ(objSourceFile, objLogFile, saFlagCreate);
 			
 			//2. Mache den Log Watcher mit dem "Reaktionsstring".
@@ -143,14 +144,14 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 		    	sFilterSentence = "Peer Connection Initiated with";
 		    	//sFilterSentence = "local_port";
 		    }
-		    String[]saFlag= {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
+		    String[]saFlag= {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
 			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence, saFlag);			
 			
 			
 			//3. Schritt: Mache den Monitor
 					//	IDEE: Flag END_ON_FILTERFOUND
 					//	Jetzt wird der CreatorThread und der LogFileWatch thread am monitor registriert.
-					//	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUESTSTOP gesetzt.
+					//	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUEST_STOP gesetzt.
 					//  Damit werden auch die anderen Threads angehalten.
 		    //String[] saFlagMonitor = {ILogFileWatchRunnerMonitorZZZ.FLAGZ.END_ON_FILTERFOUND.name()};		    
 		    LogFileWatchMonitorZZZ objMonitor = new LogFileWatchMonitorZZZ(objLogFile);//, sFilterSequence, saFlagMonitor);
@@ -185,11 +186,11 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 			
 			// So kann man so den Lauf der einzelnen Programme anhalten...
 			//	System.out.println("Versuche anzuhalten: LogFileCreateMockRunnerZZZ");
-			//	objCreator.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+			//	objCreator.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
 			//	System.out.println("Versuche anzuhalten... Erfolgreich?");
 			//			
 			//	System.out.println("Versuche anzuhalten: LogFileWatchRunnerZZZ");
-			//	objWatcher.setFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP, true);
+			//	objWatcher.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
 			//	System.out.println("Versuche anzuhalten... Erfolgreich?");
 								
 		} catch (ExceptionZZZ e) {

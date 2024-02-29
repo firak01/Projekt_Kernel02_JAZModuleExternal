@@ -5,7 +5,7 @@ import java.io.File;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.FLAGZ;
 
-public interface ILogFileCreateRunnerOnMonitorListeningZZZ {
+public interface ILogFileCreateRunnerOnMonitorListeningZZZ extends ILogFileCreateRunnerZZZ{
 	public File getSourceFile();
 	public void setSourceFile(File objSourceFile) ;
 
@@ -15,7 +15,7 @@ public interface ILogFileCreateRunnerOnMonitorListeningZZZ {
 	
 	//##############################################################	
 	public enum FLAGZ{
-		DUMMY,END_ON_EVENT_BYMONITOR
+		DUMMY;
 	}
 
 	boolean getFlag(FLAGZ objEnumFlag);

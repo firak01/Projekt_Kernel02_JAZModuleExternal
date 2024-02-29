@@ -8,8 +8,10 @@ import java.util.HashMap;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
+import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.component.IProgramZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
@@ -135,40 +137,43 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 		return bReturn;
 	}	
 	
-	@Override
-	public boolean reactOnStatusLocalEvent(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {		
-		boolean bReturn = false;
-		main:{
-			
-			if(eventStatusLocal==null) {
-				  ExceptionZZZ ez = new ExceptionZZZ( "EventStatusObject not provided", this.iERROR_PARAMETER_MISSING, this, ReflectCodeZZZ.getMethodCurrentName()); 						
-				  throw ez;
-			}
-		
-			//Nun den einkommenden Event auf einen eigenen Event mappen.
-			//Diesen eigenen Event werfen,
-			//so dass andere Listener (die an dem Monitor registriert sind) auf den MonitorEvent reagieren können.
-			HashMap<IEnumSetMappedStatusZZZ, IEnumSetMappedStatusZZZ> hmStatus = this.getHashMapEnumSetForCascadingStatusLocal();
-			IEnumSetMappedStatusZZZ enumStatusIn = eventStatusLocal.getStatusLocal();
-			if(enumStatusIn==null) {
-				  ExceptionZZZ ez = new ExceptionZZZ( "EnumStatusObject not provided", this.iERROR_PARAMETER_MISSING, this, ReflectCodeZZZ.getMethodCurrentName()); 						
-				  throw ez;
-			}
-		
-			IEnumSetMappedStatusZZZ enumStatusOut = hmStatus.get(enumStatusIn); 
-			if(enumStatusOut==null) break main; //Wenn der Status nicht gemappt ist, wird auch nichts gesetzt.
-			
-			String sLog = "Gemappten Status gefunden... ("+ ReflectCodeZZZ.getPositionCurrent() + ")";
-			this.logProtocolString(sLog);
-			
-			boolean bStatusValue = eventStatusLocal.getStatusValue();
-			this.setStatusLocalEnum(enumStatusOut, bStatusValue);
-			//this.offerStatusLocalEnum(enumStatusOut, bStatusValue);
-			
-			bReturn = true;
+	//Methode wird in der ReactionHashMap angegeben....
+		public boolean doStop(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+			boolean bReturn = false;
+			main:{
+				
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+				this.logProtocolString(sLog);
+				
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "DOSTOP!!!";
+				this.logProtocolString(sLog);
+				
+				bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
+			}//end main
+			return bReturn;
 		}
-		return bReturn;
-	}
+		
+		
+		//Methode wird in der ReactionHashMap angegeben....
+		public boolean doFilterFound(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+			boolean bReturn = false;
+			main:{
+				
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+				this.logProtocolString(sLog);
+				
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "GEFUNDEN!!!";
+				this.logProtocolString(sLog);
+				
+				//Ist ja nicht runnable
+//				if(this.getFlag(ILogFileWatchMonitorZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
+//					bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+//				}
+							
+			}//end main
+			return bReturn;
+		}
+	
 	
 	//### Getter / Setter
 		
@@ -219,12 +224,46 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 		return true;
 	}
 
-	
 
 	@Override
-	public HashMap createHashMapStatusLocalReactionCustom() {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap createHashMapStatusLocal4ReactionCustom() {
+		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
+		
+		//Reagiere auf diee Events... mit dem angegebenen Alias.
+		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
+		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR, "doStop");
+		
+		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
+				
+		return hmReturn;
+	}
+
+	@Override
+	public boolean reactOnStatusLocalEventCustomAction(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			String sLog;
+	
+			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
+			if(!StringZZZ.isEmpty(sAction)) {
+				switch(sAction) {
+				case "doStop":
+					bReturn = this.doStop(enumStatus, bStatusValue, sStatusMessage);	
+					break;
+				case "doFilterFound":
+					bReturn = this.doFilterFound(enumStatus, bStatusValue, sStatusMessage);		
+					break;
+				default:
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
+					this.logProtocolString(sLog);
+				}
+			}else {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
+				this.logProtocolString(sLog);
+			}
+	
+	}//end main:
+	return bReturn;	
 	}
 
 }//END class

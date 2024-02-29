@@ -141,7 +141,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 						
 						if(bUseLogFileWatch) {
 							TODOGOON20240127;//Projekt einbinden
-							String[]saFlagControl = {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND.name()};
+							String[]saFlagControl = {ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
 							runneraProcessOVPN[icount] =new ProcessWatchRunnerOVPN(objKernel, objProcess,iNumberOfProcessStarted, saFlagControl);
 							
 							runneraProcessOVPN[icount].setServerBackendObject(this.getMainObject());

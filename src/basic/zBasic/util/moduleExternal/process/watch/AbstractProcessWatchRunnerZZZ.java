@@ -153,7 +153,7 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 						e.printStackTrace();
 					}
 					
-					boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP);
+					boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 					if(bStopRequested) break;				
 			}while(true);
 			this.setStatusLocal(AbstractProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, true);

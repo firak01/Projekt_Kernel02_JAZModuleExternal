@@ -127,8 +127,8 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				//Warte auf die Existenz der Datei.
 				boolean bExists = false;
 				do {
-					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
-						sLog = ReflectCodeZZZ.getPositionCurrent() + ": Flag gesetzt ('" + IProgramRunnableZZZ.FLAGZ.REQUESTSTOP .name() + "'. Breche ab.";
+					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
+						sLog = ReflectCodeZZZ.getPositionCurrent() + ": Flag gesetzt ('" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
 						this.logProtocolString(sLog);
 						break main;
 					}
@@ -158,7 +158,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
                 while (true){
                 	Thread.sleep(100); //Bremse zum Debuggen ab. Sonst gehen mir die Zeilen aus... ;-))
                 	
-                	boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUESTSTOP);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
+                	boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
 					if( bStopRequested) {
 						sLog = ReflectCodeZZZ.getPositionCurrent() + ": Breche Schleife ab.";
 						this.logProtocolString(sLog);
@@ -183,8 +183,8 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
             				sLog = ReflectCodeZZZ.getPositionCurrent() + ": LogFileWatchRunner HASFILTERFOUND Status gesetzt.";
             				this.logProtocolString(sLog);
             				
-                			if(this.getFlag(ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
-                				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTERFOUND gesetzt. Beende Schleife.";
+                			if(this.getFlag(ILogFileWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
+                				sLog = ReflectCodeZZZ.getPositionCurrent() + ": Filter gefunden und END_ON_FILTER_FOUND gesetzt. Beende Schleife.";
                 				this.logProtocolString(sLog);
         						break;
                 			}
