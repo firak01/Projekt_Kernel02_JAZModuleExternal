@@ -3,6 +3,8 @@ REM Beliebige Klasse mit einer Methode: public static void main(String[] args) {
 REM Merke: Wenn die JAR - Datei nicht in dem Verzeichnis der Batch liegt, den Pfad vorneweg ergänzen.
 REM TEST IST HIER: JAZKernel\test\basic\zBasic\util\file\JarEasyZZZTestMain.java
 
-java -cp C:\1fgl\client\JAZKernel\JAZModuleExternal.jar debug.zBasic.util.moduleExternal.process.create.ProcessCreateMainZZZ > c:\fglkernel\kernellog\ProcessCreate_StarterLog.txt
-REM java -cp C:\1fgl\client\JAZKernel\JAZModuleExternal.jar debug.zBasic.util.moduleExternal.process.create.ProcessCreateMainZZZ
+REM java -cp C:\1fgl\client\JAZKernel\JAZModuleExternal.jar debug.zBasic.util.moduleExternal.process.create.ProcessCreateMainZZZ > c:\fglkernel\kernellog\ProcessCreate_StarterLog.txt
+
+REM Startet ein Konsolenfenster mit dem Namen. Darin wird dann der Prozess ausgefuehrt.
+start "fglProcessCreateMainZZZ" java -cp C:\1fgl\client\JAZKernel\JAZModuleExternal.jar debug.zBasic.util.moduleExternal.process.create.ProcessCreateMainZZZ > c:\fglkernel\kernellog\ProcessCreate_StarterLog.txt
 pause
