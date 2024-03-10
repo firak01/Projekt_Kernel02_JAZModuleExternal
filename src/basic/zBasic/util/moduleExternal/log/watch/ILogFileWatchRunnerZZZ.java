@@ -5,17 +5,16 @@ import java.util.EnumSet;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 
-public interface ILogFileWatchRunnerZZZ {
+public interface ILogFileWatchRunnerZZZ extends IWatchRunnerZZZ {
 	public File getLogFileWatched();
 	public void setLogFileWatched(File objFile);
-	public String getLineFilter();
-	public void setLineFilter(String sLineFilter);
 	
 	//##############################################################	
 	
 	public enum FLAGZ{
-		DUMMY,REQUEST_STOP,END_ON_FILTER_FOUND
+		DUMMY
 	}
 	boolean getFlag(FLAGZ objEnumFlag);
 	boolean setFlag(FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ;
@@ -29,6 +28,16 @@ public interface ILogFileWatchRunnerZZZ {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//Die StatusId für Stati, aus dieser Klasse selbst. Nicht die Stati der anderen Klassen.
 	public static int iSTATUSLOCAL_GROUPID=3;
+	
+	
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//DIE INTERNE ENUM-KLASSE FUER STATUSLOCAL.
+    //Merke1: Diese wird auch vererbt. So dass erbende Klassen auf dieses Enum ueber ihren eingene Klassennamen zugreifen können.
+    //
+	//Merke2: Diese könnte auch in eine extra Klasse ausgelagert werden (z.B. um es in einer Datenbank mit Hibernate zu persistieren.
+	//       Für die Auslagerung als extra Klasse, s.: EnumSetMappedTestTypeZZZ
+	//++++++++++++++++++++++++
+	
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
 	//Merke: Obwohl fullName und abbr nicht direkt abgefragt werden, müssen Sie im Konstruktor sein, um die Enumeration so zu definieren.
@@ -148,5 +157,5 @@ public interface ILogFileWatchRunnerZZZ {
 			return this.sDescription;
 		}
 		//+++++++++++++++++++++++++
-	}//End internal Class
+	}//End internal Enum Class
 }

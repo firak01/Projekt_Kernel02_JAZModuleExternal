@@ -2,6 +2,7 @@ package basic.zBasic.util.moduleExternal.process.watch;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -13,12 +14,15 @@ import java.util.Set;
 import base.files.EncodingMaintypeZZZ.TypeZZZ;
 import basic.zKernel.KernelZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.status.EventObject4ProcessWatchStatusLocalZZZ;
 import basic.zKernel.status.IEventBrokerStatusLocalUserZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
+import basic.zKernel.status.IStatusLocalMessageUserZZZ;
 import basic.zKernel.status.StatusLocalHelperZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
+import basic.zBasic.component.AbstractProgramWithStatusOnStatusListeningRunnableZZZ;
 import basic.zBasic.component.IModuleUserZZZ;
 import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
@@ -27,6 +31,8 @@ import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringArrayZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
+import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
+import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zKernel.IKernelZZZ;
 import basic.zKernel.AbstractKernelUseObjectWithStatusZZZ;
 import basic.zKernel.AbstractKernelUseObjectZZZ;
@@ -37,30 +43,43 @@ import basic.zKernel.AbstractKernelUseObjectZZZ;
  * @author 0823
  *
  */
-public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObjectWithStatusZZZ implements IProcessWatchRunnerZZZ, IProgramRunnableZZZ, IEventBrokerStatusLocalUserZZZ{
-	protected volatile IModuleZZZ objModule = null;
-	protected volatile String sModuleName=null;
-	protected volatile String sProgramName = null;
-		
-	protected Process objProcess=null; //Der externe process, der hierdurch "gemonitored" werden soll
-	protected int iNumber=0;
+public abstract class AbstractProcessWatchRunnerZZZ extends AbstractProgramWithStatusOnStatusListeningRunnableZZZ implements IProcessWatchRunnerZZZ{
+	private static final long serialVersionUID = 6586079955658760005L;
+	protected volatile Process objProcess=null; //Der externe process, der hierdurch "gemonitored" werden soll
+	protected volatile String sLineFilter = null;
 
-	public AbstractProcessWatchRunnerZZZ(IKernelZZZ objKernel, Process objProcess, int iNumber) throws ExceptionZZZ{
-		super(objKernel);		
-		ProcessWatchRunnerNew_(objProcess, iNumber, null);
-	}
-	public AbstractProcessWatchRunnerZZZ(IKernelZZZ objKernel, Process objProcess, int iNumber, String sFlag) throws ExceptionZZZ{
-		super(objKernel);
-		String[]saFlag=new String[1];
-		saFlag[0]=sFlag;
-		ProcessWatchRunnerNew_(objProcess, iNumber, saFlag);
-	}
-	public AbstractProcessWatchRunnerZZZ(IKernelZZZ objKernel, Process objProcess, int iNumber, String[] saFlag) throws ExceptionZZZ{
-		super(objKernel);
-		ProcessWatchRunnerNew_(objProcess, iNumber, saFlag);
+	public AbstractProcessWatchRunnerZZZ() throws ExceptionZZZ{
+		super();				
 	}
 	
-	private void ProcessWatchRunnerNew_(Process objProcess, int iNumber, String[] saFlagControl) throws ExceptionZZZ{		
+	public AbstractProcessWatchRunnerZZZ(Process objProcess) throws ExceptionZZZ{
+		super();		
+		ProcessWatchRunnerNew_(objProcess, null, null);
+	}
+	public AbstractProcessWatchRunnerZZZ(Process objProcess, String sFlag) throws ExceptionZZZ{
+		super();
+		String[]saFlag=new String[1];
+		saFlag[0]=sFlag;
+		ProcessWatchRunnerNew_(objProcess, null, saFlag);
+	}
+	public AbstractProcessWatchRunnerZZZ(Process objProcess, String sLineFilter, String sFlag) throws ExceptionZZZ{
+		super();
+		String[]saFlag=new String[1];
+		saFlag[0]=sFlag;
+		ProcessWatchRunnerNew_(objProcess, sLineFilter, saFlag);
+	}
+	
+	public AbstractProcessWatchRunnerZZZ(Process objProcess, String[] saFlag) throws ExceptionZZZ{
+		super();
+		ProcessWatchRunnerNew_(objProcess,  null, saFlag);
+	}
+	
+	public AbstractProcessWatchRunnerZZZ(Process objProcess, String sLineFilter, String[] saFlag) throws ExceptionZZZ{
+		super();
+		ProcessWatchRunnerNew_(objProcess,  sLineFilter, saFlag);
+	}
+	
+	private void ProcessWatchRunnerNew_(Process objProcess, String sLineFilter, String[] saFlagControl) throws ExceptionZZZ{		
 		main:{			
 			check:{
 				if(saFlagControl != null){
@@ -83,123 +102,133 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 			}//END check
 	
 			this.objProcess = objProcess;
-			this.iNumber = iNumber;
+			this.sLineFilter = sLineFilter;
 		}//END main:
 	}
 	
-	@Override
-	public boolean reset() {
-		this.resetModuleUsed();
-		this.resetStatusLocalError();
-		return true;
-	}
 	
-	@Override
-	public boolean startAsThread() throws ExceptionZZZ{
-		boolean bReturn = false;
-		main:{			
-				check:{
-					
-				}//END check:
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + " ProcessWatchRunner started for Process #"+ this.getNumber();
-				System.out.println(sLog);
-				this.logLineDate(sLog);
-				
-				//Solange laufen, bis ein Fehler auftritt oder eine Verbindung erkannt wird.
-				do{
-					this.writeOutputToLogPLUSanalyse();		//Man muss wohl erst den InputStream abgreifen, damit der Process weiterlaufen kann.
-					
-					//Versuch an das spezielle Enum der Klasse heranzukommne
-					//Enum objEnum = this.getEnumStatusLocalUsed(); //Aber daraus kann man nicht auf den Konstanten Enum-Namen zugreifen
-					//Idee... STATUSLOCAL in einem Interface definieren....
-					boolean bHasConnection = this.getStatusLocal(AbstractProcessWatchRunnerZZZ.STATUSLOCAL.HASCONNECTION);										
-					if(bHasConnection) {
-						sLog = "Connection wurde erstellt. Beende ProcessWatchRunner #"+this.getNumber();
-						this.logLineDate(sLog);						
-						break;
-					}
-					
-					//System.out.println("FGLTEST02");
-					this.writeErrorToLog();
-					boolean bError = this.getStatusLocal(AbstractProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR);
-					if(bError) break;
-										
-					//Merke: Da die Events speziell sind, ist dies nichts für eine Abstrakte Klasse.
-					//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
-					//Dazu braucht es IEventBrokerStatusLocalSetUserZZZ
-					//Dann erzeuge den Event und feuer ihn ab.
-					//Merke: Nun aber ueber das enum			
-//					if(this.getSenderStatusLocalUsed()!=null) {
-//						//IEventObjectStatusLocalSetZZZ event = new EventObjectStatusLocalSetZZZ(this,1,ClientMainOVPN.STATUSLOCAL.ISCONNECTED, true);
-//						//TODOGOON20230914: Woher kommt nun das Enum? Es gibt ja kein konkretes Beispiel
-//						IEventObjectStatusLocalSetZZZ event = new EventObject4ProcessWatchStatusLocalSetZZZ(this,1,(ProcessWatchRunnerZZZ.STATUSLOCAL)null, true);
-//						this.getSenderStatusLocalUsed().fireEvent(event);
-//					}			
-					
-					
-					//Nach irgendeiner Ausgabe enden ist hier falsch, in einer abstrakten Klasse vielleicht richtig, quasi als Muster.
-					//if(this.getFlag("hasOutput")) break;
-					try {
-						Thread.sleep(10);
-					}catch (InterruptedException e) {					
-						try {
-							String sLogIE = e.getMessage();
-							this.logProtocolString("An error happend: '" + sLogIE + "'");
-						} catch (ExceptionZZZ e1) {
-							System.out.println(e1.getDetailAllLast());
-							e1.printStackTrace();
-						}
-						System.out.println(e.getMessage());
-						e.printStackTrace();
-					}
-					
-					boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
-					if(bStopRequested) break;				
-			}while(true);
-			this.setStatusLocal(AbstractProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, true);
-			this.getLogObject().WriteLineDate("ProcessWatchRunner #"+ this.getNumber() + " ended.");
-			
-			bReturn = true;		
-		}//END main
-		return bReturn;
-	}
-	
-	@Override
-	public void run() {
-		try {
-			this.startAsThread();
-		} catch (ExceptionZZZ ez) {
-			try {
-				this.logLineDate(ez.getDetailAllLast());
-			} catch (ExceptionZZZ e1) {
-				System.out.println(e1.getDetailAllLast());
-				e1.printStackTrace();
-			}
-			
-			try {
-				String sLog = ez.getDetailAllLast();
-				this.logLineDate("An error happend: '" + sLog + "'");
-			} catch (ExceptionZZZ e1) {				
-				System.out.println(ez.getDetailAllLast());
-				e1.printStackTrace();
-			}			
-		} 
+	//#### GETTER / SETTER
 		
-//		catch (InterruptedException e) {					
-//			try {
-//				String sLog = e.getMessage();
-//				this.logLineDate("An error happend: '" + sLog + "'");
-//			} catch (ExceptionZZZ e1) {
-//				System.out.println(e1.getDetailAllLast());
-//				e1.printStackTrace();
-//			}
-//			System.out.println(e.getMessage());
-//			e.printStackTrace();
-//		}
+	//+++ aus IProcessWatchRunnerZZZ
+	@Override
+	public String getLineFilter() {
+		return this.sLineFilter;
+	}
+
+	@Override
+	public void setLineFilter(String sLineFilter) {
+		this.sLineFilter = sLineFilter;
+	}
+		
+	/**Returns the process - object passed as a parameter of the constructor 
+	 * Hint: Therefore is no setter-method available
+	 * @return Process
+	 *
+	 * javadoc created by: 0823, 06.07.2006 - 16:48:57
+	 */
+	@Override
+	public Process getProcessWatched(){
+		return this.objProcess;
 	}
 	
+	@Override
+	public void setProcessWatched(Process objProcess) {
+		this.objProcess = objProcess;
+	}
+	
+	
+	/** In dieser Methode werden die Ausgabezeilen eines Batch-Prozesses ( cmd.exe ) 
+	 *  aus dem Standard - Output gelesen.
+	 *  - Sie werden in das Kernel-Log geschrieben.
+	 *  - Sie werden hinsichtlich bestimmter Schluesselsaetze analysiert,
+	 *    um z.B. den erfolgreichen Verbindungsaufbau mitzubekommen.
+	 *  
+	 *  Merke: 
+	 *  Merke1: Der aufgerufene OVPN-Prozess stellt irgendwann das schreiben ein
+					//Das ist dann z.B. der letzte Eintrag
+					//0#Sat Sep 02 07:39:48 2023 us=571873 NOTE: --mute triggered... 
+					//Der wert wird in der OVPN-Konfiguration eingestellt, z.B.:
+					//mute=20  
+				
+	 * Merke2: Wie über einen Erfolg benachrichtigen?
+			   Wenn die Verbindung erstellt wird, steht folgendes im Log.
+			   
+TCP connection established with [AF_INET]192.168.3.116:4999
+0#Sat Sep 02 12:53:10 2023 us=223095 TCPv4_CLIENT link local: [undef]
+0#Sat Sep 02 12:53:10 2023 us=223095 TCPv4_CLIENT link remote: [AF_INET]192.168.3.116:4999
+0#Sat Sep 02 12:53:10 2023 us=223095 TLS: Initial packet from [AF_INET]192.168.3.116:4999, sid=75fbf19d 73f20fdc
+0#Sat Sep 02 12:53:10 2023 us=363726 VERIFY OK: depth=1, C=DE, ST=PREUSSEN, L=BERLIN, O=OpenVPN, OU=TEST, CN=PAUL.HINDENBURG, name=PAUL.HINDENBURG, emailAddress=paul.hindenburg@mailinator.com\09
+0#Sat Sep 02 12:53:10 2023 us=363726 VERIFY OK: depth=0, C=DE, ST=PREUSSEN, L=BERLIN, O=OpenVPN, OU=TEST, CN=HANNIBALDEV06VM_SERVER, name=HANNIBALDEV06VM, emailAddress=paul.hindenburg@mailinator.com\09
+0#Sat Sep 02 12:53:10 2023 us=551235 Data Channel Encrypt: Cipher 'BF-CBC' initialized with 128 bit key
+0#Sat Sep 02 12:53:10 2023 us=551235 WARNING: INSECURE cipher with block size less than 128 bit (64 bit).  This allows attacks like SWEET32.  Mitigate by using a --cipher with a larger block size (e.g. AES-256-CBC).
+0#Sat Sep 02 12:53:10 2023 us=551235 Data Channel Encrypt: Using 160 bit message hash 'SHA1' for HMAC authentication
+0#Sat Sep 02 12:53:10 2023 us=551235 Data Channel Decrypt: Cipher 'BF-CBC' initialized with 128 bit key
+0#Sat Sep 02 12:53:10 2023 us=551235 WARNING: INSECURE cipher with block size less than 128 bit (64 bit).  This allows attacks like SWEET32.  Mitigate by using a --cipher with a larger block size (e.g. AES-256-CBC).
+0#Sat Sep 02 12:53:10 2023 us=551235 Data Channel Decrypt: Using 160 bit message hash 'SHA1' for HMAC authentication
+0#Sat Sep 02 12:53:10 2023 us=551235 Control Channel: TLSv1.2, cipher TLSv1/SSLv3 DHE-RSA-AES256-GCM-SHA384, 1024 bit RSA
+0#Sat Sep 02 12:53:10 2023 us=551235 [HANNIBALDEV06VM_SERVER] Peer Connection Initiated with [AF_INET]192.168.3.116:4999
+0#Sat Sep 02 12:53:13 2023 us=20060 SENT CONTROL [HANNIBALDEV06VM_SERVER]: 'PUSH_REQUEST' (status=1)
+0#Sat Sep 02 12:53:13 2023 us=176313 PUSH: Received control message: 'PUSH_REPLY,ping 10,ping-restart 240,ifconfig 10.0.0.2 10.0.0.1'
+0#Sat Sep 02 12:53:13 2023 us=176313 OPTIONS IMPORT: timers and/or timeouts modified
+0#Sat Sep 02 12:53:13 2023 us=176313 OPTIONS IMPORT: --ifconfig/up options modified
+0#Sat Sep 02 12:53:13 2023 us=176313 do_ifconfig, tt->ipv6=0, tt->did_ifconfig_ipv6_setup=0
+0#Sat Sep 02 12:53:13 2023 us=176313 ******** NOTE:  Please manually set the IP/netmask of 'OpenVPN2' to 10.0.0.2/255.255.255.252 (if it is not already set)
+0#Sat Sep 02 12:53:13 2023 us=176313 open_tun, tt->ipv6=0
+0#Sat Sep 02 12:53:13 2023 us=176313 TAP-WIN32 device [OpenVPN2] opened: \\.\Global\{9B00449E-0F90-4137-A063-CEA05D846AD8}.tap
+0#Sat Sep 02 12:53:13 2023 us=176313 TAP-Windows Driver Version 9.9 
+0#Sat Sep 02 12:53:13 2023 us=176313 TAP-Windows MTU=1500
+0#Sat Sep 02 12:53:13 2023 us=176313 Sleeping for 3 seconds...
+2023-9-2_12_53: Thread # 0 not jet ended or has reported an error.
+0#Sat Sep 02 12:53:16 2023 us=176370 Successful ARP Flush on interface [4] {9B00449E-0F90-4137-A063-CEA05D846AD8}
+0#Sat Sep 02 12:53:17 2023 us=410769 TEST ROUTES: 0/0 succeeded len=0 ret=0 a=0 u/d=down
+0#Sat Sep 02 12:53:17 2023 us=410769 Route: Waiting for TUN/TAP interface to come up...
+0#Sat Sep 02 12:53:18 2023 us=645168 TEST ROUTES: 0/0 succeeded len=0 ret=1 a=0 u/d=up
+0#Sat Sep 02 12:53:18 2023 us=645168 WARNING: this configuration may cache passwords in memory -- use the auth-nocache option to prevent this
+0#Sat Sep 02 12:53:18 2023 us=645168 Initialization Sequence Completed
+					 
+	 *  Obiges ist ein Beispiel für die Ausgabe eines Openvpn.exe Processes
+	 * @throws ExceptionZZZ
+	 * @author Fritz Lindhauer, 03.09.2023, 07:35:31
+	 */
+	public void writeOutputToLogPLUSanalyse() throws ExceptionZZZ{	
+		main:{
+			try{
+				String sLog;
+				check:{
+					Process objProcess = this.getProcessWatched();
+					if(objProcess==null){
+						ExceptionZZZ ez = new ExceptionZZZ("Process-Object", iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+						throw ez;
+					}
+				}//END check:
+			
+				BufferedReader in = new BufferedReader( new InputStreamReader(objProcess.getInputStream()) );
+				for ( String s; (s = in.readLine()) != null; ){
+					sLog="gelesen aus InputStream: '" + s + "'";
+					this.logProtocolString(sLog);
+					this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASOUTPUT, true);
+				
+					boolean bAny = this.analyseInputLineCustom(s);
+														
+					Thread.sleep(20);
+					boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
+					if( bStopRequested) break main;
+				}								
+			} catch (IOException e) {
+				ExceptionZZZ ez = new ExceptionZZZ("IOException happend: '" + e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+				throw ez;
+			} catch (InterruptedException e) {
+				ExceptionZZZ ez = new ExceptionZZZ("InterruptedException happend: '"+ e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+				throw ez;
+			}
+		}//END main:
+	}
+
 	//MErke: Die genaue Analyse muss im konkreten Process Watch Runner gemacht werden.
-	public abstract void writeOutputToLogPLUSanalyse() throws ExceptionZZZ;
+	@Override
+	public abstract boolean analyseInputLineCustom(String sLine) throws ExceptionZZZ;
+
+
 	
 	@Override
 	public boolean writeErrorToLog() throws ExceptionZZZ{
@@ -214,9 +243,8 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 				}//END check:
 			   		
 			    BufferedReader err = new BufferedReader(new InputStreamReader(objProcess.getErrorStream()) );
-			    for ( String s; (s = err.readLine()) != null; ){
-				    //System.out.println( s );
-			    	this.getLogObject().WriteLine(this.getNumber() + "# ERROR: "+ s);			
+			    for ( String s; (s = err.readLine()) != null; ){				    
+			    	this.logProtocolString("ERROR: "+ s);			
 			    	if( this.getFlag("stoprequested")==true) break main;
 				}
 			} catch (IOException e) {
@@ -228,10 +256,93 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 		return bReturn;
 	}
 	
-	@Override
-	public abstract boolean writeErrorToLogWithStatus() throws ExceptionZZZ;
 	
+	@Override
+	public boolean startCustom() throws ExceptionZZZ {
+		return startProcessWatch_();
+	}
+	
+	private boolean startProcessWatch_() throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			try {
+			String sLog = "ProcessWatchRunner started.";
+			this.logLineDate(sLog);
+			
+			//Solange laufen, bis ein Fehler auftritt oder eine Verbindung erkannt wird.
+			do{							
+				boolean bHasError = this.getStatusLocal(ProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR);
+				if(bHasError) break;//das wäre dann ein von mir selbst erzeugter Fehler, der nicht im STDERR auftaucht.
+				
+				this.writeOutputToLogPLUSanalyse();		//Man muss wohl erst den InputStream abgreifen, damit der Process weiterlaufen kann.				
+				boolean bHasConnection = this.getStatusLocal(ProcessWatchRunnerZZZ.STATUSLOCAL.HASCONNECTION);
+				if(bHasConnection) {
+					sLog = "Connection wurde erstellt.";
+					this.logProtocolString(sLog);
+					if(this.getFlag(IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
+						sLog = "Filter gefunden... Gemaess Flag, beende.";
+						this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
+					}
+				}
+				
+				//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
+				//Dann erzeuge den Event und feuer ihn ab.
+				//Merke: Nun aber ueber das enum			
+				if(this.getSenderStatusLocalUsed()!=null) {
+					//IEventObjectStatusLocalSetZZZ event = new EventObjectStatusLocalSetZZZ(this,1,ClientMainOVPN.STATUSLOCAL.ISCONNECTED, true);
+					//TODOGOON20230914: Woher kommt nun das Enum? Es gibt ja kein konkretes Beispiel
+					IEventObjectStatusLocalZZZ event = new EventObject4ProcessWatchStatusLocalZZZ(this,(ProcessWatchRunnerZZZ.STATUSLOCAL)null, true);
+					this.getSenderStatusLocalUsed().fireEvent(event);
+				}			
+			
+				//Nach irgendeiner Ausgabe enden ist hier falsch, in einer abstrakten Klasse vielleicht richtig, quasi als Muster.
+				//if(this.getFlag("hasOutput")) break;
+				Thread.sleep(10);
 
+				boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
+				if(bStopRequested) break;					
+			}while(true);
+			this.setStatusLocal(ProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, true);
+			sLog = "ProcessWatchRunner ended.";
+			this.logProtocolString(sLog);
+						
+			bReturn = true;
+			}catch (InterruptedException e) {					
+				try {
+					String sLogIE = e.getMessage();
+					this.logProtocolString("An error happend: '" + sLogIE + "'");
+					this.writeErrorToLog();
+				} catch (ExceptionZZZ e1) {
+					System.out.println(e1.getDetailAllLast());
+					e1.printStackTrace();
+				}
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
+
+		}//END main
+		return bReturn;
+	}
+	
+	@Override
+	public boolean writeErrorToLogWithStatus() throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{			
+			try{
+				bReturn = this.writeErrorToLog();
+				if(!bReturn)break main;
+			   		
+				this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR, true);
+		    	Thread.sleep(20);
+
+			} catch (InterruptedException e) {
+				ExceptionZZZ ez = new ExceptionZZZ("InterruptedException happend: '"+ e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+				throw ez;
+			}
+			bReturn = true;
+		}//END Main:	
+		return bReturn;
+	}		
 	
 	/**TODO Ich weiss noch garnicht, was ich senden soll und wie es gehen kann.
 	 * Ziel w�re es z.B. mit der Test F4 den Process herunterzufahren.
@@ -256,7 +367,7 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 				BufferedWriter out = new BufferedWriter( new OutputStreamWriter(objProcess.getOutputStream()) );
 				out.write(sOut);
 			
-				this.getLogObject().WriteLineDate(this.getNumber() +"# STRING SEND TO PROCESS: "+ sOut);
+				this.logProtocolString("STRING SEND TO PROCESS: "+ sOut);
 				this.setFlag("hasInput", true);
 				
 			} catch (IOException e) {
@@ -265,116 +376,132 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 			}
 		}//END main:
 	}
+
 	
-	//###### FLAGS
-	
-	//### Aus IProcessWatchRunnerZZZ, analog zu IFlagUserZZZ ##########################
-		@Override
-		public boolean getFlag(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag) {
-			return this.getFlag(objEnumFlag.name());
-		}
-		@Override
-		public boolean setFlag(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
-			return this.setFlag(objEnumFlag.name(), bFlagValue);
-		}
-		
-		@Override
-		public boolean[] setFlag(IProcessWatchRunnerZZZ.FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
-			boolean[] baReturn=null;
-			main:{
-				if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
-					baReturn = new boolean[objaEnumFlag.length];
-					int iCounter=-1;
-					for(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
-						iCounter++;
-						boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
-						baReturn[iCounter]=bReturn;
-					}
-					
-					//!!! Ein mögliches init-Flag ist beim direkten setzen der Flags unlogisch.
-					//    Es wird entfernt.
-					this.setFlag(IFlagZUserZZZ.FLAGZ.INIT, false);
-				}
-			}//end main:
-			return baReturn;
-		}
-		
-		@Override
-		public boolean proofFlagExists(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
-			return this.proofFlagExists(objEnumFlag.name());
-		}	
-		
-		@Override
-		public boolean proofFlagSetBefore(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
-			return this.proofFlagSetBefore(objEnumFlag.name());
-		}	
-	
-	/* (non-Javadoc)
-	@see zzzKernel.basic.KernelObjectZZZ#getFlag(java.lang.String)
-	Flags used: 
-	- hasError
-	- hasOutput
-	- hasInput
-	- stoprequested
-	 */
-	public boolean getFlag(String sFlagName){
-		boolean bFunction = false;
+	//###############################
+	//### FLAG HANDLING aus: IWatchRunnerZZZ
+	//###############################
+	@Override
+	public boolean getFlag(IWatchRunnerZZZ.FLAGZ objEnumFlag) {
+		return this.getFlag(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean setFlag(IWatchRunnerZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
+		return this.setFlag(objEnumFlag.name(), bFlagValue);
+	}
+
+	@Override
+	public boolean[] setFlag(IWatchRunnerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
+		boolean[] baReturn=null;
 		main:{
-			if(StringZZZ.isEmpty(sFlagName)) break main;
-			bFunction = super.getFlag(sFlagName);
-			if(bFunction==true) break main;
-		
-			//getting the flags of this object
-//			String stemp = sFlagName.toLowerCase();
-//			if(stemp.equals("haserror")){
-//				bFunction = bFlagHasError;
-//				break main;
-//			}else if(stemp.equals("hasconnection")) {
-//				bFunction = bFlagHasConnection;
-//				break main;
-//			}
+			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+				baReturn = new boolean[objaEnumFlag.length];
+				int iCounter=-1;
+				for(IWatchRunnerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+					iCounter++;
+					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+					baReturn[iCounter]=bReturn;
+				}
+			}
+		}//end main:
+		return baReturn;
+	}
+
+	@Override
+	public boolean proofFlagExists(IWatchRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean proofFlagSetBefore(IWatchRunnerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+	
+	
+	//###############################
+	//### FLAG HANDLING aus: IProcessWatchRunnerZZZ
+	//###############################
+	@Override
+	public boolean getFlag(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag) {
+		return this.getFlag(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean setFlag(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
+		return this.setFlag(objEnumFlag.name(), bFlagValue);
+	}
+
+	@Override
+	public boolean[] setFlag(IProcessWatchRunnerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
+		boolean[] baReturn=null;
+		main:{
+			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+				baReturn = new boolean[objaEnumFlag.length];
+				int iCounter=-1;
+				for(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+					iCounter++;
+					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+					baReturn[iCounter]=bReturn;
+				}
+			}
+		}//end main:
+		return baReturn;
+	}
+
+	@Override
+	public boolean proofFlagExists(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean proofFlagSetBefore(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+	
+	//###############################
+	//### FLAG HANDLING aus: IStatusLocalMessageUserZZZ
+	//###############################
+	@Override
+	public boolean getFlag(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag) {
+		return this.getFlag(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean setFlag(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
+		return this.setFlag(objEnumFlag.name(), bFlagValue);
+	}
+
+	@Override
+	public boolean[] setFlag(IStatusLocalMessageUserZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
+		boolean[] baReturn=null;
+		main:{
+			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+				baReturn = new boolean[objaEnumFlag.length];
+				int iCounter=-1;
+				for(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+					iCounter++;
+					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+					baReturn[iCounter]=bReturn;
+				}
+			}
+		}//end main:
+		return baReturn;
+	}
+
+	@Override
+	public boolean proofFlagExists(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean proofFlagSetBefore(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+	
 			
-		}//end main:
-		return bFunction;
-	}
-	
-	
-
-	/**
-	 * @see AbstractKernelUseObjectZZZ.basic.KernelUseObjectZZZ#setFlag(java.lang.String, boolean)
-	 * @param sFlagName
-	 * Flags used:<CR>
-	 	- hasError
-	- hasOutput
-	- hasInput
-	- stoprequested
-	 * @throws ExceptionZZZ 
-	 */
-	public boolean setFlag(String sFlagName, boolean bFlagValue) throws ExceptionZZZ{
-		boolean bFunction = false;
-		main:{			
-			if(StringZZZ.isEmpty(sFlagName)) break main;
-			bFunction = super.setFlag(sFlagName, bFlagValue);
-			if(bFunction==true) break main;
-		
-		//setting the flags of this object
-//		String stemp = sFlagName.toLowerCase();
-//		if(stemp.equals("haserror")){
-//			bFlagHasError = bFlagValue;
-//			bFunction = true;
-//			break main;
-//		}else if(stemp.equals("hasconnection")) {
-//			bFlagHasConnection = bFlagValue;
-//			bFunction = true;
-//			break main;
-//		}
-
-		}//end main:
-		return bFunction;
-	}
-	
 	//##########################################
-	//### FLAG HANDLING
+	//### FLAG HANDLING: IProgramRunnableZZZ
 	@Override
 	public boolean getFlag(IProgramRunnableZZZ.FLAGZ objEnumFlag) {
 		return this.getFlag(objEnumFlag.name());
@@ -548,45 +675,9 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractKernelUseObj
 	}		
 	//##########################
 	
-	//###### GETTER / SETTER
-	
-	//+++ aus IProcessWatchRunnerZZZ
-	
-	/**Returns the process - object passed as a parameter of the constructor 
-	 * Hint: Therefore is no setter-method available
-	 * @return Process
-	 *
-	 * javadoc created by: 0823, 06.07.2006 - 16:48:57
-	 */
-	@Override
-	public Process getProcessObject(){
-		return this.objProcess;
-	}
-	
-	@Override
-	public void setProcessObject(Process objProcess) {
-		this.objProcess = objProcess;
-	}
-	
-	/**Returns a number passed as a parameter of the constructor
-	 * This number should allow the object to identify itself. E.g. when writing to the log.
-	 * @return int
-	 *
-	 * javadoc created by: 0823, 06.07.2006 - 17:52:34
-	 */
-	@Override
-	public int getNumber(){
-		return this.iNumber;
-	}
-	
-	@Override
-	public void setNumber(int iNumber) {
-		this.iNumber = iNumber;
-	}
-	
-	@Override
-	public abstract boolean analyseInputLineCustom(String sLine) throws ExceptionZZZ;
-
+	//#############################################
+	//### STATUS
+	//#############################################
 	
 	//### Aus IStatusLocalUserZZZ
 	

@@ -1,21 +1,31 @@
-package basic.zBasic.util.moduleExternal.process.watch;
+package basic.zBasic.util.moduleExternal.process.create;
 
+import java.io.File;
 import java.util.EnumSet;
 
 import basic.zBasic.ExceptionZZZ;
-import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
-import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
+import basic.zBasic.util.moduleExternal.ICreateRunnerZZZ;
+import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.FLAGZ;
+import basic.zBasic.util.moduleExternal.process.watch.AbstractProcessWatchRunnerZZZ;
+import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ.STATUSLOCAL;
 
-public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
-	public Process getProcessWatched();
-	public void setProcessWatched(Process objProcess);
-		
-	public abstract boolean analyseInputLineCustom(String sLine) throws ExceptionZZZ;
-	public abstract boolean writeErrorToLog()throws ExceptionZZZ;
-	public abstract boolean writeErrorToLogWithStatus()throws ExceptionZZZ;
+public interface IProcessCreateRunnerZZZ extends ICreateRunnerZZZ{
+	public File getSourceFile();
+	public void setSourceFile(File objSourceFile) ;
+
+	public Process getProcess() ;
+	public void setProcess(Process objProcess);
+	
+	public Process createProcessByBatchCustom() throws ExceptionZZZ;  //Erzeuge den Process	
+	public boolean controlProcessByBatchCustom() throws ExceptionZZZ; //Beobachte Flags und versuche den Process zu steuern, bzw. in per Batch zu KILLEN.
+	
+	public void debugWriteOutputToLogPLUSanalyse() throws ExceptionZZZ;
+	public void debugWriteOutputToLogPLUSanalyse(Process objProcess) throws ExceptionZZZ;
+	public boolean analyseInputLineCustom(String sLine) throws ExceptionZZZ;
 	
 	
+	//##############################################################	
 	public enum FLAGZ{
 		DUMMY
 	}
@@ -27,7 +37,7 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 	boolean proofFlagSetBefore(FLAGZ objEnumFlag) throws ExceptionZZZ;
 	
 	
-	
+	//##############################################################
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//Die StatusId für Stati, aus dieser Klasse selbst. Nicht die Stati der anderen Klassen.
 	public static int iSTATUSLOCAL_GROUPID=0;
@@ -36,26 +46,26 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//DIE INTERNE ENUM-KLASSE FUER STATUSLOCAL.
-    //Merke1: Diese wird auch vererbt. So dass erbende Klassen auf dieses Enum ueber ihren eingene Klassennamen zugreifen können.
-    //
+	//Merke1: Diese wird auch vererbt. So dass erbende Klassen auf dieses Enum ueber ihren eingene Klassennamen zugreifen können.
+	//
 	//Merke2: Diese könnte auch in eine extra Klasse ausgelagert werden (z.B. um es in einer Datenbank mit Hibernate zu persistieren.
 	//       Für die Auslagerung als extra Klasse, s.: EnumSetMappedTestTypeZZZ
 	//++++++++++++++++++++++++
-    		
-
+			
+	
 	//Merke: Obwohl fullName und abbr nicht direkt abgefragt werden, müssen Sie im Konstruktor sein, um die Enumeration so zu definieren.
 	//ALIAS("Uniquename","Statusmeldung","Beschreibung, wird nicht genutzt....",)
 	public enum STATUSLOCAL implements IEnumSetMappedStatusZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{	
-		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ProcessWatchRunner",""),
+		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ProcessCreateRunner",""),
 		HASCONNECTION(iSTATUSLOCAL_GROUPID,"hasconnection","ProcessWatchRunner ist mit dem Process verbunden",""),
 		HASOUTPUT(iSTATUSLOCAL_GROUPID,"hasoutput","Prozess hat Output",""),
 		HASINPUT(iSTATUSLOCAL_GROUPID,"hasinput","Prozess hat Input",""),
-		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isended","ProcessWatchRunner ist beendet",""),
+		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isended","ProcessCreateRunner ist beendet",""),
 		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","Ein Fehler ist aufgetreten","");
 			
 		private int iStatusGroupId;
 		private String sAbbreviation,sStatusMessage,sDescription;
-
+	
 		//#############################################
 		//#### Konstruktoren
 		//Merke: Enums haben keinen public Konstruktor, können also nicht intiantiiert werden, z.B. durch Java-Reflektion.
@@ -66,7 +76,7 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 		    this.sStatusMessage = sStatusMessage;
 		    this.sDescription = sDescription;
 		}
-
+	
 		public int getStatusGroupId() {				
 			return this.iStatusGroupId;
 		}
@@ -82,7 +92,7 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 		public EnumSet<?>getEnumSetUsed(){
 			return STATUSLOCAL.getEnumSet();
 		}
-
+	
 		/* Die in dieser Methode verwendete Klasse für den ...TypeZZZ muss immer angepasst werden. */
 		@SuppressWarnings("rawtypes")
 		public static <E> EnumSet getEnumSet() {
@@ -104,7 +114,7 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 			return set;
 			
 		}
-
+	
 		//TODO: Mal ausprobieren was das bringt
 		//Convert Enumeration to a Set/List
 		private static <E extends Enum<E>>EnumSet<E> toEnumSet(Class<E> enumClass,long vector){
@@ -118,7 +128,7 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 			  }
 			  return set;
 			}
-
+	
 		//+++ Das könnte auch in einer Utility-Klasse sein.
 		//the valueOfMethod <--- Translating from DB
 		public static STATUSLOCAL fromAbbreviation(String s) {
@@ -128,7 +138,7 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 		}
 		throw new IllegalArgumentException("Not a correct abbreviation: " + s);
 		}
-
+	
 		//##################################################
 		//#### Folgende Methoden bring Enumeration von Hause aus mit. 
 				//Merke: Diese Methoden können aber nicht in eine abstrakte Klasse verschoben werden, zum daraus Erben. Grund: Enum erweitert schon eine Klasse.
@@ -136,23 +146,23 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 		public String getName() {	
 			return super.name();
 		}
-
+	
 		@Override
 		public String toString() {//Mehrere Werte mit # abtennen
 		    return this.sAbbreviation+"="+this.sDescription;
 		}
-
+	
 		@Override
 		public int getIndex() {
 			return ordinal();
 		}
-
+	
 		//### Folgende Methoden sind zum komfortablen Arbeiten gedacht.
 		@Override
 		public int getPosition() {
 			return getIndex()+1; 
 		}
-
+	
 		@Override
 		public String getDescription() {
 			return this.sDescription;

@@ -109,7 +109,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 			this.logProtocolString(sLog);
 			
-			if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+			if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
 				bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
 			}
 		}//end main

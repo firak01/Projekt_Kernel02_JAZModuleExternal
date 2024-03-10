@@ -34,7 +34,8 @@ public class ProcessUsingProcessCreateAndWatchDummyZZZ extends AbstractObjectZZZ
 
 				
 				//Merke: Beim Starten der Batch, gibt es keine Fehlermeldung, fall die ueberhaupt nicht vorhanden ist. Es funktioniert halt nicht....
-				String sDirectory = "C:\\HIS-Workspace\\1fgl\\repo\\EclipseOxygen\\Projekt_Kernel02_JAZModuleExternal\\src\\bat";
+				//auf dem Notebook der TUBAF String sDirectory = "C:\\HIS-Workspace\\1fgl\\repo\\EclipseOxygen\\Projekt_Kernel02_JAZModuleExternal\\src\\bat";
+				String sDirectory = "C:\\1fgl\\repo\\EclipseOxygen_V01\\Projekt_Kernel02_JAZModuleExternal\\src\\bat";
 				//String sDirectory = "\\src\\bat";
 				
 				
@@ -147,69 +148,12 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			int iZaehler = StringZZZ.toInteger(sZaehler);
 			if(iZaehler % 10 == 0 && iZaehler > 0) {
 				System.out.println(ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - 10er Zaehler gefunden.");
-				
-				
-			}else if(StringZZZ.contains(sLine,"TCP connection established")) {
-				
-				
-			} else if(StringZZZ.contains(sLine,"TCP connection established")) {
-				//this.setStatusLocal(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTIONLOST, false);
-				//this.setStatusLocal(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTION, true);
-				
-				//Falls ein Abbruch nach der Verbindung gewuenscht wird, dies hier tun
-				//boolean bEndOnConnection = this.getFlag(IProcessWatchRunnerZZZ.FLAGZ.END_ON_CONNECTION);
-				//if(bEndOnConnection) {
-					//Den Process selbst an dieser Stelle nicht beenden, sondern nur ein Flag setzten, auf das reagiert werden kann.
-					//boolean bStopRequested = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
-					
-			//	}
-				
 				bReturn = true;
 				break main;
-			}else if(StringZZZ.contains(sLine,"Connection reset, restarting")) {
-				//Beim Verbindungsverlust:
-				//Sun Oct 29 07:35:45 2023 us=949123 Connection reset, restarting [-1]
-				//Sun Oct 29 07:35:45 2023 us=949123 TCP/UDP: Closing socket
-				//Sun Oct 29 07:35:45 2023 us=949123 SIGUSR1[soft,connection-reset] received, process restarting
-				//Sun Oct 29 07:35:45 2023 us=949123 Restart pause, 5 second(s)
-				//...
-				//Sun Oct 29 07:35:50 2023 us=948995 Attempting to establish TCP connection with [AF_INET]192.168.3.116:4999 [nonblock]
-				//Sun Oct 29 07:36:00 2023 us=948860 TCP: connect to [AF_INET]192.168.3.116:4999 failed, will try again in 5 seconds: Connection timed out (WSAETIMEDOUT)
-				//Sun Oct 29 07:36:15 2023 us=949340 TCP: connect to [AF_INET]192.168.3.116:4999 failed, will try again in 5 seconds: Connection timed out (WSAETIMEDOUT)
-				System.out.println(("TESTFGL PROCESS STRING ANALYSE 01: " + sLine));
-				
-			//TODOGOON20231106;//Debugge, warum der false - Wert nicht weitergegeben wird an Main
-//				this.setStatusLocal(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTION, false);				
-//				this.setStatusLocal(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTIONLOST, true);
-//				
-//				//Falls ein Abbruch nach der Verbindung gewuenscht wird, dies hier tun
-//				boolean bEndOnConnectionLost = this.getFlag(IProcessWatchRunnerZZZ.FLAGZ.END_ON_CONNECTIONLOST);
-//				if(bEndOnConnectionLost) {
-//					//Den Process selbst an dieser Stelle nicht beenden, sondern nur ein Flag setzten, auf das reagiert werden kann.
-//					boolean bStopRequested = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
-//					
-//				}
-				
-				bReturn = true;
-				break main;
-			}else if(StringZZZ.contains(sLine,"Peer Connection Initiated with")) {
-				//Nach Verbindungsverlust neu verbinden:
-				//[HANNIBALDEV06VM_SERVER] Peer Connection Initiated with [AF_INET]192.168.3.116:4999
-//				System.out.println(("TESTFGL PROCESS STRING ANALYSE 02: " + sLine));
-//											
-//				this.setStatusLocal(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTIONLOST, false);
-//				this.setStatusLocal(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTION, true);
-//				
-//				//Falls ein Abbruch nach der Verbindung gewuenscht worden waere, dies hier wieder rueckgaengig machen
-//				//Idee dahinter: Der Verbindungsverlust war so kurzfristig, der STOPREQUEST hat noch garnicht gezogen.
-//				boolean bEndOnConnectionLost = this.getFlag(IProcessWatchRunnerZZZ.FLAGZ.END_ON_CONNECTIONLOST);
-//				if(bEndOnConnectionLost) {
-//					//Den Process selbst an dieser Stelle nicht beenden, sondern nur ein Flag setzten, auf das reagiert werden kann.
-//					boolean bStopRequested = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, false);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
-//					
-//				}
-				
-				bReturn = true;
+			}else if(iZaehler >= 1000) {
+				System.out.println(ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - Zaehler ueber 1000. Breche ab.");
+				//this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, false);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
+				bReturn = false;
 				break main;
 			}
 		}//end main:
@@ -251,8 +195,8 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					s="gelesen aus InputStream: '" + s + "'";
 					
 					this.logProtocolString(s);
-					boolean bAny = this.analyseInputLineCustom(s);
-									
+					boolean bContinue = this.analyseInputLineCustom(s);
+					if(!bContinue) break;
 					Thread.sleep(20);
 				}								
 			} catch (IOException e) {

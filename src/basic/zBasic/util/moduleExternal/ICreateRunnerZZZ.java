@@ -1,16 +1,11 @@
-package debug.zBasic.util.moduleExternal.log.create;
+package basic.zBasic.util.moduleExternal;
 
 import java.io.File;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.FLAGZ;
 
-public interface ILogFileCreateRunnerZZZ {
-	public File getSourceFile();
-	public void setSourceFile(File objSourceFile) ;
-
-	public File getLogFile() ;
-	public void setLogFile(File objLogFile);
+public interface ICreateRunnerZZZ {
 	
 	
 	//##############################################################	

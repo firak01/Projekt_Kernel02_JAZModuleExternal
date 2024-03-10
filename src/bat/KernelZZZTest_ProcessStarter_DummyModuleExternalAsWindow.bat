@@ -10,5 +10,6 @@ REM java -cp JAZModuleExternalDummy.jar debug.zBasic.util.moduleExternal.process
 REM Startet ein Konsolenfenster mit dem Namen. Darin wird dann der Prozess ausgefuehrt.
 REM Leider wird die .jar Datei ohne den absoluten Pfad nicht gefunden, auch wenn sie im gleichen Verzeichnis wie diese Batch liegt.
 REM start "fglProcessCreateMainZZZ" java -cp C:\1fgl\client\JAZKernel\JAZModuleExternalDummy.jar debug.zBasic.util.moduleExternal.process.createDummy.ProcessCreateMockDummyMainZZZ
-start "fglProcessCreateMainZZZ" java -cp C:\HIS-Workspace\1fgl\repo\EclipseOxygen\Projekt_Kernel02_JAZModuleExternal\src\bat\JAZModuleExternalDummy.jar debug.zBasic.util.moduleExternal.process.createDummy.ProcessCreateMockDummyMainZZZ
+REM auf dem Notebook der TUBAF: start "fglProcessCreateMainZZZ" java -cp C:\HIS-Workspace\1fgl\repo\EclipseOxygen\Projekt_Kernel02_JAZModuleExternal\src\bat\JAZModuleExternalDummy.jar debug.zBasic.util.moduleExternal.process.createDummy.ProcessCreateMockDummyMainZZZ
+start "fglProcessCreateMainZZZ" java -cp C:\1fgl\repo\EclipseOxygen_V01\Projekt_Kernel02_JAZModuleExternal\src\bat\JAZModuleExternalDummy.jar debug.zBasic.util.moduleExternal.process.createDummy.ProcessCreateMockDummyMainZZZ
 pause
