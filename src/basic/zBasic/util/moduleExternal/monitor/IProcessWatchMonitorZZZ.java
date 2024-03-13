@@ -98,8 +98,8 @@ public interface IProcessWatchMonitorZZZ extends Runnable{
 			Class<STATUSLOCAL> enumClass = STATUSLOCAL.class;
 			EnumSet<STATUSLOCAL> set = EnumSet.noneOf(enumClass);//Erstelle ein leeres EnumSet
 			
-			//for(Object obj : ServerTrayMenuTypeZZZ.class.getEnumConstants()){
-			for(Object obj : AbstractProcessWatchMonitorZZZ.class.getEnumConstants()){
+			Enum[]objaEnum = (Enum[]) enumClass.getEnumConstants();
+			for(Object obj : objaEnum){
 				//System.out.println(obj + "; "+obj.getClass().getName());
 				set.add((STATUSLOCAL) obj);
 			}
