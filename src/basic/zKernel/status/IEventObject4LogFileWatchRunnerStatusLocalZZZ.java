@@ -6,5 +6,4 @@ import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 
 public interface IEventObject4LogFileWatchRunnerStatusLocalZZZ extends IEventObjectStatusLocalZZZ{
 	public ILogFileWatchRunnerZZZ.STATUSLOCAL getStatusEnum();
-	String getStatusAbbreviation();
 }

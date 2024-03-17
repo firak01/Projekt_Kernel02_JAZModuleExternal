@@ -89,7 +89,7 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 		    		         };
 			ProcessWatchRunnerZZZ objWatcher = new ProcessWatchRunnerZZZ(objProcess, sFilterSentence,saFlag);			
 			//TESTTESTTEST 20240310
-			ArrayList<Collection<? extends Enum<?>>> col = StatusLocalHelperZZZ.getStatusLocalEnumList(objWatcher.getClass());
+			ArrayList<Collection<? extends Enum<?>>> col = StatusLocalHelperZZZ.getStatusLocalEnumMappedList(objWatcher.getClass());
 			
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
 			//objWatcher.registerForStatusLocalEvent(objListener);//Registriere den Monitor nun am ProcessWatchRunner
