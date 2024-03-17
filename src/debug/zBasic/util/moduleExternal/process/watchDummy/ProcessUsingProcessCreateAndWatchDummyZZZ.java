@@ -148,14 +148,13 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			int iZaehler = StringZZZ.toInteger(sZaehler);
 			if(iZaehler % 10 == 0 && iZaehler > 0) {
 				System.out.println(ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - 10er Zaehler gefunden.");
-				bReturn = true;
-				break main;
 			}else if(iZaehler >= 1000) {
 				System.out.println(ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - Zaehler ueber 1000. Breche ab.");
 				//this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, false);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
 				bReturn = false;
 				break main;
 			}
+			bReturn = true;
 		}//end main:
 		return bReturn;
 	}
