@@ -200,7 +200,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
                     if(sLine!=null)
                     {
                     	icount++;                    	
-                    	System.out.println(ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: " + sLine);
+                    	System.out.println(ReflectCodeZZZ.getPositionCurrent() + icount +"\t: " + sLine);
                     	objLogStream.write(sLine.getBytes());
                     	objLogStream.write(StringZZZ.crlf().getBytes());//Merke: Ohne diese explizite neue Zeile wird alles hintereinander geschrieben.
                     	
@@ -221,17 +221,17 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 			} catch (InterruptedException e) {				
 				e.printStackTrace();
 				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + ": HASERROR Status gesetzt.";
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
 				this.logProtocolString(sLog);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + ": HASERROR Status gesetzt.";
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
 				this.logProtocolString(sLog);
 			} catch (IOException e) {
 				e.printStackTrace();	
 				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + ": HASERROR Status gesetzt.";
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
 				this.logProtocolString(sLog);
 			} finally {
 				

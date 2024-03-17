@@ -37,7 +37,7 @@ public class EventObject4LogFileWatchRunnerStatusLocalZZZ  extends AbstractEvent
 
 	//### Aus Interface
 	@Override
-	public ILogFileWatchRunnerZZZ.STATUSLOCAL getStatusEnum() {
+	public STATUSLOCAL getStatusEnum() {
 		return (STATUSLOCAL) this.getStatusLocal();
 	}
 }
