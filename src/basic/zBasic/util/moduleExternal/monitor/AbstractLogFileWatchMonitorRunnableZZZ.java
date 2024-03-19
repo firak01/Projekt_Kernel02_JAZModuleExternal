@@ -192,20 +192,21 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		main:{
 			if(enumStatusIn==null) break main;
 			
+			String sLog;
 		
 			//Merke: In anderen Klassen, die dieses Design-Pattern anwenden ist das eine andere Klasse fuer das Enum
 			ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorRunnableZZZ.STATUSLOCAL) enumStatusIn;
 			String sStatusName = enumStatus.name();
 			bFunction = this.proofStatusLocalExists(sStatusName);															
 			if(!bFunction) {
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") would like to fire event, but this status is not available: '" + sStatusName + "'";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") would like to fire event, but this status is not available: '" + sStatusName + "'";
 				this.logProtocolString(sLog);			
 				break main;
 			}
 			
 		bFunction = this.proofStatusLocalValueChanged(sStatusName, bStatusValue);
 		if(!bFunction) {
-			String sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") would like to fire event, but this status has not changed: '" + sStatusName + "'";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") would like to fire event, but this status has not changed: '" + sStatusName + "'";
 			this.logProtocolString(sLog);
 			break main;
 		}	
@@ -229,7 +230,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 			sStatusMessageToSet = sStatusMessage;
 		}
 		
-		String sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") verarbeitet sStatusMessageToSet='" + sStatusMessageToSet + "'";
+		sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") verarbeitet sStatusMessageToSet='" + sStatusMessageToSet + "'";
 		this.logProtocolString(sLog);
 
 		//Falls eine Message extra uebergeben worden ist, ueberschreibe...

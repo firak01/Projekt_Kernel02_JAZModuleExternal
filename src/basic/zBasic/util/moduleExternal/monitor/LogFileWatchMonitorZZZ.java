@@ -187,7 +187,6 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 			
 		
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	
 	@Override
 	//Weil auf den Status anderer Thread gehoert wird und diese weitergeleitet werden sollen.
 	public HashMap<IEnumSetMappedStatusZZZ, IEnumSetMappedStatusZZZ> createHashMapEnumSetForCascadingStatusLocalCustom() {
