@@ -7,6 +7,7 @@ import java.util.Collection;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.IConstantZZZ;
 import basic.zBasic.IObjectWithStatusZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.ProcessWatchRunnerZZZ;
@@ -88,8 +89,8 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 		    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()
 		    		         };
 			ProcessWatchRunnerZZZ objWatcher = new ProcessWatchRunnerZZZ(objProcess, sFilterSentence,saFlag);			
-			//TESTTESTTEST 20240310
-			ArrayList<Collection<? extends Enum<?>>> col = StatusLocalHelperZZZ.getStatusLocalEnumMappedList(objWatcher.getClass());
+			TODOGOON20240310;
+			ArrayList<IEnumSetMappedStatusZZZ> col = StatusLocalHelperZZZ.getStatusLocalEnumMappedList(objWatcher));
 			
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
 			//objWatcher.registerForStatusLocalEvent(objListener);//Registriere den Monitor nun am ProcessWatchRunner
