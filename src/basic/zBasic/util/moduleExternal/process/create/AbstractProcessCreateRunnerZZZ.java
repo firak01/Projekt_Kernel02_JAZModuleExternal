@@ -18,7 +18,7 @@ import basic.zKernel.status.IEventBrokerStatusLocalUserZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 import basic.zKernel.status.IStatusLocalMessageUserZZZ;
-import basic.zKernel.status.StatusLocalHelperZZZ;
+import basic.zKernel.status.StatusLocalAvailableHelperZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZZ;
