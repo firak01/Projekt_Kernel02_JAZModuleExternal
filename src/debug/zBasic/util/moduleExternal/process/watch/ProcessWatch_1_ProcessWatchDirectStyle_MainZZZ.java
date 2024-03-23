@@ -11,7 +11,7 @@ import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.ProcessWatchRunnerZZZ;
-import basic.zKernel.status.StatusLocalHelperZZZ;
+import basic.zKernel.status.StatusLocalAvailableHelperZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
 import debug.zBasic.util.moduleExternal.process.create.ProcessCreateMockRunnerZZZ;
 
@@ -90,7 +90,7 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 		    		         };
 			ProcessWatchRunnerZZZ objWatcher = new ProcessWatchRunnerZZZ(objProcess, sFilterSentence,saFlag);			
 			TODOGOON20240310;
-			ArrayList<IEnumSetMappedStatusZZZ> col = StatusLocalHelperZZZ.getStatusLocalEnumMappedList(objWatcher));
+			ArrayList<IEnumSetMappedStatusZZZ> col = StatusLocalAvailableHelperZZZ.getEnumMappedList(objWatcher);
 			
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
 			//objWatcher.registerForStatusLocalEvent(objListener);//Registriere den Monitor nun am ProcessWatchRunner

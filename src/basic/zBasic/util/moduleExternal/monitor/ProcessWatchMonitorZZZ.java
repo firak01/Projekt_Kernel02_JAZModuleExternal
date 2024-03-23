@@ -11,6 +11,7 @@ import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.abstractList.ArrayListUniqueZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.monitor.AbstractProcessWatchMonitorZZZ;
+import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ;
 import basic.zKernel.AbstractKernelUseObjectWithStatusZZZ;
 import basic.zKernel.IKernelZZZ;
 import basic.zKernel.flag.EventObjectFlagZsetZZZ;
@@ -691,15 +692,12 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		main:{
 			
 			//Merke: Reine Lokale Statuswerte kommen nicht aus einem Event und werden daher nicht gemapped. 			
-			hmReturn.put(IProcessWatchRunnerOVPN.STATUSLOCAL.ISSTARTNEW, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSSTARTNEW);
-			hmReturn.put(IProcessWatchRunnerOVPN.STATUSLOCAL.ISSTARTING, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSSTARTING);
-			hmReturn.put(IProcessWatchRunnerOVPN.STATUSLOCAL.ISSTARTED, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSSTARTED);
-			hmReturn.put(IProcessWatchRunnerOVPN.STATUSLOCAL.HASOUTPUT, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSOUTPUT);
-			hmReturn.put(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTION, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSCONNECTION);
-			hmReturn.put(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTIONLOST, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSCONNECTIONLOST);
+			hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.ISSTARTED, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSSTARTED);
+			hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.HASOUTPUT, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSOUTPUT);
+			hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.HASCONNECTION, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSCONNECTION);
 			
-			hmReturn.put(IProcessWatchRunnerOVPN.STATUSLOCAL.ISSTOPPED, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSSTOPPED);
-			hmReturn.put(IProcessWatchRunnerOVPN.STATUSLOCAL.HASERROR, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSERROR);
+			hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSSTOPPED);
+			hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSERROR);
 						
 		}//end main:
 		return hmReturn;	
