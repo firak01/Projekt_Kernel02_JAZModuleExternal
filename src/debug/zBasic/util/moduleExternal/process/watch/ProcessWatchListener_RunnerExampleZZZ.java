@@ -1,4 +1,4 @@
-package debug.zBasic.util.moduleExternal.log.watch;
+package debug.zBasic.util.moduleExternal.process.watch;
 
 import java.util.HashMap;
 
@@ -7,19 +7,20 @@ import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
-import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
-import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
+import basic.zBasic.util.moduleExternal.monitor.IProcessWatchMonitorZZZ;
+import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ;
+import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ.STATUSLOCAL;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 
 /** Ein Beispiel-Broker, an dem sich die "hoerenden" Klassen registieren.
  * @author fl86kyvo
  *
  */
-public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFlagOnStatusListeningZZZ {//implements IListenerObjectStatusLocalMessageZZZ, IListenerObjectStatusLocalMessageReactZZZ{
+public class ProcessWatchListener_RunnerExampleZZZ extends AbstractObjectWithFlagOnStatusListeningZZZ {//implements IListenerObjectStatusLocalMessageZZZ, IListenerObjectStatusLocalMessageReactZZZ{
 	private static final long serialVersionUID = -2338056174362726426L;
 
-	public LogFileWatchListener_RunnerExampleZZZ() throws ExceptionZZZ {
+	public ProcessWatchListener_RunnerExampleZZZ() throws ExceptionZZZ {
 		super();
 	}
 	
@@ -29,7 +30,7 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 		main:{	
 			if(eventStatusLocal==null)break main;
 						
-			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Fuer LogFileWatchEvent.";
+			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Fuer ProcessWatchEvent.";
 			this.logLineDate(sLog);
 			
 			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {
@@ -63,7 +64,7 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 			
 			//Wenn wir den Status nicht weitersenden, sondern direkt verarbeiten ist solch ein Mapping nicht notwendig.
 			//Also da wir mit objEnum als Variable weiterarbeiten wollen:
-			ILogFileWatchRunnerZZZ.STATUSLOCAL objEnum = (STATUSLOCAL) enumStatus;
+			IProcessWatchRunnerZZZ.STATUSLOCAL objEnum = (STATUSLOCAL) enumStatus;
 			//++++++++++++++++++++##
 			
 			boolean bValue = eventStatusLocalSet.getStatusValue();
@@ -139,10 +140,10 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
 		//Reagiere auf diee Events... mit dem angegebenen Alias.
-		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASLOGFILEWATCHRUNNERFILTERFOUND, "doFilterFound");
-		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR, "doStop");
+		hmReturn.put(IProcessWatchMonitorZZZ.STATUSLOCAL.HASPROCESSWATCHRUNNERFILTERFOUND, "doFilterFound");
+		hmReturn.put(IProcessWatchMonitorZZZ.STATUSLOCAL.HASERROR, "doStop");
 		
-		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASLOGFILEWATCHRUNNERSTOPPED, "doStop");
+		hmReturn.put(IProcessWatchMonitorZZZ.STATUSLOCAL.HASPROCESSWATCHRUNNERSTOPPED, "doStop");
 				
 		return hmReturn;
 	}

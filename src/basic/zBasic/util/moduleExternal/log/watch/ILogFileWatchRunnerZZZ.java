@@ -43,15 +43,15 @@ public interface ILogFileWatchRunnerZZZ extends IWatchRunnerZZZ {
 	//Merke: Obwohl fullName und abbr nicht direkt abgefragt werden, müssen Sie im Konstruktor sein, um die Enumeration so zu definieren.
 	//ALIAS("Uniquename","Statusmeldung","Beschreibung, wird nicht genutzt....",)
 	public enum STATUSLOCAL implements IEnumSetMappedStatusZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{
-		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","LogWatchRunner: Nicht gestartet",""),
-		ISSTARTING(iSTATUSLOCAL_GROUPID,"isstarting","LogWatchRunner: Startet...",""),
-		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","LogWatchRunner: Gestartet",""),
+		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","LogFileWatchRunner: Nicht gestartet",""),
+		ISSTARTING(iSTATUSLOCAL_GROUPID,"isstarting","LogFileWatchRunner: Startet...",""),
+		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","LogFileWatchRunner: Gestartet",""),
 		
-		HASOUTPUT(iSTATUSLOCAL_GROUPID,"hasoutput","Log hat Output",""),		
-		HASFILTERFOUND(iSTATUSLOCAL_GROUPID,"hasfilterfound","Log enthaelt aktuell den Filter",""),
+		HASOUTPUT(iSTATUSLOCAL_GROUPID,"hasoutput","LogFileWatchRunner: Hat Output",""),		
+		HASFILTERFOUND(iSTATUSLOCAL_GROUPID,"hasfilterfound","LogFileWatchRunner: Log enthaelt aktuell den Filter",""),
 				
-		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isstopped","ProcessWatchRunner: Beendet",""),
-		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","ProcessWatchRunner: Fehler","");
+		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isstopped","LogFileWatchRunner: Beendet",""),
+		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","LogFileWatchRunner: Fehler","");
 									
 		private int iStatusGroupId;			
 		private String sAbbreviation,sStatusMessage,sDescription;

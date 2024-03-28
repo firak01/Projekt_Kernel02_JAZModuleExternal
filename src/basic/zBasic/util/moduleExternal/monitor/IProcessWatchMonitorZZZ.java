@@ -35,26 +35,30 @@ public interface IProcessWatchMonitorZZZ extends Runnable{
 	//Merke: Obwohl fullName und abbr nicht direkt abgefragt werden, müssen Sie im Konstruktor sein, um die Enumeration so zu definieren.
 	//ALIAS("Uniquename","Statusmeldung","Beschreibung, wird nicht genutzt....",)
 	public enum STATUSLOCAL implements IEnumSetMappedStatusZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{
-		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","OVPN: Monitor nicht gestartet",""),
-		ISSTARTING(iSTATUSLOCAL_GROUPID,"isstarting","OVPN: Monitor startet...",""),		
-		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","OVPN: Monitor gestartet",""),
-		ISSTARTNO(iSTATUSLOCAL_GROUPID,"isstartno","OVPN: Monitor nicht gestartet",""),
+		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","ProcessWatchMonitor: Neu",""),
+		ISSTARTING(iSTATUSLOCAL_GROUPID,"isstarting","ProcessWatchMonitor: Startet...",""),		
+		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ProcessWatchMonitor: Gestartet",""),
+		ISSTARTNO(iSTATUSLOCAL_GROUPID,"isstartno","ProcessWatchMonitor: Nicht gestartet",""),
 
-		HASPROCESSSTARTNEW(iSTATUSLOCAL_GROUPID,"hasprocessnew","OVPN: Prozess nicht gestartet",""),
-		HASPROCESSSTARTING(iSTATUSLOCAL_GROUPID,"hasprocessstarting","OVPN: Prozess startet",""),
-		HASPROCESSSTARTED(iSTATUSLOCAL_GROUPID,"hasprocessstarted","OVPN: Prozess gestartet",""),
-		HASPROCESSOUTPUT(iSTATUSLOCAL_GROUPID,"hasprocessoutput","OVPN: Prozess mit Ausgabe",""),
-		HASPROCESSCONNECTION(iSTATUSLOCAL_GROUPID,"hasprocessconnection","OVPN: Process verbunden",""),
-		HASPROCESSCONNECTIONLOST(iSTATUSLOCAL_GROUPID,"hasprocessconnectionlost","OVPN: Process Verbindung verloren",""),
-		HASPROCESSERROR(iSTATUSLOCAL_GROUPID,"hasprocesserror","OVPN: Process meldet fehler",""),
-		HASPROCESSSTOPPED(iSTATUSLOCAL_GROUPID,"hasprocessstopped","OVPN: Process gestoppt",""),
+		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isstopped","ProcessWatchMonitor: Beendet",""),			
+		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","ProcessWatchMonitor: Fehler",""),		
+
+		//TODOGOON 20240328 IDEE: Alternativen zweiten Konstruktor, der ein IEnumSetMappedStatusZZZ - Objekt aufnimmt. 
+		HASPROCESSSTARTNEW(iSTATUSLOCAL_GROUPID,"hasprocessnew","ProcessWatchMonitor: Prozess: Neu",""),
+		HASPROCESSSTARTING(iSTATUSLOCAL_GROUPID,"hasprocessstarting","ProcessWatchMonitor: Prozess: Startet",""),
+		HASPROCESSSTARTED(iSTATUSLOCAL_GROUPID,"hasprocessstarted","ProcessWatchMonitor: Prozess: Gestartet",""),
+		HASPROCESSSTARTNO(iSTATUSLOCAL_GROUPID,"hasprocessstartno","ProcessWatchMonitor: Process: Nicht gestartet",""),
 		
-		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isstopped","OVPN: Monitor beendet",""),
-				
-		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","OVPN: Monitor Fehler",""),		
-		HASSERVERNOTSTARTING(iSTATUSLOCAL_GROUPID,"hasservernotstarting","OVPN: Server nicht gestarted",""),
-		HASSERVERNOTSTARTED(iSTATUSLOCAL_GROUPID,"hasservernotstarted","OVPN: Server nicht fertig mit Start. Wartet auf Process?","");		
+		HASPROCESSOUTPUT(iSTATUSLOCAL_GROUPID,"hasprocessoutput","ProcessWatchMonitor: Prozess: Hat Ausgabe",""),
+		HASPROCESSCONNECTION(iSTATUSLOCAL_GROUPID,"hasprocessconnection","ProcessWatchMonitor: Process: Verbunden",""),
+		HASPROCESSCONNECTIONLOST(iSTATUSLOCAL_GROUPID,"hasprocessconnectionlost","ProcessWatchMonitor: Process: Verbindung verloren",""),
 		
+		HASPROCESSERROR(iSTATUSLOCAL_GROUPID,"hasprocesserror","ProcessWatchMonitor: Process: Fehler",""),
+		HASPROCESSSTOPPED(iSTATUSLOCAL_GROUPID,"hasprocessstopped","ProcessWatchMonitor: Process: Gestoppt",""),
+		
+		HASPROCESSWATCHRUNNERFILTERFOUND(iSTATUSLOCAL_GROUPID,"hasprocesswatchrunnerfilterfound","ProcessWatchMonitor: ProcessWatchrunner: Filter gefunden.",""),
+		HASPROCESSWATCHRUNNERSTOPPED(iSTATUSLOCAL_GROUPID,"hasprocesswatchrunnerstopped","ProcessWatchMonitor: ProcessWatchrunner: Gestoppt.","");
+			
 		private int iStatusGroupId;
 		private String sAbbreviation,sStatusMessage,sDescription;
 	

@@ -11,6 +11,7 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 	public Process getProcessWatched();
 	public void setProcessWatched(Process objProcess);
 		
+	TODOGOON20240328;//Diese Methoden in ein Interface IWatchRunnerZZZ packen und dann auch vom FileWatchRunner implementieren
 	public abstract boolean analyseInputLineCustom(String sLine) throws ExceptionZZZ;
 	public abstract boolean writeErrorToLog()throws ExceptionZZZ;
 	public abstract boolean writeErrorToLogWithStatus()throws ExceptionZZZ;
@@ -46,12 +47,15 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 	//Merke: Obwohl fullName und abbr nicht direkt abgefragt werden, müssen Sie im Konstruktor sein, um die Enumeration so zu definieren.
 	//ALIAS("Uniquename","Statusmeldung","Beschreibung, wird nicht genutzt....",)
 	public enum STATUSLOCAL implements IEnumSetMappedStatusZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{	
-		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ProcessWatchRunner",""),
-		HASCONNECTION(iSTATUSLOCAL_GROUPID,"hasconnection","ProcessWatchRunner ist mit dem Process verbunden",""),
-		HASOUTPUT(iSTATUSLOCAL_GROUPID,"hasoutput","Prozess hat Output",""),
-		HASINPUT(iSTATUSLOCAL_GROUPID,"hasinput","Prozess hat Input",""),
-		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isended","ProcessWatchRunner ist beendet",""),
-		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","Ein Fehler ist aufgetreten","");
+		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","ProcessWatchRunner: Nicht gestartet",""),
+		ISSTARTING(iSTATUSLOCAL_GROUPID,"isstarting","ProcessWatchRunner: Startet...",""),
+		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ProcessWatchRunner: Gestartet",""),
+		
+		HASOUTPUT(iSTATUSLOCAL_GROUPID,"hasoutput","ProcessWatchRunner: Hat Output",""),		
+		HASFILTERFOUND(iSTATUSLOCAL_GROUPID,"hasfilterfound","ProcessWatchRunner: Processoutput enthaelt aktuell den Filter",""),
+				
+		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isstopped","ProcessWatchRunner: Beendet",""),
+		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","ProcessWatchRunner: Fehler","");
 			
 		private int iStatusGroupId;
 		private String sAbbreviation,sStatusMessage,sDescription;

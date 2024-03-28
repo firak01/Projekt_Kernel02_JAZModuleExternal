@@ -13,6 +13,7 @@ import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.ProcessWatchRunnerZZZ;
 import basic.zKernel.status.StatusLocalAvailableHelperZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
+import debug.zBasic.util.moduleExternal.log.watch.LogFileWatchListener_RunnerExampleZZZ;
 import debug.zBasic.util.moduleExternal.process.create.ProcessCreateMockRunnerZZZ;
 
 /** In dieser Klasse wird ein LogFile von dem einen Thread erzeugt 
@@ -55,7 +56,11 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 			System.out.println("###    der einfach nur am ProcessWatchRunner registiert ist   ###");
 			System.out.println("#################################################################");
 		
-											
+								
+			//0. Schritt: Bereite den Listener vor, der als Beispiel für einen einfachen Listener fungiert.
+		    ProcessWatchListener_RunnerExampleZZZ objListener = new ProcessWatchListener_RunnerExampleZZZ();
+			
+			
 			//Starte den Thread für den Process und seine Ausgaben.
 			//TODOGOON: 
 			//Momentan sind das nur Zähler-Ausgaben.
@@ -88,15 +93,16 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 		    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
 		    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()
 		    		         };
-			ProcessWatchRunnerZZZ objWatcher = new ProcessWatchRunnerZZZ(objProcess, sFilterSentence,saFlag);			
-			TODOGOON20240310;
-			ArrayList<IEnumSetMappedStatusZZZ> col = StatusLocalAvailableHelperZZZ.getEnumMappedList(objWatcher);
+			ProcessWatchRunnerZZZ objWatcher = new ProcessWatchRunnerZZZ(objProcess, sFilterSentence,saFlag);						
+			ArrayList<IEnumSetMappedStatusZZZ> col = StatusLocalAvailableHelperZZZ.searchEnumMappedList(objWatcher);
+			
+			System.out.println("TODOGOON20240310");
 			
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
-			//objWatcher.registerForStatusLocalEvent(objListener);//Registriere den Monitor nun am ProcessWatchRunner
+			objWatcher.registerForStatusLocalEvent(objListener);//Registriere den Monitor nun am ProcessWatchRunner
 				
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Creator daran.
-			//objWatcher.registerForStatusLocalEvent((IListenerObjectStatusLocalZZZ) objCreator);//Registriere den Creator nun am ProcessWatchRunner
+			objWatcher.registerForStatusLocalEvent(objCreator);//Registriere den Creator nun am ProcessWatchRunner
 				
 			//3. Starte die Programme. Jedes erzeugt seinen eigenen Thread.
 		    objWatcher.startAsThread();

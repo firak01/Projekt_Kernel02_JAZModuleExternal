@@ -275,9 +275,9 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				if(bHasError) break;//das wäre dann ein von mir selbst erzeugter Fehler, der nicht im STDERR auftaucht.
 				
 				this.writeOutputToLogPLUSanalyse();		//Man muss wohl erst den InputStream abgreifen, damit der Process weiterlaufen kann.				
-				boolean bHasConnection = this.getStatusLocal(ProcessWatchRunnerZZZ.STATUSLOCAL.HASCONNECTION);
-				if(bHasConnection) {
-					sLog = "Connection wurde erstellt.";
+				boolean bHasFilerFound = this.getStatusLocal(ProcessWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND);
+				if(bHasFilerFound) {
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter wurde gefunden.";
 					this.logProtocolString(sLog);
 					if(this.getFlag(IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
 						sLog = "Filter gefunden... Gemaess Flag, beende.";
