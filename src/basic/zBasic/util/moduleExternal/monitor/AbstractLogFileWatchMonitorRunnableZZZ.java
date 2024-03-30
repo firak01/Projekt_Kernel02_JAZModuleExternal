@@ -6,12 +6,15 @@ import java.util.HashMap;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.AbstractProgramMonitorRunnableZZZ;
+import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.EventObject4LogFileWatchMonitorStatusLocalZZZ;
 import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
+import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 
 /**Beachte: Es wird ILogFileWatchMonitorZZZ implementiert
  *          und nicht etwa ein ILogFileWatchMonitorRunnableZZZ.
@@ -128,6 +131,49 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		return this.proofFlagSetBefore(objEnumFlag.name());
 	}
 	
+	//####################################################
+	//### FLAG aus IWatchListenerZZZ
+	//####################################################
+	@Override
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+		return this.getFlag(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean setFlag(IWatchListenerZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
+		return this.setFlag(objEnumFlag.name(), bFlagValue);
+	}
+
+	@Override
+	public boolean[] setFlag(IWatchListenerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
+		boolean[] baReturn=null;
+		main:{
+			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+				baReturn = new boolean[objaEnumFlag.length];
+				int iCounter=-1;
+				for(IWatchListenerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+					iCounter++;
+					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+					baReturn[iCounter]=bReturn;
+				}
+			}
+		}//end main:
+		return baReturn;
+	}
+
+	@Override
+	public boolean proofFlagExists(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean proofFlagSetBefore(IWatchListenerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+	
+		
+	
+	//#########################################################################
 	//####################################
 	//### STATUS: ILogFileWatchMonitorRunanbleZZZ
 	//####################################
@@ -241,31 +287,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte
 		//       und der Event wird ggfs. geworfen...
 		this.offerStatusLocalEnum(enumStatus, bStatusValue, sStatusMessageToSet);
-		
-		
-		
-		//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
-		//Dann erzeuge den Event und feuer ihn ab.	
-//		if(this.getSenderStatusLocalUsed()==null) {
-//			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") would like to fire event '" + enumStatus.getAbbreviation() + "', but no objEventStatusLocalBroker available, any registered?";
-//			this.logProtocolString(sLog);		
-//			break main;
-//		}
-//		
-//		//Erzeuge fuer das Enum einen eigenen Event. Die daran registrierten Klassen koennen in einer HashMap definieren, ob der Event fuer sie interessant ist.		
-//		sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") - Erzeuge Event fuer '" + sStatusName + "', StatusValue='"+bStatusValue+"', StatusMessage='"+sStatusMessage+"'";		
-//		this.logProtocolString(sLog);
-//		IEventObject4LogFileWatchMonitorStatusLocalZZZ event = new EventObject4LogFileWatchMonitorStatusLocalZZZ(this,enumStatus, bStatusValue);			
-//		
-//		//### GGFS. noch weitere benoetigte Objekte hinzufuegen............
-//		//...
-//		
-//				
-//		//Feuere den Event ueber den Broker ab.
-//		sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") - Fires event fuer '" + sStatusName + "'";
-//		this.logProtocolString(sLog);
-//		this.getSenderStatusLocalUsed().fireEvent(event);
-				
+					
 		bFunction = true;				
 	}	// end main:
 	return bFunction;

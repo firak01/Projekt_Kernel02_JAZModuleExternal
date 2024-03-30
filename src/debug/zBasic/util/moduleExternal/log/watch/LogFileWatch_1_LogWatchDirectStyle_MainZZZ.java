@@ -6,13 +6,16 @@ import base.files.DateiUtil;
 import base.io.IoUtil;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.IConstantZZZ;
+import basic.zBasic.IObjectWithStatusZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.LogFileWatchRunnerZZZ;
 import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
+import basic.zKernel.status.ISenderObjectStatusLocalUserZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
 import debug.zBasic.util.moduleExternal.log.create.LogFileCreateRunnerMockZZZ;
 
@@ -106,7 +109,8 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 		    File objLogFile = new File(sFilePath);
 			
 			//0. Schritt: Bereite den Listener vor, der als Beispiel für einen einfachen Listener fungiert.
-		    LogFileWatchListener_RunnerExampleZZZ objListener = new LogFileWatchListener_RunnerExampleZZZ();
+		    String[]saFlagExample= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
+		    LogFileWatchListener_ExampleZZZ objListener = new LogFileWatchListener_ExampleZZZ(saFlagExample);
 			
 		   
 			//1. Schritt: Mache den Log Creator
@@ -116,7 +120,7 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 			
 			
 			File objSourceFile = new File(sSourceFilePathTotalDefault); 
-			String[]saFlagCreate= {ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
+			String[]saFlagCreate= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
 			LogFileCreateRunnerMockZZZ objCreator = new LogFileCreateRunnerMockZZZ(objSourceFile, objLogFile, saFlagCreate);
 			
 			//2. Schritt: Mache den Log Watcher mit dem "Reaktionsstring".
@@ -128,7 +132,10 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 		    	//sFilterSentence = "local_port";
 		    }
 			
-		    String[]saFlag= {IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
+		    String[]saFlag= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
+		    				 ISenderObjectStatusLocalUserZZZ.FLAGZ.SEND_ONLY_STATUSVALUE_TRUE.name(),
+		    				 IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
+		    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()};
 			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence,saFlag);			
 			
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						

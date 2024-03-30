@@ -18,6 +18,7 @@ import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.ProcessWatchRunnerZZZ;
@@ -196,8 +197,10 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 						//if(this.getFlag(IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)) { //Merke: Es wird ein Status gesetzt und dann ein Event geworfen (auch an andere registrierte Objekte) und dann abgebrochen.
 						
 						//Hier wird sofort abgebrochen. Es wird also nicht auf das Setzen von REQUEST_STOP per Event gewartet.
-						if(this.getFlag(IWatchRunnerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)){
-							sLog = "Filter gefunden... Gemaess Flag '" + IWatchRunnerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
+						//Das kann z.B. bei dem "Direkten" Test auch nicht erfolgen.
+						if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)|
+						   this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
+							sLog = "Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
 							this.logProtocolString(sLog);
 							this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
 						}
@@ -389,6 +392,46 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	
 	
 	//###############################
+	//### FLAG aus: IWatchListenerZZZ
+	//###############################
+	@Override
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+		return this.getFlag(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean setFlag(IWatchListenerZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
+		return this.setFlag(objEnumFlag.name(), bFlagValue);
+	}
+
+	@Override
+	public boolean[] setFlag(IWatchListenerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
+		boolean[] baReturn=null;
+		main:{
+			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+				baReturn = new boolean[objaEnumFlag.length];
+				int iCounter=-1;
+				for(IWatchListenerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+					iCounter++;
+					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+					baReturn[iCounter]=bReturn;
+				}
+			}
+		}//end main:
+		return baReturn;
+	}
+
+	@Override
+	public boolean proofFlagExists(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean proofFlagSetBefore(IWatchListenerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+	
+	//###############################
 	//### FLAG HANDLING aus: ILogFileWatchRunnerZZZ
 	//###############################
 	@Override
@@ -428,8 +471,9 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 		return this.proofFlagExists(objEnumFlag.name());
 	}
 	
+	
 	//###############################
-	//### FLAG HANDLING II aus: IStatusLocalMessageUserZZZ
+	//### FLAG aus: IStatusLocalMessageUserZZZ
 	//###############################
 	@Override
 	public boolean getFlag(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag) {

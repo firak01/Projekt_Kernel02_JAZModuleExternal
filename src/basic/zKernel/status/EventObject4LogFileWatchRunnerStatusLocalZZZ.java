@@ -2,8 +2,8 @@ package basic.zKernel.status;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ.STATUSLOCAL;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
-import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
 
 
 /** 
@@ -35,10 +35,5 @@ public class EventObject4LogFileWatchRunnerStatusLocalZZZ  extends AbstractEvent
 		super(source,objStatusEnum,bStatusValue);		
 	}
 
-	//### Aus Interface
-	@Override
-	public STATUSLOCAL getStatusEnum() {
-		return (STATUSLOCAL) this.getStatusLocal();
-	}
 }
 

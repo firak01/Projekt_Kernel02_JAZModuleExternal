@@ -20,17 +20,13 @@ import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
-import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
-import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
+import basic.zBasic.util.moduleExternal.process.create.IProcessCreateRunnerZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.IEventObjectStatusBasicZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
-import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 
 /**Diese Klasse erzeugt laaangsam, Zeile fuer Zeile eine Log-Datei.
  * Der Inhalt der Log-Datei kommt aus einer anderen Dummy-Log-Datei, die fest im Projekt als Beispiel vorliegt.
@@ -144,7 +140,7 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 			this.logProtocolString(sLog);
 			
-			if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
+			if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
 				bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
 			}
 						
@@ -313,6 +309,8 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
+			if(!bStatusValue)break main;
+			
 			String sLog;
 	
 			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
@@ -354,4 +352,45 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 		return hmReturn;
 		
 	}
+	
+	//###############################
+	//### FLAG HANDLING AUS: IWatchListenerZZZ
+	//###############################
+	@Override
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+		return this.getFlag(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean setFlag(IWatchListenerZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
+		return this.setFlag(objEnumFlag.name(), bFlagValue);
+	}
+
+	@Override
+	public boolean[] setFlag(IWatchListenerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
+		boolean[] baReturn=null;
+		main:{
+			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+				baReturn = new boolean[objaEnumFlag.length];
+				int iCounter=-1;
+				for(IWatchListenerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+					iCounter++;
+					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+					baReturn[iCounter]=bReturn;
+				}
+			}
+		}//end main:
+		return baReturn;
+	}
+
+	@Override
+	public boolean proofFlagExists(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean proofFlagSetBefore(IWatchListenerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+	
 }

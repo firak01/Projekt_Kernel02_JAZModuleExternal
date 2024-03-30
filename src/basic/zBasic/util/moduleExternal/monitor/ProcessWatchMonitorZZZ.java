@@ -694,7 +694,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			//Merke: Reine Lokale Statuswerte kommen nicht aus einem Event und werden daher nicht gemapped. 			
 			hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.ISSTARTED, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSSTARTED);
 			hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.HASOUTPUT, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSOUTPUT);
-			hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.HASCONNECTION, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSCONNECTION);
+			hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSCONNECTION);
 			
 			hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSSTOPPED);
 			hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR, IServerThreadProcessWatchMonitorOVPN.STATUSLOCAL.HASPROCESSERROR);
@@ -755,9 +755,31 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		return bReturn;
 	}
 
+
 	@Override
-	public HashMap createHashMapStatusLocalReactionCustom() {
+	public boolean isEventRelevant2ChangeStatusLocalByStatusLocalValue(IEventObjectStatusLocalZZZ eventStatusLocal)
+			throws ExceptionZZZ {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public HashMap createHashMapStatusLocal4ReactionCustom() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus,
+			boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		
+		main:{
+			if(!bStatusValue)break main;
+		
+		
+		}
+	
+		// TODO Auto-generated method stub
+		return false;
 	}
 }//END class

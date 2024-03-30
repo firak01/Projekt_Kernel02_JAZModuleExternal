@@ -9,9 +9,10 @@ import basic.zBasic.component.IProgramMonitorZZZ;
 import basic.zBasic.component.IProgramMonitorZZZ.FLAGZ;
 import basic.zBasic.component.IProgramMonitorZZZ.STATUSLOCAL;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 
 
-public interface ILogFileWatchMonitorZZZ{
+public interface ILogFileWatchMonitorZZZ extends IWatchListenerZZZ{
 	public File getLogFile();
 	public void setLogFile(File objFile);
 	

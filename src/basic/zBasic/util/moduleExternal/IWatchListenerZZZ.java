@@ -1,24 +1,19 @@
-package basic.zBasic.util.moduleExternal.log.watch;
-
-import java.io.File;
-import java.util.EnumSet;
+package basic.zBasic.util.moduleExternal;
 
 import basic.zBasic.ExceptionZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
-import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 
-public interface ILogFileWatchRunnerZZZ extends IWatchRunnerZZZ {
-	public File getLogFileWatched();
-	public void setLogFileWatched(File objFile);
+public interface IWatchListenerZZZ {
+	
 	
 	//##############################################################	
 	
 	public enum FLAGZ{
-		DUMMY
+		DUMMY,END_ON_FILTER_FOUND,IMMIDIATE_END_ON_FILTER_FOUND
 	}
 	boolean getFlag(FLAGZ objEnumFlag);
 	boolean setFlag(FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ;
 	boolean[] setFlag(FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ;
 	boolean proofFlagExists(FLAGZ objEnumFlag) throws ExceptionZZZ;
 	boolean proofFlagSetBefore(FLAGZ objEnumFlag) throws ExceptionZZZ;
+	
 }

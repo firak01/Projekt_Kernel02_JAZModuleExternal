@@ -11,6 +11,7 @@ import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.component.IProgramZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
@@ -84,7 +85,7 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 			this.logProtocolString(sLog);
 			
-			if(this.getFlag(ILogFileWatchMonitorRunnableZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
+			if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
 				if(bStatusValue) {//nur im true Fall
 					bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
 				}
@@ -290,9 +291,11 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 	@Override
 	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
-		main:{
+		main:{			
+			if(!bStatusValue)break main;
+			
 			String sLog;
-	
+			
 			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
 			if(!StringZZZ.isEmpty(sAction)) {
 				switch(sAction) {

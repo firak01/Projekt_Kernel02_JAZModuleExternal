@@ -2,40 +2,21 @@ package debug.zBasic.util.moduleExternal.process.create;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.HashMap;
-
-import org.apache.commons.io.IOUtils;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZZ;
-import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningZZZ;
-import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
-import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.ICreateRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
-import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
-import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zBasic.util.moduleExternal.process.create.AbstractProcessCreateRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.create.IProcessCreateRunnerZZZ;
-import basic.zBasic.util.moduleExternal.process.watch.ProcessWatchRunnerZZZ;
-import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.IEventObjectStatusBasicZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
-import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 
 /**Diese Klasse erzeugt laaangsam, Zeile fuer Zeile eine Log-Datei.
  * Der Inhalt der Log-Datei kommt aus einer anderen Dummy-Log-Datei, die fest im Projekt als Beispiel vorliegt.
@@ -456,9 +437,11 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	}
 	
 	@Override
-	public boolean reactOnStatusLocalEventCustomAction(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
+			if(!bStatusValue)break main;
+			
 			String sLog;
 	
 			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
@@ -531,7 +514,4 @@ TCP connection established with [AF_INET]192.168.3.116:4999
     public static Class getEnumStatusLocalClass(){    	
     	return STATUSLOCAL.class;    	
     }
-
-
-	
 }

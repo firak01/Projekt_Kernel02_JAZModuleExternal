@@ -241,6 +241,8 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
+			if(!bStatusValue) break main;
+			
 			String sLog;
 	
 			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
@@ -264,5 +266,4 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 	}//end main:
 	return bReturn;	
 	}
-
 }//END class

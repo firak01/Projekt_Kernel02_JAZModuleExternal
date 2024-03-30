@@ -6,13 +6,16 @@ import base.files.DateiUtil;
 import base.io.IoUtil;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.IConstantZZZ;
+import basic.zBasic.IObjectWithStatusZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.LogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.LogFileWatchMonitorZZZ;
+import basic.zKernel.status.ISenderObjectStatusLocalUserZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerOnMonitorListeningZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
 import debug.zBasic.util.moduleExternal.log.create.LogFileCreateRunnerMockOnMonitorListeningZZZ;
@@ -134,7 +137,7 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 			
 			
 			File objSourceFile = new File(sSourceFilePathTotalDefault); 
-			String[]saFlagCreate= {ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
+			String[]saFlagCreate= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
 			LogFileCreateRunnerMockOnMonitorListeningZZZ objCreator = new LogFileCreateRunnerMockOnMonitorListeningZZZ(objSourceFile, objLogFile, saFlagCreate);
 			
 			//2. Mache den Log Watcher mit dem "Reaktionsstring".
@@ -145,7 +148,10 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 		    	sFilterSentence = "Peer Connection Initiated with";
 		    	//sFilterSentence = "local_port";
 		    }
-		    String[]saFlag= {IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
+		    String[]saFlag= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
+		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.SEND_ONLY_STATUSVALUE_TRUE.name(),
+		    		 IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
+    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()};
 			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence, saFlag);			
 			
 			
@@ -154,7 +160,10 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 					//	Jetzt wird der CreatorThread und der LogFileWatch thread am monitor registriert.
 					//	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUEST_STOP gesetzt.
 					//  Damit werden auch die anderen Threads angehalten.
-		    String[] saFlagMonitor = {IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};		    
+		    String[] saFlagMonitor = {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
+		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.SEND_ONLY_STATUSVALUE_TRUE.name(),
+		    		 IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
+    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()};
 		    LogFileWatchMonitorZZZ objMonitor = new LogFileWatchMonitorZZZ(objLogFile);//, sFilterSequence, saFlagMonitor);
 		    
 		    //4. Schritt: Statt im Konstruktor des Monitors alles zu definieren...

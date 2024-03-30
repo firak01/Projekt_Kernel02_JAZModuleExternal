@@ -10,6 +10,7 @@ import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorRunnableZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
@@ -96,8 +97,8 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 				this.logProtocolString(sLog);
 				
-				if(this.getFlag(IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)|
-				   this.getFlag(IWatchRunnerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)	) {
+				if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)|
+				   this.getFlag(IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)	) {
 					if(bStatusValue) {//nur im true Fall
 						bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
 					}
@@ -342,9 +343,10 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ{
 			boolean bReturn = false;
 			main:{
+				if(!bStatusValue)break main;
+				
 				String sLog;
-			
-			
+		
 				//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
 				if(!StringZZZ.isEmpty(sAction)) {
 					switch(sAction) {

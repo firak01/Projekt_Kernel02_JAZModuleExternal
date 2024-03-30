@@ -10,6 +10,7 @@ import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
@@ -133,7 +134,7 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue='"+bStatusValue+"', EventMessage='" + sStatusMessage +"'";
 				this.logProtocolString(sLog);
 				
-				if(this.getFlag(ILogFileWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ.END_ON_FILTERFOUND)) {
+				if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
 					bReturn = this.doStop(enumStatus, bStatusValue, sStatusMessage);
 				}
 			}//end main
@@ -214,6 +215,8 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ{
 			boolean bReturn = false;
 			main:{
+				if(!bStatusValue)break main;
+				
 				String sLog;
 			
 			
@@ -237,5 +240,45 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		
 		}//end main:
 		return bReturn;		
+	}
+
+	//####################################################
+	//### FLAG aus IWatchListenerZZZ
+	//####################################################
+	@Override
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+		return this.getFlag(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean setFlag(IWatchListenerZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
+		return this.setFlag(objEnumFlag.name(), bFlagValue);
+	}
+
+	@Override
+	public boolean[] setFlag(IWatchListenerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
+		boolean[] baReturn=null;
+		main:{
+			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+				baReturn = new boolean[objaEnumFlag.length];
+				int iCounter=-1;
+				for(IWatchListenerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+					iCounter++;
+					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+					baReturn[iCounter]=bReturn;
+				}
+			}
+		}//end main:
+		return baReturn;
+	}
+
+	@Override
+	public boolean proofFlagExists(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean proofFlagSetBefore(IWatchListenerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
 	}
 }

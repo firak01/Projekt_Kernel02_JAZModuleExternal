@@ -9,11 +9,13 @@ import basic.zBasic.IConstantZZZ;
 import basic.zBasic.IObjectWithStatusZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.ProcessWatchRunnerZZZ;
+import basic.zKernel.status.ISenderObjectStatusLocalUserZZZ;
 import basic.zKernel.status.StatusLocalAvailableHelperZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
-import debug.zBasic.util.moduleExternal.log.watch.LogFileWatchListener_RunnerExampleZZZ;
+import debug.zBasic.util.moduleExternal.log.watch.LogFileWatchListener_ExampleZZZ;
 import debug.zBasic.util.moduleExternal.process.create.ProcessCreateMockRunnerZZZ;
 
 /** In dieser Klasse wird ein LogFile von dem einen Thread erzeugt 
@@ -58,7 +60,7 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 		
 								
 			//0. Schritt: Bereite den Listener vor, der als Beispiel für einen einfachen Listener fungiert.
-		    ProcessWatchListener_RunnerExampleZZZ objListener = new ProcessWatchListener_RunnerExampleZZZ();
+		    ProcessWatchListener_ExampleZZZ objListener = new ProcessWatchListener_ExampleZZZ();
 			
 			
 			//Starte den Thread für den Process und seine Ausgaben.
@@ -75,7 +77,7 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 			File objSourceFile = new File(sSourceFilePathTotalDefault);
 			
 			//TODOGOON: Demnaechst mit einem File als Quelle der Ausgabe
-			String[]saFlagCreate= {ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
+			String[]saFlagCreate= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
 			ProcessCreateMockRunnerZZZ objCreator = new ProcessCreateMockRunnerZZZ();
 			objCreator.createProcessByBatchCustom();
 			
@@ -89,10 +91,12 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 		    }
 			
 		    Process objProcess = objCreator.getProcess();
-		    String[]saFlag= {IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
+		    String[]saFlag= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
 		    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
-		    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()
+		    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name(),
+		    		         ISenderObjectStatusLocalUserZZZ.FLAGZ.SEND_ONLY_STATUSVALUE_TRUE.name()
 		    		         };
+		    
 			ProcessWatchRunnerZZZ objWatcher = new ProcessWatchRunnerZZZ(objProcess, sFilterSentence,saFlag);						
 			ArrayList<IEnumSetMappedStatusZZZ> col = StatusLocalAvailableHelperZZZ.searchEnumMappedList(objWatcher);
 			
