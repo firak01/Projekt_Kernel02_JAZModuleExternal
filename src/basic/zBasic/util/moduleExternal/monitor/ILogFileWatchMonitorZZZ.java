@@ -44,6 +44,9 @@ public interface ILogFileWatchMonitorZZZ{
 		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ZZZ: LogFileWatchMonitor gestartet",""),
 		ISSTARTNO(iSTATUSLOCAL_GROUPID,"isstartno","ZZZ: LogFileWatchMonitor nicht gestartet",""),
 
+		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isstopped","ZZZ: LogFileWatchMonitor beendet",""),		
+		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","ZZZ: LogFileWatchMonitor meldet Fehler",""),
+		
 		HASLOGFILEWATCHRUNNERSTARTNEW(iSTATUSLOCAL_GROUPID,"haslogfilewatchrunnerstartnew","ZZZ: LogFileWatchRunner nicht gestartet",""),
 		HASLOGFILEWATCHRUNNERSTARTING(iSTATUSLOCAL_GROUPID,"haslogfilewatchrunnerstarting","ZZZ: LogFileWatchRunner startet",""),
 		HASLOGFILEWATCHRUNNERSTARTED(iSTATUSLOCAL_GROUPID,"haslogfilewatchrunnerstarted","ZZZ: LogFileWatchRunner gestartet",""),
@@ -52,11 +55,9 @@ public interface ILogFileWatchMonitorZZZ{
 		HASLOGFILEWATCHRUNNERFILTERFOUND(iSTATUSLOCAL_GROUPID,"haslogfilewatchrunnerfilterfound","ZZZ: LogFileWatchRunner hat Filterwert gefunden",""),
 		
 		HASLOGFILEWATCHRUNNERERROR(iSTATUSLOCAL_GROUPID,"haslogfilewatchrunnererror","ZZZ: LogFileWatchRunner meldet Fehler",""),
-		HASLOGFILEWATCHRUNNERSTOPPED(iSTATUSLOCAL_GROUPID,"haslogfilewatchrunnerstopped","ZZZ: LogFileWatchRunner gestoppt",""),
+		HASLOGFILEWATCHRUNNERSTOPPED(iSTATUSLOCAL_GROUPID,"haslogfilewatchrunnerstopped","ZZZ: LogFileWatchRunner gestoppt","");
 		
-		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isstopped","OVPN: Monitor beendet",""),
 				
-		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","ZZZ: LogFileWatchMonitor meldet Fehler","");		
 		
 		private int iStatusGroupId;
 		private String sAbbreviation,sStatusMessage,sDescription;

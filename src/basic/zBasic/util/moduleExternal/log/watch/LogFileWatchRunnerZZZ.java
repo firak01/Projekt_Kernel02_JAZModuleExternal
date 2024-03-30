@@ -1,5 +1,6 @@
 package basic.zBasic.util.moduleExternal.log.watch;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.util.HashMap;
 
@@ -9,6 +10,8 @@ import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
+import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
+import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorRunnableZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.EventObject4LogFileWatchRunnerStatusLocalZZZ;
@@ -84,6 +87,25 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		}//end main
 		return bReturn;
 	}
+	
+	//Methode wird in der ReactionHashMap angegeben....
+		public boolean doFilterFound(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+			boolean bReturn = false;
+			main:{
+				
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+				this.logProtocolString(sLog);
+				
+				if(this.getFlag(IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)|
+				   this.getFlag(IWatchRunnerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)	) {
+					if(bStatusValue) {//nur im true Fall
+						bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+					}
+				}
+							
+			}//end main
+			return bReturn;
+		}
 	
 	
 	//#### GETTER / SETTER
@@ -200,32 +222,9 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 			this.logProtocolString(sLog);
 		}
 		//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte...
+		//       und es wird ein Event erzeugt und ggfs. wird an registrierte Listener der Event geworfen.
 		this.offerStatusLocalEnum(enumStatus, bStatusValue, sStatusMessageToSet);
-		
-		
-		
-		//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
-		//Dann erzeuge den Event und feuer ihn ab.	
-		if(this.getSenderStatusLocalUsed()==null) {
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "Would like to fire event '" + enumStatus.getAbbreviation() + "', but no objEventStatusLocalBroker available, any registered?";
-			this.logProtocolString(sLog);		
-			break main;
-		}
-		
-		//Erzeuge fuer das Enum einen eigenen Event. Die daran registrierten Klassen koennen in einer HashMap definieren, ob der Event fuer sie interessant ist.		
-		sLog = ReflectCodeZZZ.getPositionCurrent() + "Erzeuge Event fuer '" + sStatusName + "', bValue='"+ bStatusValue + "', sMessage='"+sStatusMessage+"'";
-		this.logProtocolString(sLog);
-		IEventObject4LogFileWatchRunnerStatusLocalZZZ event = new EventObject4LogFileWatchRunnerStatusLocalZZZ(this,enumStatus, bStatusValue);			
-		
-		//### GGFS. noch weitere benoetigte Objekte hinzufuegen............
-		//...
-		
-				
-		//Feuere den Event ueber den Broker ab.
-		sLog = ReflectCodeZZZ.getPositionCurrent() + "Fires event '" + enumStatus.getAbbreviation() + "'";
-		this.logProtocolString(sLog);
-		this.getSenderStatusLocalUsed().fireEvent(event);
-				
+
 		bFunction = true;				
 	}	// end main:
 	return bFunction;
@@ -324,6 +323,14 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	public HashMap<IEnumSetMappedStatusZZZ, String>createHashMapStatusLocal4ReactionCustom() {
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
+		//Merke:
+		//Sich selbst daran zu registrieren macht im Grunde nur bei einem Monitor Sinn.
+		//hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
+		
+		//Das würde nur Sinn machen, wenn z.B. am Monitor mehrere LogFileWatchRunner registriert sind
+		//Dann könnte dieser LogFileWatchRunner auch beendet werden, wenn einer der anderen seinen Filterwert gefunden hat.		
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASLOGFILEWATCHRUNNERFILTERFOUND,"doFilterFound");
+		
 		//Reagiere auf diee Events... mit dem angegebenen Alias.
 		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
 		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR, "doStop");
@@ -332,7 +339,7 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	}
 	
 	@Override
-	public boolean reactOnStatusLocalEventCustomAction(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ{
+	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ{
 			boolean bReturn = false;
 			main:{
 				String sLog;
@@ -343,7 +350,10 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 					switch(sAction) {
 					case "doStop":
 						bReturn = doStop(enumStatus, bStatusValue, sStatusMessage);	
-						break;				
+						break;	
+					case "doFilterFound":
+						bReturn = this.doFilterFound(enumStatus, bStatusValue, sStatusMessage);		
+						break;
 					default:
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
 						this.logProtocolString(sLog);

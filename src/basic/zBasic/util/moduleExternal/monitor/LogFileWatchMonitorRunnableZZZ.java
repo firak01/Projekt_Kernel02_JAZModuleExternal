@@ -24,6 +24,7 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 
 	public LogFileWatchMonitorRunnableZZZ() throws ExceptionZZZ{
 		super();				
+		ProcessWatchMonitorNew_(null, null);
 	}
 	
 	public LogFileWatchMonitorRunnableZZZ(File objFile) throws ExceptionZZZ{
@@ -84,7 +85,9 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 			this.logProtocolString(sLog);
 			
 			if(this.getFlag(ILogFileWatchMonitorRunnableZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
-				bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+				if(bStatusValue) {//nur im true Fall
+					bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+				}
 			}
 						
 		}//end main
@@ -174,7 +177,7 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 					if( bStopRequested) {
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "Breche Schleife ab.";
 						this.logProtocolString(sLog);
-						break main;
+						break;
 					}
 					
                    
@@ -193,6 +196,7 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 					//System.out.println("FGLTEST03");					
 				}//end while
 					
+                //Ganz wichtig ist es nun noch die anderen Programme ueber das Ende des Monitors zu informieren. Sonst laufen die weiter.
 				this.setStatusLocal(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED,true);
 				this.logLineDate(ReflectCodeZZZ.getPositionCurrent() + "LogFileWatchRunner ended.");
 				
@@ -250,10 +254,21 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
 		//Reagiere auf diee Events... mit dem angegebenen Alias.
-		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
-		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR, "doStop");
+		//Merke: anders als beim Beispiel mit der direkten Verbindung von Creator zu WatchRunner wird hier der Status des Monitors verwendet.
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASLOGFILEWATCHRUNNERFILTERFOUND,"doFilterFound");
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASLOGFILEWATCHRUNNERSTOPPED,"doStop");
 		
-		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
+		
+		//und den "Monitor beendet" Event, bzw. Fehler
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
+		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR, "doStop");
+				
+		
+		
+//		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
+//		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR, "doStop");
+//		
+//		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
 				
 		return hmReturn;
 	}
@@ -273,7 +288,7 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 	
 
 	@Override
-	public boolean reactOnStatusLocalEventCustomAction(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
 			String sLog;

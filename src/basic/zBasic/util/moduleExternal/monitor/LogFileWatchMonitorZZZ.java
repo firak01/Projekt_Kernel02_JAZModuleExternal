@@ -238,7 +238,7 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 	}
 
 	@Override
-	public boolean reactOnStatusLocalEventCustomAction(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
 			String sLog;

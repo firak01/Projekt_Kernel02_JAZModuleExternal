@@ -7,6 +7,7 @@ import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
+import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.STATUSLOCAL;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
@@ -148,8 +149,33 @@ public class LogFileWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 	}
 
 	@Override
-	public boolean reactOnStatusLocalEventCustomAction(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		// TODO Auto-generated method stub
 		return false;
+		
+//		boolean bReturn = false;
+//		main:{
+//			String sLog;
+//	
+//			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
+//			if(!StringZZZ.isEmpty(sAction)) {
+//				switch(sAction) {
+//				case "doStop":
+//					bReturn = this.doStop(enumStatus, bStatusValue, sStatusMessage);	
+//					break;
+//				case "doFilterFound":
+//					bReturn = this.doFilterFound(enumStatus, bStatusValue, sStatusMessage);		
+//					break;
+//				default:
+//					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
+//					this.logProtocolString(sLog);
+//				}
+//			}else {
+//				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
+//				this.logProtocolString(sLog);
+//			}
+//	
+//	}//end main:
+//	return bReturn;	
 	}
 }

@@ -84,12 +84,13 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 				long lcounter = 0;
 				do {
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) {
+						System.out.println(ReflectCodeZZZ.getPositionCurrent() +": Stop requested by Flag at LoopCounter=" + lcounter);						
 						break main;
 					}
 
 					lcounter++;
 					
-					System.out.println(ReflectCodeZZZ.getPositionCurrent() +": Running waiting for Request_stop-Flag. (" + lcounter +")");
+					System.out.println(ReflectCodeZZZ.getPositionCurrent() +": Running waiting for Request_stop-Flag. LoopCountr=" + lcounter);
 					Thread.sleep(5000);
 					
 				}while(true);
@@ -129,7 +130,7 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		public boolean doFilterFound(IEnumSetMappedZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 			boolean bReturn = false;
 			main:{				
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue='"+bStatusValue+"', EventMessage='" + sStatusMessage +"'";
 				this.logProtocolString(sLog);
 				
 				if(this.getFlag(ILogFileWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ.END_ON_FILTERFOUND)) {
@@ -210,7 +211,7 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	}
 
 	@Override
-	public boolean reactOnStatusLocalEventCustomAction(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ{
+	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ{
 			boolean bReturn = false;
 			main:{
 				String sLog;

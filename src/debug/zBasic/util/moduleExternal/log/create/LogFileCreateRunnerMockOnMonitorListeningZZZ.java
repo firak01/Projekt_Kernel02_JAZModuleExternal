@@ -110,7 +110,9 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 			this.logProtocolString(sLog);
 			
 			if(this.getFlag(ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
-				bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+				if(bStatusValue) {//nur im true Fall
+					bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+				}
 			}
 		}//end main
 		return bReturn;
@@ -358,19 +360,25 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	public HashMap<IEnumSetMappedStatusZZZ, String> createHashMapStatusLocal4ReactionCustom() {
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
-		//Den Monitor "Filter Found" Event verwenden
+		//Reagiere auf diee Events... mit dem angegebenen Alias.
 		//Merke: anders als beim Beispiel mit der direkten Verbindung von Creator zu WatchRunner wird hier der Status des Monitors verwendet.
 		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASLOGFILEWATCHRUNNERFILTERFOUND,"doFilterFound");
 				
 		//und den "Monitor beendet" Event, bzw. Fehler
 		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
 		hmReturn.put(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR, "doStop");
+		
+//		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
+//		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR, "doStop");
+//		
+//		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
+		
 			
 		return hmReturn;
 	}
 
 	@Override
-	public boolean reactOnStatusLocalEventCustomAction(String sAction, IEnumSetMappedStatusZZZ enumStatus,		boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus,		boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
 			String sLog;

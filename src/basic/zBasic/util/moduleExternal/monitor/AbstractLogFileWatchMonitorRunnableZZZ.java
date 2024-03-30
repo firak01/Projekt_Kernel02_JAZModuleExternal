@@ -238,32 +238,33 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+")  setzt sStatusMessageToSet='" + sStatusMessageToSet + "'";
 			this.logProtocolString(sLog);
 		}
-		//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte...
+		//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte
+		//       und der Event wird ggfs. geworfen...
 		this.offerStatusLocalEnum(enumStatus, bStatusValue, sStatusMessageToSet);
 		
 		
 		
 		//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
 		//Dann erzeuge den Event und feuer ihn ab.	
-		if(this.getSenderStatusLocalUsed()==null) {
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") would like to fire event '" + enumStatus.getAbbreviation() + "', but no objEventStatusLocalBroker available, any registered?";
-			this.logProtocolString(sLog);		
-			break main;
-		}
-		
-		//Erzeuge fuer das Enum einen eigenen Event. Die daran registrierten Klassen koennen in einer HashMap definieren, ob der Event fuer sie interessant ist.		
-		sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") - Erzeuge Event fuer '" + sStatusName + "'";		
-		this.logProtocolString(sLog);
-		IEventObject4LogFileWatchMonitorStatusLocalZZZ event = new EventObject4LogFileWatchMonitorStatusLocalZZZ(this,enumStatus, bStatusValue);			
-		
-		//### GGFS. noch weitere benoetigte Objekte hinzufuegen............
-		//...
-		
-				
-		//Feuere den Event ueber den Broker ab.
-		sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") - Fires event '" + enumStatus.getAbbreviation() + "'";
-		this.logProtocolString(sLog);
-		this.getSenderStatusLocalUsed().fireEvent(event);
+//		if(this.getSenderStatusLocalUsed()==null) {
+//			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") would like to fire event '" + enumStatus.getAbbreviation() + "', but no objEventStatusLocalBroker available, any registered?";
+//			this.logProtocolString(sLog);		
+//			break main;
+//		}
+//		
+//		//Erzeuge fuer das Enum einen eigenen Event. Die daran registrierten Klassen koennen in einer HashMap definieren, ob der Event fuer sie interessant ist.		
+//		sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") - Erzeuge Event fuer '" + sStatusName + "', StatusValue='"+bStatusValue+"', StatusMessage='"+sStatusMessage+"'";		
+//		this.logProtocolString(sLog);
+//		IEventObject4LogFileWatchMonitorStatusLocalZZZ event = new EventObject4LogFileWatchMonitorStatusLocalZZZ(this,enumStatus, bStatusValue);			
+//		
+//		//### GGFS. noch weitere benoetigte Objekte hinzufuegen............
+//		//...
+//		
+//				
+//		//Feuere den Event ueber den Broker ab.
+//		sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") - Fires event fuer '" + sStatusName + "'";
+//		this.logProtocolString(sLog);
+//		this.getSenderStatusLocalUsed().fireEvent(event);
 				
 		bFunction = true;				
 	}	// end main:

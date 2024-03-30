@@ -11,8 +11,6 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 	public Process getProcessWatched();
 	public void setProcessWatched(Process objProcess);
 		
-	TODOGOON20240328;//Diese Methoden in ein Interface IWatchRunnerZZZ packen und dann auch vom FileWatchRunner implementieren
-	public abstract boolean analyseInputLineCustom(String sLine) throws ExceptionZZZ;
 	public abstract boolean writeErrorToLog()throws ExceptionZZZ;
 	public abstract boolean writeErrorToLogWithStatus()throws ExceptionZZZ;
 	

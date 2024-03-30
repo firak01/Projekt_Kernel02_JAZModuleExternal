@@ -149,7 +149,7 @@ public class ProcessWatchListener_RunnerExampleZZZ extends AbstractObjectWithFla
 	}
 
 	@Override
-	public boolean reactOnStatusLocalEventCustomAction(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -135,8 +135,35 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractProgramWithS
 	public void setProcessWatched(Process objProcess) {
 		this.objProcess = objProcess;
 	}
+		
+	@Override
+	public boolean writeErrorToLog() throws ExceptionZZZ{
+		boolean bReturn = false;
+		main:{			
+			try{
+				check:{
+					if(this.objProcess==null){
+						ExceptionZZZ ez = new ExceptionZZZ("Process-Object", iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+						throw ez;
+					}
+				}//END check:
+			   		
+			    BufferedReader err = new BufferedReader(new InputStreamReader(objProcess.getErrorStream()) );
+			    for ( String s; (s = err.readLine()) != null; ){				    
+			    	this.logProtocolString("ERROR: "+ s);			
+			    	if( this.getFlag("stoprequested")==true) break main;
+				}
+			} catch (IOException e) {
+				ExceptionZZZ ez = new ExceptionZZZ("IOException happend: '" + e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+				throw ez;
+			}
+			bReturn = true;
+		}//END Main:	
+		return bReturn;
+	}
 	
-	
+	//#############################################
+	//### asu IWatchRunnerZZZ
 	/** In dieser Methode werden die Ausgabezeilen eines Batch-Prozesses ( cmd.exe ) 
 	 *  aus dem Standard - Output gelesen.
 	 *  - Sie werden in das Kernel-Log geschrieben.
@@ -194,13 +221,13 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 		main:{
 			try{
 				String sLog;
-				check:{
-					Process objProcess = this.getProcessWatched();
-					if(objProcess==null){
-						ExceptionZZZ ez = new ExceptionZZZ("Process-Object", iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
-						throw ez;
-					}
-				}//END check:
+				
+				Process objProcess = this.getProcessWatched();
+				if(objProcess==null){
+					ExceptionZZZ ez = new ExceptionZZZ("Process-Object", iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+					throw ez;
+				}
+				
 			
 				BufferedReader in = new BufferedReader( new InputStreamReader(objProcess.getInputStream()) );
 				for ( String s; (s = in.readLine()) != null; ){
@@ -224,39 +251,15 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 		}//END main:
 	}
 
-	//MErke: Die genaue Analyse muss im konkreten Process Watch Runner gemacht werden.
+	//Merke: Die genaue Analyse muss im konkreten Process Watch Runner gemacht werden.
 	@Override
-	public abstract boolean analyseInputLineCustom(String sLine) throws ExceptionZZZ;
+	public abstract boolean analyseInputLineCustom(String sLine, String sLineFilter) throws ExceptionZZZ;
 
 
+
 	
-	@Override
-	public boolean writeErrorToLog() throws ExceptionZZZ{
-		boolean bReturn = false;
-		main:{			
-			try{
-				check:{
-					if(this.objProcess==null){
-						ExceptionZZZ ez = new ExceptionZZZ("Process-Object", iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
-						throw ez;
-					}
-				}//END check:
-			   		
-			    BufferedReader err = new BufferedReader(new InputStreamReader(objProcess.getErrorStream()) );
-			    for ( String s; (s = err.readLine()) != null; ){				    
-			    	this.logProtocolString("ERROR: "+ s);			
-			    	if( this.getFlag("stoprequested")==true) break main;
-				}
-			} catch (IOException e) {
-				ExceptionZZZ ez = new ExceptionZZZ("IOException happend: '" + e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
-				throw ez;
-			}
-			bReturn = true;
-		}//END Main:	
-		return bReturn;
-	}
-	
-	
+
+	//#############################################
 	@Override
 	public boolean startCustom() throws ExceptionZZZ {
 		return startProcessWatch_();
@@ -279,7 +282,8 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				if(bHasFilerFound) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter wurde gefunden.";
 					this.logProtocolString(sLog);
-					if(this.getFlag(IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
+					if(this.getFlag(IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)|
+					   this.getFlag(IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
 						sLog = "Filter gefunden... Gemaess Flag, beende.";
 						this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
 					}

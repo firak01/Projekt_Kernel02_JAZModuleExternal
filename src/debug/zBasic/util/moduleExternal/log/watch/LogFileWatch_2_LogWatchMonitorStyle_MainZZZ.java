@@ -154,7 +154,7 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 					//	Jetzt wird der CreatorThread und der LogFileWatch thread am monitor registriert.
 					//	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUEST_STOP gesetzt.
 					//  Damit werden auch die anderen Threads angehalten.
-		    //String[] saFlagMonitor = {ILogFileWatchRunnerMonitorZZZ.FLAGZ.END_ON_FILTERFOUND.name()};		    
+		    String[] saFlagMonitor = {IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};		    
 		    LogFileWatchMonitorZZZ objMonitor = new LogFileWatchMonitorZZZ(objLogFile);//, sFilterSequence, saFlagMonitor);
 		    
 		    //4. Schritt: Statt im Konstruktor des Monitors alles zu definieren...

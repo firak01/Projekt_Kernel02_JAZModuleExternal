@@ -143,16 +143,30 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 			String[]saFlagCreate= {ILogFileCreateRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
 			LogFileCreateRunnerMockOnMonitorListeningZZZ objCreator = new LogFileCreateRunnerMockOnMonitorListeningZZZ(objSourceFile, objLogFile, saFlagCreate);
 			
-			//2. Mache den Log Watcher mit dem "Reaktionsstring".
-		    String sFilterSentence;    
+			//2a. Mache den Log Watcher 01 mit dem "Reaktionsstring".
+		    String sFilterSentence01;    
 		    if (args.length > 1) {
-		    	sFilterSentence = (args[1]);
+		    	sFilterSentence01 = (args[1]);
 		    }else{    	    
-		    	sFilterSentence = "Peer Connection Initiated with";
-		    	//sFilterSentence = "local_port";
+		    	sFilterSentence01 = "Peer Connection Initiated with";		    	
 		    }
-		    String[]saFlag= {IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};		    
-			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence, saFlag);			
+		    
+		    String[]saFlag01= {IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};		    
+		    //String[]saFlag= {IWatchRunnerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name()};
+			LogFileWatchRunnerZZZ objWatcher01 = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence01, saFlag01);			
+			
+			//2b. Mache den Log Watcher 02 mit dem "Reaktionsstring".
+			 String sFilterSentence02;    
+			    if (args.length > 2) {
+			    	sFilterSentence02 = (args[2]);
+			    }else{    	    
+			    	sFilterSentence02 = "local_port";;
+			    }
+			    
+			    String[]saFlag02= {IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};		    
+			    //String[]saFlag= {IWatchRunnerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name()};
+				LogFileWatchRunnerZZZ objWatcher02 = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence02, saFlag02);			
+				
 			
 			
 			//3. Schritt: Mache den Monitor
@@ -160,7 +174,7 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 					//	Jetzt wird der CreatorThread und der LogFileWatch thread am monitor registriert.
 					//	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUEST_STOP gesetzt.
 					//  Damit werden auch die anderen Threads angehalten.
-		    String[] saFlagMonitor = {ILogFileWatchMonitorRunnableZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};		    
+		    String[] saFlagMonitor = {ILogFileWatchMonitorRunnableZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};		    			
 		    LogFileWatchMonitorRunnableZZZ objMonitor = new LogFileWatchMonitorRunnableZZZ(objLogFile,saFlagMonitor);//, sFilterSequence, saFlagMonitor);
 		    
 		    //4. Schritt: Statt im Konstruktor des Monitors alles zu definieren...
@@ -170,7 +184,8 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 		                     //Wie Loesen.... z.B. objWatcher.getMain().getLogFile();
 		                     //IDee: Schaue auf OVPN Projekt und IMain - Pattern.
 		    //Merke: Beim Übergeben der Objekte an den Monitor... diese dabei sofort am Monitor registrieren....
-		    objMonitor.addProgram(objWatcher);
+		    objMonitor.addProgram(objWatcher01);
+		    objMonitor.addProgram(objWatcher02);
 		    objMonitor.addProgram(objCreator);
 		    
 			//Registriere auch den Beispiellistener am Monitor, der dann quasi auf die Events des Monitors reagieren kann.

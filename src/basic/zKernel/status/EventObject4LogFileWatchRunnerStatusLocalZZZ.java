@@ -28,7 +28,7 @@ public class EventObject4LogFileWatchRunnerStatusLocalZZZ  extends AbstractEvent
 	}
 	
 	public EventObject4LogFileWatchRunnerStatusLocalZZZ(Object source,  Enum objEnum, String sStatusText, boolean bStatusValue) throws ExceptionZZZ {
-		super(source,sStatusText,bStatusValue);
+		super(source,objEnum, sStatusText,bStatusValue);
 	}
 	
 	public EventObject4LogFileWatchRunnerStatusLocalZZZ(Object source, STATUSLOCAL objStatusEnum, boolean bStatusValue) throws ExceptionZZZ {
