@@ -189,6 +189,9 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 						this.logProtocolString(sLog);
 						
 						//... ein Event soll auch beim Setzen des passenden Flags erzeugt und geworfen werden.
+						
+						//20240331TODOGOON://Wird das Interface IWatchRunnerZZZ auch nach STATUSLOCAL durchsucht?
+						
 		        		this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND,true);
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
 						this.logProtocolString(sLog);

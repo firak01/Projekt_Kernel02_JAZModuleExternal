@@ -155,7 +155,7 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 		    }
 		    
 		    String[]saFlag01= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.SEND_ONLY_STATUSVALUE_TRUE.name()};		    
+		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()};		    
 		    //String[]saFlag01= {IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name()};
 			LogFileWatchRunnerZZZ objWatcher01 = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence01, saFlag01);			
 			
@@ -168,7 +168,7 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 			    }
 			    
 			    String[]saFlag02= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-			    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.SEND_ONLY_STATUSVALUE_TRUE.name()};			    
+			    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()};			    
 			    //String[]saFlag02= {IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name()};
 				LogFileWatchRunnerZZZ objWatcher02 = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence02, saFlag02);			
 				
@@ -180,7 +180,7 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 					//	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUEST_STOP gesetzt.
 					//  Damit werden auch die anderen Threads angehalten.
 		    String[] saFlagMonitor = {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.SEND_ONLY_STATUSVALUE_TRUE.name()};
+		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()};
 		    LogFileWatchMonitorRunnableZZZ objMonitor = new LogFileWatchMonitorRunnableZZZ(objLogFile,saFlagMonitor);//, sFilterSequence, saFlagMonitor);
 		    
 		    //4. Schritt: Statt im Konstruktor des Monitors alles zu definieren...

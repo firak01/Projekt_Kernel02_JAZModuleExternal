@@ -145,91 +145,91 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	//+++ OFFER STATUS LOCAL, alle Varianten, gecasted auf dieses Objekt
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
-	@Override
-	public boolean offerStatusLocal(Enum enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
-		boolean bFunction = false;
-		main:{
-			if(enumStatusIn==null) break main;
-			
-			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
-			
-			bFunction = this.offerStatusLocal_(enumStatus, "", bStatusValue);				
-		}//end main;
-		return bFunction;
-	}
-	
-	
-	@Override
-	public boolean offerStatusLocal(Enum enumStatusIn, String sStatusMessage, boolean bStatusValue) throws ExceptionZZZ {
-		boolean bFunction = false;
-		main:{
-			if(enumStatusIn==null) break main;
-			
-			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
-			
-			bFunction = this.offerStatusLocal_(enumStatus, sStatusMessage, bStatusValue);				
-		}//end main;
-		return bFunction;
-	}
-	
-	private boolean offerStatusLocal_(Enum enumStatusIn, String sStatusMessage, boolean bStatusValue) throws ExceptionZZZ {
-		boolean bFunction = false;
-		main:{
-			if(enumStatusIn==null) break main;
-			
-		
-			//Merke: In anderen Klassen, die dieses Design-Pattern anwenden ist das eine andere Klasse fuer das Enum
-			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
-			String sStatusName = enumStatus.name();
-			bFunction = this.proofStatusLocalExists(sStatusName);															
-			if(!bFunction) {
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Would like to fire event, but this status is not available: '" + sStatusName + "'";
-				this.logProtocolString(sLog);			
-				break main;
-			}
-			
-		bFunction = this.proofStatusLocalValueChanged(sStatusName, bStatusValue);
-		if(!bFunction) {
-			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Would like to fire event, but this status has not changed: '" + sStatusName + "'";
-			this.logProtocolString(sLog);
-			break main;
-		}	
-		
-		//++++++++++++++++++++	
-		//Setze den Status nun in die HashMap
-		HashMap<String, Boolean> hmStatus = this.getHashMapStatusLocal();
-		hmStatus.put(sStatusName.toUpperCase(), bStatusValue);
-		
-		//Den enumStatus als currentStatus im Objekt speichern...
-		//                   dito mit dem "vorherigen Status"
-		//Setze nun das Enum, und damit auch die Default-StatusMessage
-		String sStatusMessageToSet = null;
-		if(StringZZZ.isEmpty(sStatusMessage)){
-			if(bStatusValue) {
-				sStatusMessageToSet = enumStatus.getStatusMessage();
-			}else {
-				sStatusMessageToSet = "NICHT " + enumStatus.getStatusMessage();
-			}			
-		}else {
-			sStatusMessageToSet = sStatusMessage;
-		}
-		
-		String sLog = ReflectCodeZZZ.getPositionCurrent() + "Verarbeite sStatusMessageToSet='" + sStatusMessageToSet + "'";
-		this.logProtocolString(sLog);
-
-		//Falls eine Message extra uebergeben worden ist, ueberschreibe...
-		if(sStatusMessageToSet!=null) {
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "Setze sStatusMessageToSet='" + sStatusMessageToSet + "'";
-			this.logProtocolString(sLog);
-		}
-		//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte...
-		//       und es wird ein Event erzeugt und ggfs. wird an registrierte Listener der Event geworfen.
-		this.offerStatusLocalEnum(enumStatus, bStatusValue, sStatusMessageToSet);
-
-		bFunction = true;				
-	}	// end main:
-	return bFunction;
-	}
+//	@Override
+//	public boolean offerStatusLocal(Enum enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
+//		boolean bFunction = false;
+//		main:{
+//			if(enumStatusIn==null) break main;
+//			
+//			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
+//			
+//			bFunction = this.offerStatusLocal_(enumStatus, "", bStatusValue);				
+//		}//end main;
+//		return bFunction;
+//	}
+//	
+//	
+//	@Override
+//	public boolean offerStatusLocal(Enum enumStatusIn, String sStatusMessage, boolean bStatusValue) throws ExceptionZZZ {
+//		boolean bFunction = false;
+//		main:{
+//			if(enumStatusIn==null) break main;
+//			
+//			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
+//			
+//			bFunction = this.offerStatusLocal_(enumStatus, sStatusMessage, bStatusValue);				
+//		}//end main;
+//		return bFunction;
+//	}
+//	
+//	private boolean offerStatusLocal_(Enum enumStatusIn, String sStatusMessage, boolean bStatusValue) throws ExceptionZZZ {
+//		boolean bFunction = false;
+//		main:{
+//			if(enumStatusIn==null) break main;
+//			
+//		
+//			//Merke: In anderen Klassen, die dieses Design-Pattern anwenden ist das eine andere Klasse fuer das Enum
+//			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
+//			String sStatusName = enumStatus.name();
+//			bFunction = this.proofStatusLocalExists(sStatusName);															
+//			if(!bFunction) {
+//				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Would like to fire event, but this status is not available: '" + sStatusName + "'";
+//				this.logProtocolString(sLog);			
+//				break main;
+//			}
+//			
+//		bFunction = this.proofStatusLocalValueChanged(sStatusName, bStatusValue);
+//		if(!bFunction) {
+//			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Would like to fire event, but this status has not changed: '" + sStatusName + "'";
+//			this.logProtocolString(sLog);
+//			break main;
+//		}	
+//		
+//		//++++++++++++++++++++	
+//		//Setze den Status nun in die HashMap
+//		HashMap<String, Boolean> hmStatus = this.getHashMapStatusLocal();
+//		hmStatus.put(sStatusName.toUpperCase(), bStatusValue);
+//		
+//		//Den enumStatus als currentStatus im Objekt speichern...
+//		//                   dito mit dem "vorherigen Status"
+//		//Setze nun das Enum, und damit auch die Default-StatusMessage
+//		String sStatusMessageToSet = null;
+//		if(StringZZZ.isEmpty(sStatusMessage)){
+//			if(bStatusValue) {
+//				sStatusMessageToSet = enumStatus.getStatusMessage();
+//			}else {
+//				sStatusMessageToSet = "NICHT " + enumStatus.getStatusMessage();
+//			}			
+//		}else {
+//			sStatusMessageToSet = sStatusMessage;
+//		}
+//		
+//		String sLog = ReflectCodeZZZ.getPositionCurrent() + "Verarbeite sStatusMessageToSet='" + sStatusMessageToSet + "'";
+//		this.logProtocolString(sLog);
+//
+//		//Falls eine Message extra uebergeben worden ist, ueberschreibe...
+//		if(sStatusMessageToSet!=null) {
+//			sLog = ReflectCodeZZZ.getPositionCurrent() + "Setze sStatusMessageToSet='" + sStatusMessageToSet + "'";
+//			this.logProtocolString(sLog);
+//		}
+//		//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte...
+//		//       und es wird ein Event erzeugt und ggfs. wird an registrierte Listener der Event geworfen.
+//		this.offerStatusLocalEnum(enumStatus, bStatusValue, sStatusMessageToSet);
+//
+//		bFunction = true;				
+//	}	// end main:
+//	return bFunction;
+//	}
 	
 	
 	
