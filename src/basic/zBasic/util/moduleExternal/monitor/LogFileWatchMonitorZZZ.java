@@ -36,6 +36,11 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 		super();		
 		ProcessWatchMonitorNew_(null, saFlagControl);
 	}
+	
+	public LogFileWatchMonitorZZZ(File objFile, String[] saFlagControl) throws ExceptionZZZ{
+		super();		
+		ProcessWatchMonitorNew_(objFile, saFlagControl);
+	}
 
 	private void ProcessWatchMonitorNew_(File objFile, String[] saFlagControl) throws ExceptionZZZ{
 	main:{	
