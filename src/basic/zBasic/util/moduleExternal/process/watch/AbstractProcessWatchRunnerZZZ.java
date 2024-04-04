@@ -31,6 +31,7 @@ import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringArrayZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zKernel.IKernelZZZ;
@@ -282,8 +283,8 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				if(bHasFilerFound) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter wurde gefunden.";
 					this.logProtocolString(sLog);
-					if(this.getFlag(IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)|
-					   this.getFlag(IWatchRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
+					if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)|
+					   this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
 						sLog = "Filter gefunden... Gemaess Flag, beende.";
 						this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
 					}
