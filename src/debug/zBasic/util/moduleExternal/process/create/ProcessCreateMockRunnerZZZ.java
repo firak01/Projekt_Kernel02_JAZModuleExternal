@@ -35,6 +35,10 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 		super();		
 	}
 
+	public ProcessCreateMockRunnerZZZ(String[] saFlag) throws ExceptionZZZ {
+		super(saFlag);		
+	}
+	
 	public ProcessCreateMockRunnerZZZ(File objSourceFile, Process objProcess) throws ExceptionZZZ {
 		super(objSourceFile,objProcess);	
 		ProcessCreateMockNew_();
@@ -67,7 +71,7 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 			
 			//Falls notwendig, starte den Process
 			//ansonsten beobachte in einer Schleife die FLAGZ und beende ggfs. den Process per Batch und "KILLEN"
-			this.controlProcessByBatchCustom();
+			bReturn = this.controlProcessByBatchCustom();
 
 		}//end main:
 		return bReturn;
@@ -113,7 +117,8 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 		boolean bReturn = false;
 		main:{
 			if(this.getProcess()==null) {
-				this.createProcessByBatchCustom();
+				Process objProcess = this.createProcessByBatchCustom();
+				this.setProcess(objProcess);
 			}
 			
 			
@@ -362,7 +367,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					//this.getLogObject().WriteLine(this.getNumber() +"#"+ s);
 					//this.setStatusLocal(IProcessWatchRunnerOVPN.STATUSLOCAL.HASOUTPUT, true);
 					
-					s="gelesen aus InputStream: '" + s + "'";
+					s=ReflectCodeZZZ.getPositionCurrent() + "gelesen aus InputStream: '" + s + "'";
 					
 					this.logProtocolString(s);
 					boolean bAny = this.analyseInputLineCustom(s);

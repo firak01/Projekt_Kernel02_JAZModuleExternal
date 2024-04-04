@@ -1,21 +1,14 @@
 package debug.zBasic.util.moduleExternal.process.watch;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.IConstantZZZ;
 import basic.zBasic.IObjectWithStatusZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
-import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.ProcessWatchRunnerZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalUserZZZ;
-import basic.zKernel.status.StatusLocalAvailableHelperZZZ;
-import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
-import debug.zBasic.util.moduleExternal.log.watch.LogFileWatchListener_ExampleZZZ;
 import debug.zBasic.util.moduleExternal.process.create.ProcessCreateMockRunnerZZZ;
 
 /** In dieser Klasse wird ein LogFile von dem einen Thread erzeugt 
@@ -78,8 +71,8 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 			
 			//TODOGOON: Demnaechst mit einem File als Quelle der Ausgabe
 			String[]saFlagCreate= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
-			ProcessCreateMockRunnerZZZ objCreator = new ProcessCreateMockRunnerZZZ();
-			objCreator.createProcessByBatchCustom();
+			ProcessCreateMockRunnerZZZ objCreator = new ProcessCreateMockRunnerZZZ(saFlagCreate);
+			Process objProcess = objCreator.createProcessByBatchCustom();
 			
 			//2. Schritt: Mache den Log Watcher mit dem "Reaktionsstring".
 		    String sFilterSentence;    
@@ -90,7 +83,6 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 		    	//sFilterSentence = "local_port";
 		    }
 			
-		    Process objProcess = objCreator.getProcess();
 		    String[]saFlag= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
 		    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
 		    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name(),
@@ -98,10 +90,7 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 		    		         };
 		    
 			ProcessWatchRunnerZZZ objWatcher = new ProcessWatchRunnerZZZ(objProcess, sFilterSentence,saFlag);						
-			ArrayList<IEnumSetMappedStatusZZZ> col = StatusLocalAvailableHelperZZZ.searchEnumMappedList(objWatcher);
-			
-			System.out.println("TODOGOON20240310");
-			
+						
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
 			objWatcher.registerForStatusLocalEvent(objListener);//Registriere den Monitor nun am ProcessWatchRunner
 				
@@ -112,14 +101,10 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 		    objWatcher.startAsThread();
 			objCreator.startAsThread();
 		    
-		    
-			
 		    //Damit ohne einen Watcher auch etwas auf der Konsole ausgegeben wird
 			Thread.sleep(1000);
 			//objCreator.debugWriteOutputToLogPLUSanalyse();
-			
-		    
-		    
+		
 //			try {
 //				Thread.sleep(50000);
 //				catch (InterruptedException e) {					

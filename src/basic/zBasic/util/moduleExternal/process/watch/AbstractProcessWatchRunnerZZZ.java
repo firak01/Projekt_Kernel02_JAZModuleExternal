@@ -11,6 +11,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
+
 import base.files.EncodingMaintypeZZZ.TypeZZZ;
 import basic.zKernel.KernelZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
@@ -137,34 +139,9 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractProgramWithS
 		this.objProcess = objProcess;
 	}
 		
-	@Override
-	public boolean writeErrorToLog() throws ExceptionZZZ{
-		boolean bReturn = false;
-		main:{			
-			try{
-				check:{
-					if(this.objProcess==null){
-						ExceptionZZZ ez = new ExceptionZZZ("Process-Object", iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
-						throw ez;
-					}
-				}//END check:
-			   		
-			    BufferedReader err = new BufferedReader(new InputStreamReader(objProcess.getErrorStream()) );
-			    for ( String s; (s = err.readLine()) != null; ){				    
-			    	this.logProtocolString("ERROR: "+ s);			
-			    	if( this.getFlag("stoprequested")==true) break main;
-				}
-			} catch (IOException e) {
-				ExceptionZZZ ez = new ExceptionZZZ("IOException happend: '" + e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
-				throw ez;
-			}
-			bReturn = true;
-		}//END Main:	
-		return bReturn;
-	}
-	
+		
 	//#############################################
-	//### asu IWatchRunnerZZZ
+	//### aus IWatchRunnerZZZ
 	/** In dieser Methode werden die Ausgabezeilen eines Batch-Prozesses ( cmd.exe ) 
 	 *  aus dem Standard - Output gelesen.
 	 *  - Sie werden in das Kernel-Log geschrieben.
@@ -218,30 +195,64 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	 * @throws ExceptionZZZ
 	 * @author Fritz Lindhauer, 03.09.2023, 07:35:31
 	 */
-	public void writeOutputToLogPLUSanalyse() throws ExceptionZZZ{	
-		main:{
-			try{
-				String sLog;
+	@Override
+	public boolean writeOutputToLogPLUSanalyse(int iLineCounter, String sLine, String sLineFilter) throws ExceptionZZZ{	
+		boolean bReturn = false;
+		main:{									
+				if(StringZZZ.isEmpty(sLine)) break main;
 				
-				Process objProcess = this.getProcessWatched();
-				if(objProcess==null){
-					ExceptionZZZ ez = new ExceptionZZZ("Process-Object", iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+				if(StringZZZ.isEmpty(sLineFilter)){
+					ExceptionZZZ ez = new ExceptionZZZ("LineFilter-String", iERROR_PARAMETER_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
 					throw ez;
 				}
 				
-			
-				BufferedReader in = new BufferedReader( new InputStreamReader(objProcess.getInputStream()) );
-				for ( String s; (s = in.readLine()) != null; ){
-					sLog="gelesen aus InputStream: '" + s + "'";
-					this.logProtocolString(sLog);
-					this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASOUTPUT, true);
+				String sLog;
 				
-					boolean bAny = this.analyseInputLineCustom(s);
-														
-					Thread.sleep(20);
-					boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
-					if( bStopRequested) break main;
-				}								
+				//+++ Die Zeile ausgeben und analysieren					
+                sLog = ReflectCodeZZZ.getPositionCurrent() + "Gelesen aus InputStream - " + iLineCounter +"\t: '" + sLine + "'";
+                this.logProtocolString(sLog);
+               		
+				bReturn = this.analyseInputLineCustom(sLine, sLineFilter);												
+		}//END main:
+		return bReturn;
+	}
+	
+	@Override
+	public boolean writeErrorToLog(int iLineCounter, String sErrorLine) throws ExceptionZZZ{
+		boolean bReturn = false;
+		main:{								   		    
+			this.logProtocolString("ERROR: "+ sErrorLine);			
+			
+			bReturn = true;
+		}//END Main:	
+		return bReturn;
+	}
+	
+	@Override
+	public boolean writeErrorToLogWithStatus(Process objProcess) throws ExceptionZZZ{
+		boolean bReturn = false;
+		main:{			
+			try{
+				check:{
+					if(objProcess==null){
+						ExceptionZZZ ez = new ExceptionZZZ("Process-Object", iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+						throw ez;
+					}
+				}//END check:
+			   		
+				int icounter = 0;
+			    BufferedReader err = new BufferedReader(new InputStreamReader(objProcess.getErrorStream()) );			    
+			    for ( String s; (s = err.readLine()) != null; ){
+			    	if( this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)==true) break main;
+			    	
+			    	this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR, true);
+			    	
+			    	icounter++;
+			    	bReturn = this.writeErrorToLog(icounter, s);	
+			    	if(!bReturn)break main;
+			    	
+			    	Thread.sleep(20);
+				}
 			} catch (IOException e) {
 				ExceptionZZZ ez = new ExceptionZZZ("IOException happend: '" + e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
 				throw ez;
@@ -249,12 +260,57 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				ExceptionZZZ ez = new ExceptionZZZ("InterruptedException happend: '"+ e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
 				throw ez;
 			}
-		}//END main:
+			bReturn = true;
+		}//END Main:	
+		return bReturn;
 	}
+	
+
+	@Override
+	public boolean writeErrorToLogWithStatus(int iLineCounter, String sErrorLine) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{			
+			try{
+				bReturn = this.writeErrorToLog(iLineCounter, sErrorLine);
+				if(!bReturn)break main;
+			   		
+				this.setStatusLocal(IWatchRunnerZZZ.STATUSLOCAL.HASERROR, true);
+		    	Thread.sleep(20);
+
+			} catch (InterruptedException e) {
+				ExceptionZZZ ez = new ExceptionZZZ("InterruptedException happend: '"+ e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+				throw ez;
+			}
+			bReturn = true;
+		}//END Main:	
+		return bReturn;
+	}	
+
 
 	//Merke: Die genaue Analyse muss im konkreten Process Watch Runner gemacht werden.
+	//Merke: Die eine ggfs. von diesem Einfachsten Fall abweichende, genauere Analyse muss ggfs. im konkreten LogFile Watch Runner gemacht werden.
 	@Override
-	public abstract boolean analyseInputLineCustom(String sLine, String sLineFilter) throws ExceptionZZZ;
+	public boolean analyseInputLineCustom(String sLine, String sLineFilter) throws ExceptionZZZ {
+		boolean bReturn = false; //true, wenn der Filter gefunden wurde
+		main:{
+			if(StringZZZ.isEmpty(sLineFilter)) break main;
+					
+			sLine = StringZZZ.trimAnyQuoteMarked(sLine);
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + " " +"\t: ObjectWithStatusRunnable ("+this.getClass().getName()+") analysierte Zeile: + '" + sLine + "'";
+    		this.logProtocolString(sLog);
+    		
+			if(StringZZZ.isEmpty(sLine)) break main;
+			
+		
+			if(StringZZZ.contains(sLine, sLineFilter)) {
+        		sLog = ReflectCodeZZZ.getPositionCurrent() + " " +"\t: ObjectWithStatusRunnable ("+this.getClass().getName()+") hat Zeilenfilter gefunden: '" + sLineFilter + "'";
+        		this.logProtocolString(sLog);
+        		
+        		bReturn = true;
+			}       			
+		}//end main:
+		return bReturn;
+	}
 
 
 
@@ -269,85 +325,119 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	private boolean startProcessWatch_() throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
+			String sLog;
+			BufferedReader brin = null;
 			try {
-			String sLog = "ProcessWatchRunner started.";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") ProcessWatchRunner started.";
 			this.logLineDate(sLog);
 			
-			//Solange laufen, bis ein Fehler auftritt oder eine Verbindung erkannt wird.
-			do{							
+			String sLineFilter = this.getLineFilter();
+			if(StringZZZ.isEmpty(sLineFilter)) {
+				ExceptionZZZ ez = new ExceptionZZZ("ObjectWithStatusRunnable ("+this.getClass().getName()+"): Keine Zeilenfilter gesetzt.", this.iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+				throw ez;
+			}
+			
+			//Warte auf die Existenz einer auszulesenden Datei ist nicht notwendig.
+			//... hier wird mit einem Process gearbeitet.
+						
+			Process objProcess = this.getProcessWatched();
+			brin = new BufferedReader(new InputStreamReader(objProcess.getInputStream()) );
+			if(!brin.ready()){
+				ExceptionZZZ ez = new ExceptionZZZ("BufferdReader-Object not ready", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+				throw ez;
+			}
+			
+			//Merke: Darin ist ene Endlosschleife
+			int icount=0;
+			String sLine;
+			
+			do{
+				//Solange laufen, bis ein Fehler auftritt oder ein Filter erkannt wird.
 				boolean bHasError = this.getStatusLocal(ProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR);
 				if(bHasError) break;//das wäre dann ein von mir selbst erzeugter Fehler, der nicht im STDERR auftaucht.
 				
-				this.writeOutputToLogPLUSanalyse();		//Man muss wohl erst den InputStream abgreifen, damit der Process weiterlaufen kann.				
-				boolean bHasFilerFound = this.getStatusLocal(ProcessWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND);
-				if(bHasFilerFound) {
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter wurde gefunden.";
+				if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
 					this.logProtocolString(sLog);
-					if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)|
-					   this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
-						sLog = "Filter gefunden... Gemaess Flag, beende.";
-						this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
-					}
+					break;
 				}
 				
-				//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
-				//Dann erzeuge den Event und feuer ihn ab.
-				//Merke: Nun aber ueber das enum			
-				if(this.getSenderStatusLocalUsed()!=null) {
-					//IEventObjectStatusLocalSetZZZ event = new EventObjectStatusLocalSetZZZ(this,1,ClientMainOVPN.STATUSLOCAL.ISCONNECTED, true);
-					//TODOGOON20230914: Woher kommt nun das Enum? Es gibt ja kein konkretes Beispiel
-					IEventObjectStatusLocalZZZ event = new EventObject4ProcessWatchStatusLocalZZZ(this,(ProcessWatchRunnerZZZ.STATUSLOCAL)null, true);
-					this.getSenderStatusLocalUsed().fireEvent(event);
-				}			
-			
-				//Nach irgendeiner Ausgabe enden ist hier falsch, in einer abstrakten Klasse vielleicht richtig, quasi als Muster.
-				//if(this.getFlag("hasOutput")) break;
-				Thread.sleep(10);
-
-				boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
-				if(bStopRequested) break;					
+				icount++;
+				sLine = brin.readLine();
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") gelesene Zeile: '" + sLine + "'";
+				this.logProtocolString(sLog);
+				if(!StringZZZ.isEmpty(sLine)) {
+               		this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASOUTPUT, true);
+               	}
+				
+				boolean bFilterFound = this.writeOutputToLogPLUSanalyse(icount, sLine, sLineFilter);		//Man muss wohl erst den InputStream abgreifen, damit der Process weiterlaufen kann.
+				if(bFilterFound) {
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter '" + sLineFilter + "' wurde gefunden in Zeile " + icount;
+					this.logProtocolString(sLog);
+					
+					//... ein Event soll auch beim Setzen des passenden Status erzeugt und geworfen werden.						
+	        		this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND,true);
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
+					this.logProtocolString(sLog);
+					
+					//Hier wird sofort abgebrochen. Es wird also nicht auf das Setzen von REQUEST_STOP per Event gewartet.
+					//Das kann z.B. bei dem "Direkten" Test auch nicht erfolgen.
+					if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)|
+					   this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
+						sLog = "Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
+						this.logProtocolString(sLog);
+						this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
+					}
+				
+					Thread.sleep(100);
+				}else{
+					//Entsprechend hier wieder den Filter verloren
+					//Einen Extra Event sollte man hier nicht erzeugen muessen. Den Status zu setzen sollte bereits einen entsprechenden Status Event abfeuern.
+					this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, false);	
+					
+				}//end bFilterFound	
+				
+				Thread.sleep(100);
 			}while(true);
-			this.setStatusLocal(ProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, true);
-			sLog = "ProcessWatchRunner ended.";
+			this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED,true);
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") ended.";
 			this.logProtocolString(sLog);
-						
-			bReturn = true;
-			}catch (InterruptedException e) {					
+			              	
+            bReturn = true;
+              
+			}catch (InterruptedException e) {
+				e.printStackTrace();
 				try {
-					String sLogIE = e.getMessage();
-					this.logProtocolString("An error happend: '" + sLogIE + "'");
-					this.writeErrorToLog();
+					this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") HASERROR Status gesetzt.";
+					this.logProtocolString(sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
 					e1.printStackTrace();
 				}
-				System.out.println(e.getMessage());
-				e.printStackTrace();
-			}
-
-		}//END main
-		return bReturn;
-	}
-	
-	@Override
-	public boolean writeErrorToLogWithStatus() throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{			
-			try{
-				bReturn = this.writeErrorToLog();
-				if(!bReturn)break main;
-			   		
-				this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR, true);
-		    	Thread.sleep(20);
-
-			} catch (InterruptedException e) {
 				ExceptionZZZ ez = new ExceptionZZZ("InterruptedException happend: '"+ e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
 				throw ez;
-			}
-			bReturn = true;
-		}//END Main:	
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+				try {
+					this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") HASERROR Status gesetzt.";
+					this.logProtocolString(sLog);
+				} catch (ExceptionZZZ e1) {
+					System.out.println(e1.getDetailAllLast());
+					e1.printStackTrace();
+				}
+				ExceptionZZZ ez = new ExceptionZZZ("IOException happend: '" + e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+				throw ez;
+			} finally {
+				if(brin!=null) {
+					IOUtils.closeQuietly(brin);
+				}
+	        }
+		}//END main
 		return bReturn;
-	}		
+	}	
 	
 	/**TODO Ich weiss noch garnicht, was ich senden soll und wie es gehen kann.
 	 * Ziel w�re es z.B. mit der Test F4 den Process herunterzufahren.
@@ -540,6 +630,44 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	
 	@Override
 	public boolean proofFlagSetBefore(IProgramRunnableZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+		return this.proofFlagSetBefore(objEnumFlag.name());
+	}	
+	
+	//##########################################
+	//### FLAG HANDLING: IWatchListenerZZZ
+	@Override
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+		return this.getFlag(objEnumFlag.name());
+	}
+	@Override
+	public boolean setFlag(IWatchListenerZZZ.FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
+		return this.setFlag(objEnumFlag.name(), bFlagValue);
+	}
+	
+	@Override
+	public boolean[] setFlag(IWatchListenerZZZ.FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
+		boolean[] baReturn=null;
+		main:{
+			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+				baReturn = new boolean[objaEnumFlag.length];
+				int iCounter=-1;
+				for(IWatchListenerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+					iCounter++;
+					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+					baReturn[iCounter]=bReturn;
+				}
+			}
+		}//end main:
+		return baReturn;
+	}
+	
+	@Override
+	public boolean proofFlagExists(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+			return this.proofFlagExists(objEnumFlag.name());
+		}
+	
+	@Override
+	public boolean proofFlagSetBefore(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.proofFlagSetBefore(objEnumFlag.name());
 	}	
 	

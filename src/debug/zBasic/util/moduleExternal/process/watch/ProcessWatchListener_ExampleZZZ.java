@@ -7,6 +7,7 @@ import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
+import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zBasic.util.moduleExternal.monitor.IProcessWatchMonitorZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ;
@@ -64,7 +65,8 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 			
 			//Wenn wir den Status nicht weitersenden, sondern direkt verarbeiten ist solch ein Mapping nicht notwendig.
 			//Also da wir mit objEnum als Variable weiterarbeiten wollen:
-			IProcessWatchRunnerZZZ.STATUSLOCAL objEnum = (STATUSLOCAL) enumStatus;
+			//IProcessWatchRunnerZZZ.STATUSLOCAL objEnum = (STATUSLOCAL) enumStatus;
+			IWatchRunnerZZZ.STATUSLOCAL objEnum = (basic.zBasic.util.moduleExternal.IWatchRunnerZZZ.STATUSLOCAL) enumStatus;
 			//++++++++++++++++++++##
 			
 			boolean bValue = eventStatusLocalSet.getStatusValue();
@@ -76,14 +78,14 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 //			boolean bHasConnection = objEnum.equals(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTION) && bValue;
 //			boolean bHasConnectionLost = objEnum.equals(IProcessWatchRunnerOVPN.STATUSLOCAL.HASCONNECTIONLOST) && bValue;
 		
-			boolean bEventHasError = objEnum.equals(STATUSLOCAL.HASERROR)&& bValue;
-			boolean bEventEnded = objEnum.equals(STATUSLOCAL.ISSTOPPED)&& bValue;
+			boolean bEventHasError = objEnum.equals(IWatchRunnerZZZ.STATUSLOCAL.HASERROR)&& bValue;
+			boolean bEventEnded = objEnum.equals(IWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED)&& bValue;
 			
 			//boolean bEventHasConnection = objEnum.equals(IClientMainOVPN.STATUSLOCAL.ISCONNECTED);
 			//boolean bEventHasConnectionLost = objEnum.equals(IClientMainOVPN.STATUSLOCAL.ISCONNECTINTERUPTED);
 			
 			
-			boolean bEventHasFilterFound = objEnum.equals(STATUSLOCAL.HASFILTERFOUND)&& bValue;
+			boolean bEventHasFilterFound = objEnum.equals(IWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND)&& bValue;
 				
 			//int iIndex = eventStatusLocalSet.getProcessID();
 			String sStatusMessage = eventStatusLocalSet.getStatusMessage();	

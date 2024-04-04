@@ -75,6 +75,20 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		}//end main:
 		return bReturn;
 	}
+	
+	//### Getter / Setter ########
+	
+	//##########################################################
+	//+++ aus IProcessWatchRunnerZZZ
+	@Override
+	public boolean analyseInputLineCustom(String sLine, String sLinefilter) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{				
+			sLine = StringZZZ.trimAnyQuoteMarked(sLine);
+			bReturn = super.analyseInputLineCustom(sLine, sLinefilter);			
+		}//end main
+		return bReturn;
+	}
 
 	//Methode wird in der ReactionHashMap angegeben....
 	public boolean doStop(IEnumSetMappedZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
@@ -124,8 +138,8 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		main:{
 			if(objEnumStatusIn==null) break main;
 			
-			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) objEnumStatusIn;
-			String sStatusName = enumStatus.name();
+			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) objEnumStatusIn;
+			String sStatusName = objEnumStatusIn.name();
 			if(StringZZZ.isEmpty(sStatusName)) break main;
 										
 			HashMap<String, Boolean> hmFlag = this.getHashMapStatusLocal();
@@ -242,9 +256,9 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		main:{
 			if(enumStatusIn==null) break main;
 			
-			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
+			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
 							
-			bFunction = this.offerStatusLocal(enumStatus, null, bStatusValue);
+			bFunction = this.offerStatusLocal(enumStatusIn, null, bStatusValue);
 		}//end main:
 		return bFunction;
 	}
@@ -258,9 +272,9 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		main:{
 			if(enumStatusIn==null) break main;
 
-			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
+			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
 			
-			bReturn = this.offerStatusLocal(enumStatus, null, bStatusValue);
+			bReturn = this.offerStatusLocal(enumStatusIn.getName(), null, bStatusValue);
 		}//end main:
 		return bReturn;
 	}
@@ -272,9 +286,9 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		main:{
 			if(enumStatusIn==null) break main;
 			
-			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
+			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
 			
-			bFunction = this.offerStatusLocal(enumStatus, sMessage, bStatusValue);
+			bFunction = this.offerStatusLocal(enumStatusIn.name(), sMessage, bStatusValue);
 		}//end main:
 		return bFunction;
 	}
@@ -285,9 +299,9 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		main:{
 			if(enumStatusIn==null) break main;
 			
-			LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
+			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
 			
-			bReturn = this.offerStatusLocal(enumStatus, sMessage, bStatusValue);
+			bReturn = this.offerStatusLocal(enumStatusIn.getName(), sMessage, bStatusValue);
 		}//end main:
 		return bReturn;
 	}				

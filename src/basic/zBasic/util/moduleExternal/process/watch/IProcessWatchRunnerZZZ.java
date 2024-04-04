@@ -10,10 +10,8 @@ import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 	public Process getProcessWatched();
 	public void setProcessWatched(Process objProcess);
-		
-	public abstract boolean writeErrorToLog()throws ExceptionZZZ;
-	public abstract boolean writeErrorToLogWithStatus()throws ExceptionZZZ;
-	
+			
+	public abstract boolean writeErrorToLogWithStatus(Process objProcess)throws ExceptionZZZ;
 	
 	public enum FLAGZ{
 		DUMMY

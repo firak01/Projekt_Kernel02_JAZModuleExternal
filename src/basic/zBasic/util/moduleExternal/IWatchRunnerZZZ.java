@@ -12,6 +12,9 @@ public interface IWatchRunnerZZZ extends IWatchListenerZZZ{
 	public abstract boolean analyseInputLineCustom(String sLine, String sLineFilter) throws ExceptionZZZ;
 	public abstract boolean writeOutputToLogPLUSanalyse(int iLineCounter, String sLine, String sLineFilter) throws ExceptionZZZ;	
 	
+	public abstract boolean writeErrorToLog(int iLineCounter, String sErrorLine) throws ExceptionZZZ;
+	public abstract boolean writeErrorToLogWithStatus(int iLineCounter, String sErrorLine)throws ExceptionZZZ;
+
 	//##############################################################	
 	
 	public enum FLAGZ{
