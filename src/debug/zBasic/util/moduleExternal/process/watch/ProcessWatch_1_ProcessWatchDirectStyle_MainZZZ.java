@@ -99,7 +99,7 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 				
 			//3. Starte die Programme. Jedes erzeugt seinen eigenen Thread.
 		    objWatcher.startAsThread();
-			objCreator.startAsThread();
+			objCreator.startAsThread();//Merke: Den so per Batch gestartetetn Java-Process kann man nicht per Eclipse "STOP" Button anhalten.
 		    
 		    //Damit ohne einen Watcher auch etwas auf der Konsole ausgegeben wird
 			Thread.sleep(1000);
@@ -133,6 +133,8 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 //	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUEST_STOP gesetzt.
 //  Damit werden auch die anderen Threads angehalten.
 			
+			
+			System.out.println("FERTIG");
 		 } catch (ExceptionZZZ e1) {
 			System.out.println(e1.getDetailAllLast());
 			e1.printStackTrace();

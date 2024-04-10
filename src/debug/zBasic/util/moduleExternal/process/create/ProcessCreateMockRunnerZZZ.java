@@ -12,6 +12,8 @@ import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
+import basic.zBasic.util.file.FileEasyZZZ;
+import basic.zBasic.util.file.IFileEasyConstantsZZZ;
 import basic.zBasic.util.moduleExternal.ICreateRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.create.AbstractProcessCreateRunnerZZZ;
@@ -146,11 +148,39 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 
 					
 					//Merke: Beim Starten der Batch, gibt es keine Fehlermeldung, fall die ueberhaupt nicht vorhanden ist. Es funktioniert halt nicht....
-					//auf dem Notebook der TUBAF String sDirectory = "C:\\HIS-Workspace\\1fgl\\repo\\EclipseOxygen\\Projekt_Kernel02_JAZModuleExternal\\src\\bat";
-					String sDirectory = "C:\\1fgl\\repo\\EclipseOxygen_V01\\Projekt_Kernel02_JAZModuleExternal\\src\\bat";
-					//String sDirectory = "\\src\\bat";
+					//auf dem Notebook der TUBAF:
+					//String sDirectory = "C:\\HIS-Workspace\\1fgl\\repo\\EclipseOxygen\\Projekt_Kernel02_JAZModuleExternal\\src\\bat";
+					//Workspase ist dort "Directory of Execution":  C:\HIS-Workspace\1fgl\repo\EclipseOxygen\Projekt_Kernel02_JAZModuleExternal
+					
+					//Sonstige Installationen:
+					//String sDirectory = "C:\\1fgl\\repo\\EclipseOxygen_V01\\Projekt_Kernel02_JAZModuleExternal\\src\\bat";
 					
 					
+										
+					//#################################################################################
+					//absolute Pfade
+					String sDirectory="";
+					if(FileEasyZZZ.isInIDE()) {
+						//den Pfad zum Workspace suchen und ggfs. noch zu den Java Quelldateien					
+						String sWorkspace = FileEasyZZZ.getFileRootPathAbsolute();
+						//String sWorkspace2 = FileEasyZZZ.getFileRootPathAbsolute();
+					    //String sWorkspace3 = FileEasyZZZ.getDirectoryOfSystemClassloaderAsString();					    
+						sLog = ReflectCodeZZZ.getPositionCurrent()+": Pfad zum Workspace, als Root fuer die Batch: '"+ sWorkspace +"'";						
+						this.logProtocolString(sLog);
+						
+						sDirectory = FileEasyZZZ.joinFilePathNameForWorkspace(sWorkspace, "bat");
+												
+					}else {
+						
+						//Falls in einer .jar Datei, dann muesste die Batch erst entpack werden
+						//alternativ ein fester Absoluter Pfad auf der Festplatte
+						
+						sLog = ReflectCodeZZZ.getPositionCurrent()+": Ausfuehrung nicht im Workspace, Pfad fuer die Batch fehlt !!!";						
+						this.logProtocolString(sLog);	
+						break main;
+					}
+					
+					//#################################################################################
 					//### DUMMY TEST #######
 					//Befüllt einen LogDatei
 					//String sCommandConcrete = sDirectory + "\\KernelZZZTest_ProcessStarter_Dummy.bat > c:\\fglkernel\\kernellog\\ProcessUsing_StarterLog.txt";
@@ -165,11 +195,18 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 					//String sCommandConcrete = sDirectory + "\\KernelZZZTest_ProcessStarter_DummyModuleExternalAsWindow.bat";
 					
 					//### Java als Thread runnable in Endlosschleife TEST: Starte die Java-Klasse direkt ######################
-					String sCommandConcrete = sDirectory + "\\KernelZZZTest_ProcessStarter_DummyModuleExternal.bat";
+					//String sFilepath = FileEasyZZZ.getFileUsedPathAbsolute("bat\\KernelZZZTest_ProcessStarter_DummyModuleExternal.bat");
 					
+					String sFilePathConcrete = FileEasyZZZ.joinFilePathName(sDirectory, "KernelZZZTest_ProcessStarter_DummyModuleExternal.bat");
+					
+					//Die Batch braucht dann noch den Pfad zum Workspace als Argument, damit die Java-Klasse gefunden werden kann.
+					String sDirectoryRootOfJavaExecution = FileEasyZZZ.getFileRootPathAbsoluteForExecutionJava();
+					String sCommandConcrete = "cmd /c " + sFilePathConcrete + " " + sDirectoryRootOfJavaExecution;
+					sLog = ReflectCodeZZZ.getPositionCurrent()+"- Konkreter Aufruf der Batch: '"+ sCommandConcrete +"'";						
+					this.logProtocolString(sLog);
 					
 					Runtime load = Runtime.getRuntime();
-					objReturn = load.exec("cmd /c " + sCommandConcrete);
+					objReturn = load.exec(sCommandConcrete);
 					
 					if(objReturn==null){
 						//Hier nicht abbrechen, sondern die Verarbeitung bei der naechsten Datei fortfuehren

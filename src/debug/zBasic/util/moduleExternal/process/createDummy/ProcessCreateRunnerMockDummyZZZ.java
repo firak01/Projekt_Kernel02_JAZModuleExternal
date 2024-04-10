@@ -20,6 +20,14 @@ public class ProcessCreateRunnerMockDummyZZZ extends AbstractObjectZZZ implement
 			
 			Thread.sleep(500);
 			lcount++;
+			
+			//Da man diesen per Batch gestareten Process nicht abbrechen kann, per Eclipse "STOP-Button", 
+			//wird die Anzahl der Ausgaben begrenzt.
+			if(lcount>=1010) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Zaehlerende erreicht. Breche ab.";
+				this.logProtocolString(sLog);
+				break; //Für einen Test schaut sich niemand mehr als 1009 Zeilen an. 
+			}
 		}
 		
 		
