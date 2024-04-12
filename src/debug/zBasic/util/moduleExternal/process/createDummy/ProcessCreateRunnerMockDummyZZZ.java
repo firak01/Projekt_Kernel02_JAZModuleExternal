@@ -30,6 +30,10 @@ public class ProcessCreateRunnerMockDummyZZZ extends AbstractObjectZZZ implement
 			}
 		}
 		
+		//Hier Beenden notwendig, damit auch die JVM fuer diesen Process beendet wird.
+		//Merke: Das nicht in der aufrufenden ...main - Klasse machen, dann wird sofort auch dieser Process beendet.
+		System.exit(0);
+		
 		
 		} catch (ExceptionZZZ | InterruptedException e) {
 			// TODO Auto-generated catch block
