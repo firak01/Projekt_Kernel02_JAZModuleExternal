@@ -6,10 +6,18 @@ import java.util.EnumSet;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 
-public interface IProcessWatchMonitorZZZ extends Runnable{
+public interface IProcessWatchMonitorZZZ extends IWatchListenerZZZ{
+	public Process getProcess();
+	public void setProcess(Process objProcess);
+	
+	
+	//#############################################################
+	//### FLAGZ
+	//#############################################################	
 	public enum FLAGZ{
-		DUMMY,END_ON_CONNECTION,USE_LOGFILE_WATCHRUNNER
+		DUMMY
 	}
 	
 	boolean getFlag(FLAGZ objEnumFlag);
@@ -18,46 +26,34 @@ public interface IProcessWatchMonitorZZZ extends Runnable{
 	boolean proofFlagExists(FLAGZ objEnumFlag) throws ExceptionZZZ;
 	boolean proofFlagSetBefore(FLAGZ objEnumFlag) throws ExceptionZZZ;
 	
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	
-	//Methoden des Monitors
-	public ArrayList<Process>getProcessList();
-	public void setProcessList(ArrayList<Process>listaProcess);
-	
-	
-	
+	//#######################################################################################
+	// STATUS	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//Die StatusId für Stati, aus dieser Klasse selbst. Nicht die Stati der anderen Klassen.
+	//Sollte dann irgendwie einzigartig sein.
 	public static int iSTATUSLOCAL_GROUPID=1;
 		
 	//++++++++++++++++++++++++
-	
-	//Merke: Obwohl fullName und abbr nicht direkt abgefragt werden, müssen Sie im Konstruktor sein, um die Enumeration so zu definieren.
 	//ALIAS("Uniquename","Statusmeldung","Beschreibung, wird nicht genutzt....",)
 	public enum STATUSLOCAL implements IEnumSetMappedStatusZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{
-		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","ProcessWatchMonitor: Neu",""),
-		ISSTARTING(iSTATUSLOCAL_GROUPID,"isstarting","ProcessWatchMonitor: Startet...",""),		
-		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ProcessWatchMonitor: Gestartet",""),
-		ISSTARTNO(iSTATUSLOCAL_GROUPID,"isstartno","ProcessWatchMonitor: Nicht gestartet",""),
+		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","ZZZ: ProcessWatchMonitor neu",""),
+		ISSTARTING(iSTATUSLOCAL_GROUPID,"isstarting","ZZZ: ProcessWatchMonitor startet...",""),		
+		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ZZZ: ProcessWatchMonitor gestartet",""),
+		ISSTARTNO(iSTATUSLOCAL_GROUPID,"isstartno","ZZZ: ProcessWatchMonitor nicht gestartet",""),
 
-		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isstopped","ProcessWatchMonitor: Beendet",""),			
-		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","ProcessWatchMonitor: Fehler",""),		
-
-		//TODOGOON 20240328 IDEE: Alternativen zweiten Konstruktor, der ein IEnumSetMappedStatusZZZ - Objekt aufnimmt. 
-		HASPROCESSSTARTNEW(iSTATUSLOCAL_GROUPID,"hasprocessnew","ProcessWatchMonitor: Prozess: Neu",""),
-		HASPROCESSSTARTING(iSTATUSLOCAL_GROUPID,"hasprocessstarting","ProcessWatchMonitor: Prozess: Startet",""),
-		HASPROCESSSTARTED(iSTATUSLOCAL_GROUPID,"hasprocessstarted","ProcessWatchMonitor: Prozess: Gestartet",""),
-		HASPROCESSSTARTNO(iSTATUSLOCAL_GROUPID,"hasprocessstartno","ProcessWatchMonitor: Process: Nicht gestartet",""),
+		ISSTOPPED(iSTATUSLOCAL_GROUPID,"isstopped","ZZZ: ProcessWatchMonitor beendet",""),			
+		HASERROR(iSTATUSLOCAL_GROUPID,"haserror","ZZZ: ProcessWatchMonitor meldet Fehler",""),		
+ 
+		HASPROCESSWATCHRUNNERSTARTNEW(iSTATUSLOCAL_GROUPID,"hasprocesswatchrunnerstartnew","ZZZ: ProcessWatchRunner nicht gestartet",""),
+		HASPROCESSWATCHRUNNERSTARTING(iSTATUSLOCAL_GROUPID,"hasprocesswatchrunnerstarting","ZZZ: ProcessWatchRunner startet",""),
+		HASPROCESSWATCHRUNNERSTARTED(iSTATUSLOCAL_GROUPID,"hasprocesswatchrunnerstarted","ZZZ: ProcessWatchRunner gestartet",""),
+		HASPROCESSWATCHRUNNEROUTPUT(iSTATUSLOCAL_GROUPID,"hasprocesswatchrunneroutput","ZZZ: ProcessWatchRunner mit Ausgabe",""),
 		
-		HASPROCESSOUTPUT(iSTATUSLOCAL_GROUPID,"hasprocessoutput","ProcessWatchMonitor: Prozess: Hat Ausgabe",""),
-		HASPROCESSCONNECTION(iSTATUSLOCAL_GROUPID,"hasprocessconnection","ProcessWatchMonitor: Process: Verbunden",""),
-		HASPROCESSCONNECTIONLOST(iSTATUSLOCAL_GROUPID,"hasprocessconnectionlost","ProcessWatchMonitor: Process: Verbindung verloren",""),
+		HASPROCESSWATCHRUNNERFILTERFOUND(iSTATUSLOCAL_GROUPID,"hasprocesswatchrunnerfilterfound","ZZZ: ProcessWatchRunner hat Ausgabe",""),
 		
-		HASPROCESSERROR(iSTATUSLOCAL_GROUPID,"hasprocesserror","ProcessWatchMonitor: Process: Fehler",""),
-		HASPROCESSSTOPPED(iSTATUSLOCAL_GROUPID,"hasprocessstopped","ProcessWatchMonitor: Process: Gestoppt",""),
+		HASPROCESSWATCHRUNNERERROR(iSTATUSLOCAL_GROUPID,"hasprocesswatchrunnererror","ZZZ: ProcessWatchRunner meldet Fehler",""),
+		HASPROCESSWATCHRUNNERSTOPPED(iSTATUSLOCAL_GROUPID,"hasprocesswatchrunnerstopped","ZZZ: ProcessWatchRunner gestoppt","");
 		
-		HASPROCESSWATCHRUNNERFILTERFOUND(iSTATUSLOCAL_GROUPID,"hasprocesswatchrunnerfilterfound","ProcessWatchMonitor: ProcessWatchrunner: Filter gefunden.",""),
-		HASPROCESSWATCHRUNNERSTOPPED(iSTATUSLOCAL_GROUPID,"hasprocesswatchrunnerstopped","ProcessWatchMonitor: ProcessWatchrunner: Gestoppt.","");
 			
 		private int iStatusGroupId;
 		private String sAbbreviation,sStatusMessage,sDescription;

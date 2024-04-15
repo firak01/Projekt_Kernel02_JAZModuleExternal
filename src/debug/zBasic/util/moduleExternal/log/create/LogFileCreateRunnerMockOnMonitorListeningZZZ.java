@@ -161,7 +161,8 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	 */
 	public boolean startLogFileCreateMockRunner() throws ExceptionZZZ{
 		boolean bReturn= false;
-		main:{			
+		main:{		
+			String sLog;
 			BufferedReader br=null;
 			OutputStream objLogStream=null;
 			try {
@@ -175,7 +176,8 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 					}
 					bExists = FileEasyZZZ.exists(objFileSource);
 					if(!bExists) {
-						System.out.println("File not exists, waiting for: '" + objFileSource.getAbsolutePath() + "'.");
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "File not exists, waiting for: '" + objFileSource.getAbsolutePath() + "'.";
+						this.logProtocolString(sLog);
 						Thread.sleep(5000);
 					}
 				}while(!bExists);
@@ -224,17 +226,17 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 			} catch (InterruptedException e) {				
 				e.printStackTrace();
 				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
 				this.logProtocolString(sLog);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
 				this.logProtocolString(sLog);
 			} catch (IOException e) {
 				e.printStackTrace();	
 				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
 				this.logProtocolString(sLog);
 			} finally {
 				

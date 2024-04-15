@@ -154,9 +154,12 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 		    	sFilterSentence01 = "Peer Connection Initiated with";		    	
 		    }
 		    
-		    String[]saFlag01= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()};		    
-		    //String[]saFlag01= {IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name()};
+//		    String[]saFlag01= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
+//		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()};		    
+		    String[]saFlag01= {
+		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name(),
+		    		 IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
+		    		 IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name()};
 			LogFileWatchRunnerZZZ objWatcher01 = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence01, saFlag01);			
 			
 			//2b. Mache den Log Watcher 02 mit dem "Reaktionsstring".
@@ -167,9 +170,12 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 			    	sFilterSentence02 = "local_port";;
 			    }
 			    
-			    String[]saFlag02= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-			    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()};			    
-			    //String[]saFlag02= {IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name()};
+//			    String[]saFlag01= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
+//	    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()};		    
+			    String[]saFlag02= {
+		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name(),
+		    		 IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
+		    		 IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name()};
 				LogFileWatchRunnerZZZ objWatcher02 = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence02, saFlag02);			
 				
 			

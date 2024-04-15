@@ -40,7 +40,7 @@ public interface ILogFileWatchMonitorZZZ extends IWatchListenerZZZ{
 	//++++++++++++++++++++++++
 	//ALIAS(Gruppenid der Meldung, "Uniquename","Statusmeldung","Beschreibung, wird nicht genutzt....",)
 	public enum STATUSLOCAL implements IEnumSetMappedStatusZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{
-		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","ZZZ: LogFileWatchMonitor nicht gestartet",""),
+		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","ZZZ: LogFileWatchMonitor neu",""),
 		ISSTARTING(iSTATUSLOCAL_GROUPID,"isstarting","ZZZ: LogFileWatchMonitor startet...",""),		
 		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ZZZ: LogFileWatchMonitor gestartet",""),
 		ISSTARTNO(iSTATUSLOCAL_GROUPID,"isstartno","ZZZ: LogFileWatchMonitor nicht gestartet",""),
@@ -58,7 +58,6 @@ public interface ILogFileWatchMonitorZZZ extends IWatchListenerZZZ{
 		HASLOGFILEWATCHRUNNERERROR(iSTATUSLOCAL_GROUPID,"haslogfilewatchrunnererror","ZZZ: LogFileWatchRunner meldet Fehler",""),
 		HASLOGFILEWATCHRUNNERSTOPPED(iSTATUSLOCAL_GROUPID,"haslogfilewatchrunnerstopped","ZZZ: LogFileWatchRunner gestoppt","");
 		
-				
 		
 		private int iStatusGroupId;
 		private String sAbbreviation,sStatusMessage,sDescription;

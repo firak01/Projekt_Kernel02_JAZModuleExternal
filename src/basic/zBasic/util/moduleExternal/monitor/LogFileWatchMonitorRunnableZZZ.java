@@ -174,7 +174,7 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 				int icount=0;
                 while (true){
                 	
-                	boolean bStopRequested = this.getFlag(IProgramMonitorRunnableZZZ.FLAGZ.REQUEST_STOP);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
+                	boolean bStopRequested = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
 					if( bStopRequested) {
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "Breche Schleife ab.";
 						this.logProtocolString(sLog);

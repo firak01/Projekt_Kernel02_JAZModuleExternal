@@ -43,39 +43,31 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 		super();		
 	}
 
+	public AbstractLogFileWatchRunnerZZZ(String[] saFlag) throws ExceptionZZZ {
+		super(saFlag);		
+	}
+	
 	public AbstractLogFileWatchRunnerZZZ(File objLogFile) throws ExceptionZZZ {
 		super();	
-		LogFileWatchRunnerNew_(objLogFile, null, null);
+		LogFileWatchRunnerNew_(objLogFile, null);
 	}
 	
 	public AbstractLogFileWatchRunnerZZZ(File objLogFile, String sFilterSentence) throws ExceptionZZZ {
 		super();	
-		LogFileWatchRunnerNew_(objLogFile, sFilterSentence, null);
+		LogFileWatchRunnerNew_(objLogFile, sFilterSentence);
 	}
 	
 	public AbstractLogFileWatchRunnerZZZ(File objLogFile, String sFilterSentence, String[] saFlag) throws ExceptionZZZ {
-		super();	
-		LogFileWatchRunnerNew_( objLogFile, sFilterSentence, saFlag);
+		super(saFlag);	
+		LogFileWatchRunnerNew_( objLogFile, sFilterSentence);
 	}
 	
-	private boolean LogFileWatchRunnerNew_(File objLogFile, String sFilterSentence, String[] saFlagControl) throws ExceptionZZZ {
+	private boolean LogFileWatchRunnerNew_(File objLogFile, String sFilterSentence) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{			
-			if(saFlagControl != null){
-				String stemp; boolean btemp;
-				for(int iCount = 0;iCount<=saFlagControl.length-1;iCount++){
-					stemp = saFlagControl[iCount];
-					btemp = setFlag(stemp, true);
-					if(btemp==false){ 								   
-						   ExceptionZZZ ez = new ExceptionZZZ( stemp, IFlagZUserZZZ.iERROR_FLAG_UNAVAILABLE, this, ReflectCodeZZZ.getMethodCurrentName()); 						
-						   throw ez;		 
-					}
-				}
-				if(this.getFlag("init")) break main;
-			}
+			if(this.getFlag("init")) break main;
 			
-			this.objLogFile = objLogFile;
-			this.objModule = objModule;
+			this.objLogFile = objLogFile;			
 			this.sLineFilter = sFilterSentence;
 		}//end main:
 		return bReturn;

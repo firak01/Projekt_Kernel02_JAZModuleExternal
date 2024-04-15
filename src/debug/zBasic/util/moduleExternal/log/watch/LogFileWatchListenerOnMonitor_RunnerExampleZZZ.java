@@ -31,26 +31,17 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	}
 	
 	public LogFileWatchListenerOnMonitor_RunnerExampleZZZ(String[] saFlag) throws ExceptionZZZ {
-		super();	
-		LogFileWatchOnMonitorListenerRunnerExampleNew_(saFlag);
+		super(saFlag);	
+		LogFileWatchOnMonitorListenerRunnerExampleNew_();
 	}
 		
 	
-	private boolean LogFileWatchOnMonitorListenerRunnerExampleNew_(String[] saFlagControl) throws ExceptionZZZ {
+	private boolean LogFileWatchOnMonitorListenerRunnerExampleNew_() throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{			
-			if(saFlagControl != null){
-				String stemp; boolean btemp;
-				for(int iCount = 0;iCount<=saFlagControl.length-1;iCount++){
-					stemp = saFlagControl[iCount];
-					btemp = setFlag(stemp, true);
-					if(btemp==false){ 								   
-						   ExceptionZZZ ez = new ExceptionZZZ( stemp, IFlagZUserZZZ.iERROR_FLAG_UNAVAILABLE, this, ReflectCodeZZZ.getMethodCurrentName()); 						
-						   throw ez;		 
-					}
-				}
-				if(this.getFlag("init")) break main;
-			}
+			if(this.getFlag("init")) break main;
+			
+			bReturn = true;
 		}//end main:
 		return bReturn;
 	}
@@ -59,6 +50,7 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 
 	//#### GETTER / SETTER
 		
+	//### INTERFACES ###################
 	@Override
 	public boolean startCustom() throws ExceptionZZZ{
 		boolean bReturn = false;
@@ -114,35 +106,35 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	}
 	
 		
-		//Methode wird in der ReactionHashMap angegeben....
-		public boolean doStop(IEnumSetMappedZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
-			boolean bReturn = false;
-			main:{
+	//Methode wird in der ReactionHashMap angegeben....
+	public boolean doStop(IEnumSetMappedZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
 				
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocolString(sLog);
-				
-				bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
-			}//end main
-			return bReturn;
-		}
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+			this.logProtocolString(sLog);
+			
+			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
+		}//end main
+		return bReturn;
+	}
 		
-		//Methode wird in der ReactionHashMap angegeben....
-		public boolean doFilterFound(IEnumSetMappedZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
-			boolean bReturn = false;
-			main:{				
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue='"+bStatusValue+"', EventMessage='" + sStatusMessage +"'";
-				this.logProtocolString(sLog);
-				
-				if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
-					bReturn = this.doStop(enumStatus, bStatusValue, sStatusMessage);
-				}
-			}//end main
-			return bReturn;
-		}
+	//Methode wird in der ReactionHashMap angegeben....
+	public boolean doFilterFound(IEnumSetMappedZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{				
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue='"+bStatusValue+"', EventMessage='" + sStatusMessage +"'";
+			this.logProtocolString(sLog);
+			
+			if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
+				bReturn = this.doStop(enumStatus, bStatusValue, sStatusMessage);
+			}
+		}//end main
+		return bReturn;
+	}
 		
 	//###############################
-	//### FLAG HANDLING
+	//### FLAG AUS: ILogFileWatchOnMonitorListenerRunnerExampleZZZ
 	//###############################
 	@Override
 	public boolean getFlag(ILogFileWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ objEnumFlag) {
@@ -181,6 +173,48 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		return this.proofFlagExists(objEnumFlag.name());
 	}
 
+	
+	//####################################################
+	//### FLAG aus IWatchListenerZZZ
+	//####################################################
+	@Override
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+		return this.getFlag(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean setFlag(IWatchListenerZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
+		return this.setFlag(objEnumFlag.name(), bFlagValue);
+	}
+
+	@Override
+	public boolean[] setFlag(IWatchListenerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
+		boolean[] baReturn=null;
+		main:{
+			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+				baReturn = new boolean[objaEnumFlag.length];
+				int iCounter=-1;
+				for(IWatchListenerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
+					iCounter++;
+					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
+					baReturn[iCounter]=bReturn;
+				}
+			}
+		}//end main:
+		return baReturn;
+	}
+
+	@Override
+	public boolean proofFlagExists(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+
+	@Override
+	public boolean proofFlagSetBefore(IWatchListenerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
+		return this.proofFlagExists(objEnumFlag.name());
+	}
+
+	
 	//##############################################
 	//### Aus IListenerObjectStatusLocalZZZ
 	//### Reaktion darauf, wenn ein Event aufgefangen wurde
@@ -240,45 +274,5 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		
 		}//end main:
 		return bReturn;		
-	}
-
-	//####################################################
-	//### FLAG aus IWatchListenerZZZ
-	//####################################################
-	@Override
-	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
-		return this.getFlag(objEnumFlag.name());
-	}
-
-	@Override
-	public boolean setFlag(IWatchListenerZZZ.FLAGZ objEnumFlag, boolean bFlagValue)throws ExceptionZZZ {
-		return this.setFlag(objEnumFlag.name(), bFlagValue);
-	}
-
-	@Override
-	public boolean[] setFlag(IWatchListenerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
-		boolean[] baReturn=null;
-		main:{
-			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
-				baReturn = new boolean[objaEnumFlag.length];
-				int iCounter=-1;
-				for(IWatchListenerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
-					iCounter++;
-					boolean bReturn = this.setFlag(objEnumFlag, bFlagValue);
-					baReturn[iCounter]=bReturn;
-				}
-			}
-		}//end main:
-		return baReturn;
-	}
-
-	@Override
-	public boolean proofFlagExists(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
-		return this.proofFlagExists(objEnumFlag.name());
-	}
-
-	@Override
-	public boolean proofFlagSetBefore(IWatchListenerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
-		return this.proofFlagExists(objEnumFlag.name());
 	}
 }

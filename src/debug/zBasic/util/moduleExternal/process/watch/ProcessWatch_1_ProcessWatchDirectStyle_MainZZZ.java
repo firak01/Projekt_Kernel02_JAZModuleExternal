@@ -56,25 +56,25 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 		    ProcessWatchListener_ExampleZZZ objListener = new ProcessWatchListener_ExampleZZZ();
 			
 			
-			//Starte den Thread für den Process und seine Ausgaben.
-			//TODOGOON: 
+			//1. Starte den Thread für den Process und seine Ausgaben.
+		
+		    //TODOGOON: 
 			//Momentan sind das nur Zähler-Ausgaben.
 			//Das sollten aber Ausgaben sein, die aus einer Muster-Textdatei stammen.
 			//z.B. einem Muster-Log des OVPN Servers.
 			
-		   
-			//1. Schritt: Mache den STDOUT Creator
+			//TODOGOON: Demnaechst mit einem File als Quelle der Ausgabe
 			String sSourceDirectory = "resourceZZZ\\file";
 			String sSourceFile = "logExampleUsed.txt";
 			String sSourceFilePathTotalDefault = FileEasyZZZ.joinFilePathName(sSourceDirectory, sSourceFile);
 			File objSourceFile = new File(sSourceFilePathTotalDefault);
 			
-			//TODOGOON: Demnaechst mit einem File als Quelle der Ausgabe
+			//1a. Schritt: Mache den STDOUT Creator
 			String[]saFlagCreate= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};
 			ProcessCreateMockRunnerZZZ objCreator = new ProcessCreateMockRunnerZZZ(saFlagCreate);
 			Process objProcess = objCreator.createProcessByBatchCustom();
 			
-			//2. Schritt: Mache den Log Watcher mit dem "Reaktionsstring".
+			//2. Schritt: Mache den Process Watcher mit dem "Reaktionsstring".
 		    String sFilterSentence;    
 		    if (args.length > 1) {
 		    	sFilterSentence = (args[1]);

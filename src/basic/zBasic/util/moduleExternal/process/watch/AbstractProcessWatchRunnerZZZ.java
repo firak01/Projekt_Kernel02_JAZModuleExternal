@@ -55,6 +55,10 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractProgramWithS
 		super();				
 	}
 	
+	public AbstractProcessWatchRunnerZZZ(String[]saFlagControl) throws ExceptionZZZ{
+		super(saFlagControl);				
+	}
+	
 	public AbstractProcessWatchRunnerZZZ(Process objProcess) throws ExceptionZZZ{
 		super();		
 		ProcessWatchRunnerNew_(objProcess, null, null);

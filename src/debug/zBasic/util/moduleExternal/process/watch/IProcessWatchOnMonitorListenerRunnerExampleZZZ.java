@@ -1,9 +1,9 @@
-package debug.zBasic.util.moduleExternal.log.watch;
+package debug.zBasic.util.moduleExternal.process.watch;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 
-public interface ILogFileWatchOnMonitorListenerRunnerExampleZZZ extends IWatchListenerZZZ{
+public interface IProcessWatchOnMonitorListenerRunnerExampleZZZ extends IWatchListenerZZZ{
 		
 	//##############################################################	
 	public enum FLAGZ{

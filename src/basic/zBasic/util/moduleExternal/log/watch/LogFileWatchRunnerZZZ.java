@@ -14,6 +14,7 @@ import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorRunnableZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
+import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ.STATUSLOCAL;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.EventObject4LogFileWatchRunnerStatusLocalZZZ;
 import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
@@ -36,45 +37,25 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	}
 	
 	public LogFileWatchRunnerZZZ(String[] saFlag) throws ExceptionZZZ {
-		super();	
-		LogFileWatchRunnerNew_(saFlag);
+		super(saFlag);	
 	}
 
 	public LogFileWatchRunnerZZZ(File objLogFile) throws ExceptionZZZ {
 		super(objLogFile);	
-		LogFileWatchRunnerNew_(null);
 	}
 	
 	public LogFileWatchRunnerZZZ(File objLogFile, String sFilterSentence) throws ExceptionZZZ {
 		super(objLogFile, sFilterSentence);	
-		LogFileWatchRunnerNew_(null);
 	}
 	
 	public LogFileWatchRunnerZZZ(File objLogFile, String sFilterSentence, String[] saFlag) throws ExceptionZZZ {
 		super(objLogFile, sFilterSentence);	
-		LogFileWatchRunnerNew_(saFlag);
 	}
-	
-	private boolean LogFileWatchRunnerNew_(String[] saFlagControl) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{			
-			if(saFlagControl != null){
-				String stemp; boolean btemp;
-				for(int iCount = 0;iCount<=saFlagControl.length-1;iCount++){
-					stemp = saFlagControl[iCount];
-					btemp = setFlag(stemp, true);
-					if(btemp==false){ 								   
-						   ExceptionZZZ ez = new ExceptionZZZ( stemp, IFlagZUserZZZ.iERROR_FLAG_UNAVAILABLE, this, ReflectCodeZZZ.getMethodCurrentName()); 						
-						   throw ez;		 
-					}
-				}
-				if(this.getFlag("init")) break main;
-			}
-			
-
-		}//end main:
-		return bReturn;
-	}
+		
+	//### Statische Methode (um einfacher darauf zugreifen zu können)
+    public static Class getEnumStatusLocalClass(){    	
+    	return STATUSLOCAL.class;    	
+    }
 	
 	//### Getter / Setter ########
 	
@@ -132,28 +113,28 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	//###########################################################
 	
 	//####### aus IStatusLocalUserZZZ
-	@Override
-	public boolean getStatusLocal(Enum objEnumStatusIn) throws ExceptionZZZ {
-		boolean bFunction = false;
-		main:{
-			if(objEnumStatusIn==null) break main;
-			
-			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) objEnumStatusIn;
-			String sStatusName = objEnumStatusIn.name();
-			if(StringZZZ.isEmpty(sStatusName)) break main;
-										
-			HashMap<String, Boolean> hmFlag = this.getHashMapStatusLocal();
-			Boolean objBoolean = hmFlag.get(sStatusName.toUpperCase());
-			if(objBoolean==null){
-				bFunction = false;
-			}else{
-				bFunction = objBoolean.booleanValue();
-			}
-							
-		}	// end main:
-		
-		return bFunction;	
-	}
+//	@Override
+//	public boolean getStatusLocal(Enum objEnumStatusIn) throws ExceptionZZZ {
+//		boolean bFunction = false;
+//		main:{
+//			if(objEnumStatusIn==null) break main;
+//			
+//			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) objEnumStatusIn;
+//			String sStatusName = objEnumStatusIn.name();
+//			if(StringZZZ.isEmpty(sStatusName)) break main;
+//										
+//			HashMap<String, Boolean> hmFlag = this.getHashMapStatusLocal();
+//			Boolean objBoolean = hmFlag.get(sStatusName.toUpperCase());
+//			if(objBoolean==null){
+//				bFunction = false;
+//			}else{
+//				bFunction = objBoolean.booleanValue();
+//			}
+//							
+//		}	// end main:
+//		
+//		return bFunction;	
+//	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//+++ OFFER STATUS LOCAL, alle Varianten, gecasted auf dieses Objekt
@@ -250,61 +231,61 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//+++ SET STATUS LOCAL, alle Varianten, gecasted auf dieses Objekt
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	@Override
-	public boolean setStatusLocal(Enum enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
-		boolean bFunction = false;
-		main:{
-			if(enumStatusIn==null) break main;
-			
-			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
-							
-			bFunction = this.offerStatusLocal(enumStatusIn, null, bStatusValue);
-		}//end main:
-		return bFunction;
-	}
-		
-	/* (non-Javadoc)
-	 * @see basic.zBasic.AbstractObjectWithStatusZZZ#setStatusLocalEnum(basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ, boolean)
-	 */
-	@Override 
-	public boolean setStatusLocalEnum(IEnumSetMappedStatusZZZ enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			if(enumStatusIn==null) break main;
-
-			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
-			
-			bReturn = this.offerStatusLocal(enumStatusIn.getName(), null, bStatusValue);
-		}//end main:
-		return bReturn;
-	}
-	
-	//+++ aus IStatusLocalUserMessageZZZ			
-	@Override 
-	public boolean setStatusLocal(Enum enumStatusIn, String sMessage, boolean bStatusValue) throws ExceptionZZZ {
-		boolean bFunction = false;
-		main:{
-			if(enumStatusIn==null) break main;
-			
-			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
-			
-			bFunction = this.offerStatusLocal(enumStatusIn.name(), sMessage, bStatusValue);
-		}//end main:
-		return bFunction;
-	}
-		
-	@Override 
-	public boolean setStatusLocalEnum(IEnumSetMappedStatusZZZ enumStatusIn, String sMessage, boolean bStatusValue) throws ExceptionZZZ {
-		boolean bReturn = false;
-		main:{
-			if(enumStatusIn==null) break main;
-			
-			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
-			
-			bReturn = this.offerStatusLocal(enumStatusIn.getName(), sMessage, bStatusValue);
-		}//end main:
-		return bReturn;
-	}				
+//	@Override
+//	public boolean setStatusLocal(Enum enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
+//		boolean bFunction = false;
+//		main:{
+//			if(enumStatusIn==null) break main;
+//			
+//			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
+//							
+//			bFunction = this.offerStatusLocal(enumStatusIn, null, bStatusValue);
+//		}//end main:
+//		return bFunction;
+//	}
+//		
+//	/* (non-Javadoc)
+//	 * @see basic.zBasic.AbstractObjectWithStatusZZZ#setStatusLocalEnum(basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ, boolean)
+//	 */
+//	@Override 
+//	public boolean setStatusLocalEnum(IEnumSetMappedStatusZZZ enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
+//		boolean bReturn = false;
+//		main:{
+//			if(enumStatusIn==null) break main;
+//
+//			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
+//			
+//			bReturn = this.offerStatusLocal(enumStatusIn.getName(), null, bStatusValue);
+//		}//end main:
+//		return bReturn;
+//	}
+//	
+//	//+++ aus IStatusLocalUserMessageZZZ			
+//	@Override 
+//	public boolean setStatusLocal(Enum enumStatusIn, String sMessage, boolean bStatusValue) throws ExceptionZZZ {
+//		boolean bFunction = false;
+//		main:{
+//			if(enumStatusIn==null) break main;
+//			
+//			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
+//			
+//			bFunction = this.offerStatusLocal(enumStatusIn.name(), sMessage, bStatusValue);
+//		}//end main:
+//		return bFunction;
+//	}
+//		
+//	@Override 
+//	public boolean setStatusLocalEnum(IEnumSetMappedStatusZZZ enumStatusIn, String sMessage, boolean bStatusValue) throws ExceptionZZZ {
+//		boolean bReturn = false;
+//		main:{
+//			if(enumStatusIn==null) break main;
+//			
+//			//LogFileWatchRunnerZZZ.STATUSLOCAL enumStatus = (STATUSLOCAL) enumStatusIn;
+//			
+//			bReturn = this.offerStatusLocal(enumStatusIn.getName(), sMessage, bStatusValue);
+//		}//end main:
+//		return bReturn;
+//	}				
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	

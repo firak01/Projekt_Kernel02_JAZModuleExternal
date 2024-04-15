@@ -28,38 +28,29 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 	
 	public LogFileWatchMonitorZZZ(File objFile) throws ExceptionZZZ{
 		super();				
-		ProcessWatchMonitorNew_(objFile,null);
+		ProcessWatchMonitorNew_(objFile);
 	}
 
 	
 	public LogFileWatchMonitorZZZ(String[] saFlagControl) throws ExceptionZZZ{
-		super();		
-		ProcessWatchMonitorNew_(null, saFlagControl);
+		super(saFlagControl);		
+		ProcessWatchMonitorNew_(null);
 	}
 	
 	public LogFileWatchMonitorZZZ(File objFile, String[] saFlagControl) throws ExceptionZZZ{
-		super();		
-		ProcessWatchMonitorNew_(objFile, saFlagControl);
+		super(saFlagControl);		
+		ProcessWatchMonitorNew_(objFile);
 	}
 
-	private void ProcessWatchMonitorNew_(File objFile, String[] saFlagControl) throws ExceptionZZZ{
-	main:{	
-		if(saFlagControl != null){
-			String stemp; boolean btemp;
-			for(int iCount = 0;iCount<=saFlagControl.length-1;iCount++){
-				stemp = saFlagControl[iCount];
-				btemp = setFlag(stemp, true);
-				if(btemp==false){ 								   
-					   ExceptionZZZ ez = new ExceptionZZZ( stemp, IFlagZUserZZZ.iERROR_FLAG_UNAVAILABLE, this, ReflectCodeZZZ.getMethodCurrentName()); 						
-					   throw ez;		 
-				}
-			}
+	private boolean ProcessWatchMonitorNew_(File objFile) throws ExceptionZZZ{
+		boolean bReturn = false;
+		main:{	
 			if(this.getFlag("init")) break main;
-		}
-		
-		this.setLogFile(objFile);
-	}//END main
-}
+			
+			this.setLogFile(objFile);
+		}//end main:
+		return bReturn;
+	}
 				
 	@Override
 	public boolean startCustom() throws ExceptionZZZ {
@@ -270,5 +261,10 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 	
 	}//end main:
 	return bReturn;	
+	}
+
+	@Override
+	public boolean proofStatusLocalQueryReactCustom() throws ExceptionZZZ {
+		return true;
 	}
 }//END class
