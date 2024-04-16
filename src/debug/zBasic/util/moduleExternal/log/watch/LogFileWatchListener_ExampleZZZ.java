@@ -156,4 +156,9 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 	public boolean proofFlagSetBefore(IWatchListenerZZZ.FLAGZ objEnumFlag)	throws ExceptionZZZ {
 		return this.proofFlagExists(objEnumFlag.name());
 	}
+
+	@Override
+	public boolean proofStatusLocalQueryReactCustom() throws ExceptionZZZ {
+		return true;
+	}
 }

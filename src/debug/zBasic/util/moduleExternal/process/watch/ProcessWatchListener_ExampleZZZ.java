@@ -155,7 +155,12 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 		main:{
 		if(!bStatusValue)break main;
 		}
-		// TODO Auto-generated method stub
+
 		return false;
+	}
+
+	@Override
+	public boolean proofStatusLocalQueryReactCustom() throws ExceptionZZZ {
+		return true;
 	}
 }

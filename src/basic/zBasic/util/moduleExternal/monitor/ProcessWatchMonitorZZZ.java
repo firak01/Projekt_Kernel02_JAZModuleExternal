@@ -427,4 +427,14 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 	}//end main:
 	return bReturn;	
 	}
+
+	@Override
+	public boolean proofStatusLocalQueryReactCustom() throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean proofStatusLocalQueryOfferCustom() throws ExceptionZZZ {
+		return true;
+	}
 }//END class
