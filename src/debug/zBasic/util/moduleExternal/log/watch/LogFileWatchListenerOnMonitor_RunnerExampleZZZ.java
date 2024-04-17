@@ -275,4 +275,9 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		}//end main:
 		return bReturn;		
 	}
+
+	@Override
+	public boolean queryReactOnStatusLocalEventCustom(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		return true;
+	}
 }

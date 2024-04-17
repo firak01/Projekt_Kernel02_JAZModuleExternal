@@ -61,53 +61,36 @@ public abstract class AbstractProcessWatchRunnerZZZ extends AbstractProgramWithS
 	
 	public AbstractProcessWatchRunnerZZZ(Process objProcess) throws ExceptionZZZ{
 		super();		
-		ProcessWatchRunnerNew_(objProcess, null, null);
+		ProcessWatchRunnerNew_(objProcess, null);
 	}
 	public AbstractProcessWatchRunnerZZZ(Process objProcess, String sFlag) throws ExceptionZZZ{
-		super();
-		String[]saFlag=new String[1];
-		saFlag[0]=sFlag;
-		ProcessWatchRunnerNew_(objProcess, null, saFlag);
+		super(sFlag);
+		ProcessWatchRunnerNew_(objProcess, null);
 	}
 	public AbstractProcessWatchRunnerZZZ(Process objProcess, String sLineFilter, String sFlag) throws ExceptionZZZ{
-		super();
-		String[]saFlag=new String[1];
-		saFlag[0]=sFlag;
-		ProcessWatchRunnerNew_(objProcess, sLineFilter, saFlag);
+		super(sFlag);
+		ProcessWatchRunnerNew_(objProcess, sLineFilter);
 	}
 	
 	public AbstractProcessWatchRunnerZZZ(Process objProcess, String[] saFlag) throws ExceptionZZZ{
-		super();
-		ProcessWatchRunnerNew_(objProcess,  null, saFlag);
+		super(saFlag);
+		ProcessWatchRunnerNew_(objProcess,  null);
 	}
 	
 	public AbstractProcessWatchRunnerZZZ(Process objProcess, String sLineFilter, String[] saFlag) throws ExceptionZZZ{
-		super();
-		ProcessWatchRunnerNew_(objProcess,  sLineFilter, saFlag);
+		super(saFlag);
+		ProcessWatchRunnerNew_(objProcess,  sLineFilter);
 	}
 	
-	private void ProcessWatchRunnerNew_(Process objProcess, String sLineFilter, String[] saFlagControl) throws ExceptionZZZ{		
+	private void ProcessWatchRunnerNew_(Process objProcess, String sLineFilter) throws ExceptionZZZ{		
 		main:{			
-			check:{
-				if(saFlagControl != null){
-					String stemp; boolean btemp;
-					for(int iCount = 0;iCount<=saFlagControl.length-1;iCount++){
-						stemp = saFlagControl[iCount];
-						btemp = setFlag(stemp, true);
-						if(btemp==false){ 								   
-							   ExceptionZZZ ez = new ExceptionZZZ(stemp, IFlagZUserZZZ.iERROR_FLAG_UNAVAILABLE, this, ReflectCodeZZZ.getMethodCurrentName()); 							  
-							   throw ez;		 
-						}
-					}
-					if(this.getFlag("init")) break main;
-				}
-								
-				if(objProcess==null){
-					ExceptionZZZ ez = new ExceptionZZZ("Process - Object", iERROR_PARAMETER_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
-					throw ez;
-				}
-			}//END check
-	
+			if(this.getFlag("init")) break main;
+										
+			if(objProcess==null){
+				ExceptionZZZ ez = new ExceptionZZZ("Process - Object", iERROR_PARAMETER_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+				throw ez;
+			}
+			
 			this.objProcess = objProcess;
 			this.sLineFilter = sLineFilter;
 		}//END main:

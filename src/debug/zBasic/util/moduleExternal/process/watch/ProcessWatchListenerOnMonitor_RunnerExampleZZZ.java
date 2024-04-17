@@ -273,6 +273,11 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		return bReturn;		
 	}
 
+	@Override
+	public boolean queryReactOnStatusLocalEventCustom(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		return true;
+	}
+
 //#############################
 	
 	

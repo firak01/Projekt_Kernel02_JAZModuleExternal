@@ -363,4 +363,15 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		}//end main:
 		return bReturn;		
 	}
+
+	@Override
+	public boolean queryReactOnStatusLocalEventCustom(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ{
+		boolean bReturn=false;
+		String sLog;
+		main:{
+									
+			bReturn = true;
+		}//end main
+		return bReturn;
+	}
 }

@@ -556,4 +556,9 @@ TCP connection established with [AF_INET]192.168.3.116:4999
     public static Class getEnumStatusLocalClass(){    	
     	return STATUSLOCAL.class;    	
     }
+
+	@Override
+	public boolean queryReactOnStatusLocalEventCustom(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		return true;
+	}
 }

@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.IProgramMonitorRunnableZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.component.IProgramZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
@@ -15,7 +14,6 @@ import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
-import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerZZZ;
 
 
 /* Monitor Klasse, der selbst in einem eigenen Thread (runnable) laeuft.
@@ -319,7 +317,12 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 	}
 
 	@Override
-	public boolean proofStatusLocalQueryOfferCustom() throws ExceptionZZZ {
+	public boolean queryOfferStatusLocalCustom() throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean queryReactOnStatusLocalEventCustom(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
 		return true;
 	}
 }//END class

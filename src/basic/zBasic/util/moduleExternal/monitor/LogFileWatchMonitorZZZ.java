@@ -264,12 +264,12 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 	}
 
 	@Override
-	public boolean proofStatusLocalQueryReactCustom() throws ExceptionZZZ {
+	public boolean queryOfferStatusLocalCustom() throws ExceptionZZZ {
 		return true;
 	}
 
 	@Override
-	public boolean proofStatusLocalQueryOfferCustom() throws ExceptionZZZ {
+	public boolean queryReactOnStatusLocalEventCustom(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
 		return true;
 	}
 }//END class

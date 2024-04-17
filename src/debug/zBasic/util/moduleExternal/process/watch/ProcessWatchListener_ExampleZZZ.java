@@ -160,7 +160,7 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 	}
 
 	@Override
-	public boolean proofStatusLocalQueryReactCustom() throws ExceptionZZZ {
+	public boolean queryReactOnStatusLocalEventCustom(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
 		return true;
 	}
 }

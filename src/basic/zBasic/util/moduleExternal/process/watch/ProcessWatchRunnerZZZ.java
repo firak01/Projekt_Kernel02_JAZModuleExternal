@@ -244,11 +244,14 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 		return null;
 	}
 
-
-
 	@Override
 	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus,		boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {	
 		return false;
+	}
+
+	@Override
+	public boolean queryReactOnStatusLocalEventCustom(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		return true;
 	}
 
 	
