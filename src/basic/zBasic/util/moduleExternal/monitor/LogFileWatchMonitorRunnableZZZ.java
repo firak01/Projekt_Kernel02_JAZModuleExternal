@@ -317,4 +317,9 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 	}//end main:
 	return bReturn;	
 	}
+
+	@Override
+	public boolean proofStatusLocalQueryOfferCustom() throws ExceptionZZZ {
+		return true;
+	}
 }//END class

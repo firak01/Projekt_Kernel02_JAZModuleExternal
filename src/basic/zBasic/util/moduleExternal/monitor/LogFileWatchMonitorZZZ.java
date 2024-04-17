@@ -267,4 +267,9 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 	public boolean proofStatusLocalQueryReactCustom() throws ExceptionZZZ {
 		return true;
 	}
+
+	@Override
+	public boolean proofStatusLocalQueryOfferCustom() throws ExceptionZZZ {
+		return true;
+	}
 }//END class
