@@ -245,7 +245,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	}
 
 	@Override
-	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus,		boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {	
+	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus,		boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {	
 		return false;
 	}
 
@@ -254,5 +254,22 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 		return true;
 	}
 
+	@Override
+	public boolean queryOfferStatusLocalCustom() throws ExceptionZZZ{
+		//Diese Methode wird vor dem ...offerStatusLocal... aufgerufen.
+		//Dadurch kann alsow verhindert werden, dass weitere Events geworfen werden.
+		boolean bReturn=false;
+		String sLog;
+		main:{
+			
+			bReturn = true;
+		}//end main
+		return bReturn;
+	}
+
+	@Override
+	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		return true;
+	}
 	
 	}//END class

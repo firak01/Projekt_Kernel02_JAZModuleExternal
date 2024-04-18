@@ -159,7 +159,7 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 		    String[]saFlag01= {
 		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name(),
 		    		 IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-		    		 IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name()};
+		    		 IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name()};
 			LogFileWatchRunnerZZZ objWatcher01 = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence01, saFlag01);			
 			
 			//2b. Mache den Log Watcher 02 mit dem "Reaktionsstring".
@@ -175,7 +175,7 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 			    String[]saFlag02= {
 		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name(),
 		    		 IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-		    		 IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name()};
+		    		 IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name()};
 				LogFileWatchRunnerZZZ objWatcher02 = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence02, saFlag02);			
 				
 			

@@ -151,7 +151,7 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 	}
 
 	@Override
-	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		main:{
 		if(!bStatusValue)break main;
 		}
@@ -161,6 +161,11 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 
 	@Override
 	public boolean queryReactOnStatusLocalEventCustom(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		return true;
 	}
 }

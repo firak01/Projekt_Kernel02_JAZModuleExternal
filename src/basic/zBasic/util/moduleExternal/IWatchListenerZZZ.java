@@ -8,7 +8,7 @@ public interface IWatchListenerZZZ {
 	//##############################################################	
 	
 	public enum FLAGZ{
-		DUMMY,END_ON_FILTER_FOUND,IMMIDIATE_END_ON_FILTER_FOUND
+		DUMMY,END_ON_FILTER_FOUND,IMMEDIATE_END_ON_FILTER_FOUND
 	}
 	boolean getFlag(FLAGZ objEnumFlag);
 	boolean setFlag(FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ;

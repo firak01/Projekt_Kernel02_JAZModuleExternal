@@ -10,7 +10,7 @@ public interface ICreateRunnerZZZ {
 	
 	//##############################################################	
 	public enum FLAGZ{
-		DUMMY,END_ON_FILTER_FOUND
+		DUMMY,END_ON_FILTER_FOUND,IMMEDIATE_END_ON_FILTER_FOUND
 	}
 
 	boolean getFlag(FLAGZ objEnumFlag);

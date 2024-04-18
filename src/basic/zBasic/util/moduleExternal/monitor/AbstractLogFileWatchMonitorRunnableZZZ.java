@@ -286,10 +286,8 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		}
 		//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte
 		//       und der Event wird ggfs. geworfen...
-		this.offerStatusLocalEnum(enumStatus, bStatusValue, sStatusMessageToSet);
-					
-		bFunction = true;				
-	}	// end main:
+		bFunction = this.offerStatusLocalEnum(enumStatus, bStatusValue, sStatusMessageToSet);						
+		}	// end main:
 	return bFunction;
 	}
 	

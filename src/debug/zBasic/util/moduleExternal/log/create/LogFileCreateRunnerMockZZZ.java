@@ -131,7 +131,6 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 		return bReturn;
 	}
 	
-	
 	//Methode wird in der ReactionHashMap angegeben....
 	public boolean doFilterFound(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
@@ -140,13 +139,23 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 			this.logProtocolString(sLog);
 			
-			if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
-				bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
-			}
-						
+			if(bStatusValue) {//nur im true Fall
+				if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
+				   if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)) {
+					   System.exit(1);
+				   }else {
+					   bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+				   }												
+				}
+			}						
 		}//end main
 		return bReturn;
 	}
+
+	
+	
+	
+	
 	
 	/** Ein Dummy-Logfile auslesen und langsam(!) Zeile fuer Zeile ausgeben
 	 * @return
@@ -169,17 +178,17 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 				boolean bExists = false;
 				do {
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) {
-						String sLog = "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'. Breche ab.";
+						String sLog = ReflectCodeZZZ.getPositionCurrent() + "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'. Breche ab.";
 						this.logProtocolString(sLog);
 						break main;
 					}
 					bExists = FileEasyZZZ.exists(objFileSource);
 					if(!bExists) {
-						String sLog = "File not exists, waiting for: '" + objFileSource.getAbsolutePath() + "'.";
+						String sLog = ReflectCodeZZZ.getPositionCurrent() + "File not exists, waiting for: '" + objFileSource.getAbsolutePath() + "'.";
 						this.logProtocolString(sLog);
 						Thread.sleep(5000);
 					}else {
-						String sLog = "File exists: '" + objFileSource.getAbsolutePath() + "'.";
+						String sLog = ReflectCodeZZZ.getPositionCurrent() + "File exists: '" + objFileSource.getAbsolutePath() + "'.";
 						this.logProtocolString(sLog);
 					}
 				}while(!bExists);
@@ -206,7 +215,7 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
                 while (true){
                 	Thread.sleep(300); //Bremse zum Debuggen ab. Sonst gehen mir die Zeilen aus... ;-))
                 	if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) {
-                		String sLog = "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'. Breche ab.";
+                		String sLog = ReflectCodeZZZ.getPositionCurrent() + "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'. Breche ab.";
 						this.logProtocolString(sLog);
     					break main;
     				}
@@ -214,7 +223,7 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
                     if(sLine!=null)
                     {
                     	icount++;          
-                    	String sLog = ReflectCodeZZZ.getPositionCurrent() + ": " + icount +"\t: " + sLine;
+                    	String sLog = ReflectCodeZZZ.getPositionCurrent() + icount +"\t: " + sLine;
                     	this.logProtocolString(sLog);
                     	objLogStream.write(sLine.getBytes());
                     	objLogStream.write(StringZZZ.crlf().getBytes());//Merke: Ohne diese explizite neue Zeile wird alles hintereinander geschrieben.
@@ -304,9 +313,10 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 	public boolean isEventRelevant2ChangeStatusLocalByStatusLocalValue(IEventObjectStatusLocalZZZ eventStatusLocalReact) throws ExceptionZZZ {
 		return true;
 	}
+
 	
 	@Override
-	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
 			if(!bStatusValue)break main;
@@ -397,5 +407,11 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 	public boolean queryReactOnStatusLocalEventCustom(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
 		return true;
 	}
+
+	@Override
+	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		return true;
+	}
+
 	
 }

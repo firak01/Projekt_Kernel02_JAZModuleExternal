@@ -13,6 +13,7 @@ import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.abstractList.ArrayListUniqueZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.AbstractProcessWatchMonitorZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ;
@@ -323,17 +324,19 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 				this.logProtocolString(sLog);
 				
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "GEFUNDEN!!!";
-				this.logProtocolString(sLog);
-				
-				//Ist ja nicht runnable
-//				if(this.getFlag(ILogFileWatchMonitorZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
-//					bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
-//				}
-							
+				if(bStatusValue) {//nur im true Fall
+					if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
+					   if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)) {
+						   System.exit(1);
+					   }else {
+						   bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+					   }												
+					}
+				}						
 			}//end main
 			return bReturn;
 		}
+	
 	
 	
 	//### Getter / Setter
@@ -399,7 +402,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 	}
 
 	@Override
-	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
 			if(!bStatusValue) break main;
@@ -435,6 +438,11 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 
 	@Override
 	public boolean queryOfferStatusLocalCustom() throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		return true;
 	}
 }//END class

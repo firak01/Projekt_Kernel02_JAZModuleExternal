@@ -188,15 +188,17 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 		        		this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND,true);
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
 						this.logProtocolString(sLog);
-												
+						
+						//Merke: Das wird in der Erweiterung, bzw. am Ende des offerStatus ggfs. für eine gemappte Action gemacht.
+						//       Darum hier nicht mehr notwendig.
 						//Hier wird sofort abgebrochen. Es wird also nicht auf das Setzen von REQUEST_STOP per Event gewartet.
 						//Das kann z.B. bei dem "Direkten" Test auch nicht erfolgen.
-						if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)|
-						   this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
-							sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
-							this.logProtocolString(sLog);
-							this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
-						}
+//						if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)|
+//						   this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
+//							sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
+//							this.logProtocolString(sLog);
+//							this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
+//						}
 					
 						Thread.sleep(100);
 					}else{

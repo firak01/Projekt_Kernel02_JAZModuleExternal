@@ -1,6 +1,5 @@
 package basic.zBasic.util.moduleExternal.log.watch;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.util.HashMap;
 
@@ -11,14 +10,8 @@ import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
-import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
-import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorRunnableZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
-import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ.STATUSLOCAL;
-import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.EventObject4LogFileWatchRunnerStatusLocalZZZ;
 import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
-import basic.zKernel.status.IEventObject4LogFileWatchRunnerStatusLocalZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 
 public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
@@ -49,7 +42,7 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	}
 	
 	public LogFileWatchRunnerZZZ(File objLogFile, String sFilterSentence, String[] saFlag) throws ExceptionZZZ {
-		super(objLogFile, sFilterSentence);	
+		super(objLogFile, sFilterSentence, saFlag);	
 	}
 		
 	//### Statische Methode (um einfacher darauf zugreifen zu können)
@@ -92,13 +85,15 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 				this.logProtocolString(sLog);
 				
-				if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)|
-				   this.getFlag(IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)	) {
-					if(bStatusValue) {//nur im true Fall
-						bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+				if(bStatusValue) {//nur im true Fall
+					if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
+					   if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)) {
+						   System.exit(1);
+					   }else {
+						   bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+					   }												
 					}
-				}
-							
+				}						
 			}//end main
 			return bReturn;
 		}
@@ -320,8 +315,8 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
 		//Merke:
-		//Sich selbst daran zu registrieren macht im Grunde nur bei einem Monitor Sinn.
-		//hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
+		//Sich selbst darin aufzunehmen, ermöglicht es ebenfalls auf diesen Status mit der genannten Methode (Alias) zu reagieren.
+		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
 		
 		//Das würde nur Sinn machen, wenn z.B. am Monitor mehrere LogFileWatchRunner registriert sind
 		//Dann könnte dieser LogFileWatchRunner auch beendet werden, wenn einer der anderen seinen Filterwert gefunden hat.		
@@ -335,7 +330,7 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 	}
 	
 	@Override
-	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ{
+	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ{
 			boolean bReturn = false;
 			main:{
 				if(!bStatusValue)break main;
@@ -373,5 +368,23 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 			bReturn = true;
 		}//end main
 		return bReturn;
+	}
+
+	@Override
+	public boolean queryOfferStatusLocalCustom() throws ExceptionZZZ{
+		//Diese Methode wird vor dem ...offerStatusLocal... aufgerufen.
+		//Dadurch kann alsow verhindert werden, dass weitere Events geworfen werden.
+		boolean bReturn=false;
+		String sLog;
+		main:{
+			
+			bReturn = true;
+		}//end main
+		return bReturn;
+	}
+
+	@Override
+	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		return true;
 	}
 }

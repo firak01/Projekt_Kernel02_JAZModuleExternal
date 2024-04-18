@@ -101,13 +101,19 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 			this.logProtocolString(sLog);
 			
-			if(this.getFlag(ICreateRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)) {
-				bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
-			}
-						
+			if(bStatusValue) {//nur im true Fall
+				if(this.getFlag(ICreateRunnerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
+				   if(this.getFlag(ICreateRunnerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)) {
+					   System.exit(1);
+				   }else {
+					   bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+				   }												
+				}
+			}						
 		}//end main
 		return bReturn;
 	}
+
 	
 	/** Kontrolliere den Process soweit möglich.
 	 *  Z.B. per Batch den Process Killen. Wird beim start ausgeführt.
@@ -479,7 +485,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	}
 	
 	@Override
-	public boolean reactOnStatusLocalEvent4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
 			if(!bStatusValue)break main;
@@ -559,6 +565,24 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 
 	@Override
 	public boolean queryReactOnStatusLocalEventCustom(IEventObjectStatusLocalZZZ eventStatusLocal) throws ExceptionZZZ {
+		return true;
+	}
+
+	@Override
+	public boolean queryOfferStatusLocalCustom() throws ExceptionZZZ{
+		//Diese Methode wird vor dem ...offerStatusLocal... aufgerufen.
+		//Dadurch kann alsow verhindert werden, dass weitere Events geworfen werden.
+		boolean bReturn=false;
+		String sLog;
+		main:{
+			
+			bReturn = true;
+		}//end main
+		return bReturn;
+	}
+
+	@Override
+	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		return true;
 	}
 }

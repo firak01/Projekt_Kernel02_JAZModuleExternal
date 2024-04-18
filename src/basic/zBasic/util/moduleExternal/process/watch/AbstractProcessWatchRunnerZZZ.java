@@ -369,9 +369,9 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					
 					//Hier wird sofort abgebrochen. Es wird also nicht auf das Setzen von REQUEST_STOP per Event gewartet.
 					//Das kann z.B. bei dem "Direkten" Test auch nicht erfolgen.
-					if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)|
+					if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)|
 					   this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
-						sLog = "Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
+						sLog = "Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
 						this.logProtocolString(sLog);
 						this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
 					}
