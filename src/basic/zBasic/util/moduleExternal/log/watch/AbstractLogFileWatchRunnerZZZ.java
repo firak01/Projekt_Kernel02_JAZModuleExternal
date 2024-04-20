@@ -116,6 +116,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 		boolean bReturn= false;
 		main:{
 			String sLog;
+			long lngThreadID = Thread.currentThread().getId(); 
 			BufferedReader brin = null;
 			try {
 			sLog = ReflectCodeZZZ.getPositionCurrent() + " LogFileWatchRunner started.";
@@ -129,17 +130,17 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				boolean bExists = false;
 				do {
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") hat Flag gesetzt ('" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] hat Flag gesetzt ('" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
 						this.logProtocolString(sLog);
 						break main;
 					}
 					bExists = FileEasyZZZ.exists(objFileLog);
 					if(!bExists) {
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") wartet auf Existenz der Datei  ('"+ objFileLog.getAbsolutePath() +"') ...";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] wartet auf Existenz der Datei  ('"+ objFileLog.getAbsolutePath() +"') ...";
 						this.logProtocolString(sLog);
 						Thread.sleep(5000);
 					}else {
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+"): Datei existiert ('"+ objFileLog.getAbsolutePath() +"')";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] Datei existiert ('"+ objFileLog.getAbsolutePath() +"')";
 						this.logProtocolString(sLog);
 						Thread.sleep(5000);
 					}
@@ -147,14 +148,14 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				
 				String sLineFilter = this.getLineFilter();
 				if(StringZZZ.isEmpty(sLineFilter)) {
-					ExceptionZZZ ez = new ExceptionZZZ("ObjectWithStatusRunnable ("+this.getClass().getName()+"): Keine Zeilenfilter gesetzt.", this.iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+					ExceptionZZZ ez = new ExceptionZZZ("ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] Keine Zeilenfilter gesetzt.", this.iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
 					throw ez;
 				}
 				
 				InputStream objStream = new FileInputStream(objFileLog);
 				brin = new BufferedReader(new InputStreamReader(objStream));
 				if(!brin.ready()){
-					ExceptionZZZ ez = new ExceptionZZZ("BufferdReader-Object not ready", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+					ExceptionZZZ ez = new ExceptionZZZ("ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] BufferdReader-Object not ready", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
 					throw ez;
 				}
 				
@@ -168,7 +169,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 					if(bHasError) break;//das wäre dann ein von mir selbst erzeugter Fehler, der nicht im STDERR auftaucht.
 					
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+ ") [Thread: "+lngThreadID + "] hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
 						this.logProtocolString(sLog);
 						break;
 					}
@@ -181,12 +182,12 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 										
 					boolean bFilterFound = this.writeOutputToLogPLUSanalyse(icount, sLine, sLineFilter);		//Man muss wohl erst den InputStream abgreifen, damit der Process weiterlaufen kann.
 					if(bFilterFound) {																								
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter '" + sLineFilter + "' wurde gefunden in Zeile " + icount;
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+ ") [Thread: "+lngThreadID + "] Filter '" + sLineFilter + "' wurde gefunden in Zeile " + icount;
 						this.logProtocolString(sLog);
 						
 						//... ein Event soll auch beim Setzen des passenden Status erzeugt und geworfen werden.						
 		        		this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND,true);
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
 						this.logProtocolString(sLog);
 						
 						//Merke: Das wird in der Erweiterung, bzw. am Ende des offerStatus ggfs. für eine gemappte Action gemacht.
@@ -211,7 +212,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 					Thread.sleep(100);
 				}while(true);
 				this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED,true);
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") ended.";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+ ") [Thread: "+lngThreadID + "] ended.";
 				this.logProtocolString(sLog);
 				              	
                 bReturn = true;
@@ -220,38 +221,38 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				e.printStackTrace();
 				try {
 					this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") HASERROR Status gesetzt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] HASERROR Status gesetzt.";
 					this.logProtocolString(sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
 					e1.printStackTrace();
 				}
-				ExceptionZZZ ez = new ExceptionZZZ("InterruptedException happend: '"+ e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+				ExceptionZZZ ez = new ExceptionZZZ("InterruptedException happend: '"+ e.getMessage() + "' ObjectWithStatusRunnable ("+this.getClass().getName()+ ") [Thread: "+lngThreadID + "]" , iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
 				throw ez;
 				
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				try{
 					this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") HASERROR Status gesetzt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] HASERROR Status gesetzt.";
 					this.logProtocolString(sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
 					e1.printStackTrace();
 				}
-				ExceptionZZZ ez = new ExceptionZZZ("FileNotFoundException happend: '"+ e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+				ExceptionZZZ ez = new ExceptionZZZ("FileNotFoundException happend: '"+ e.getMessage() + "' ObjectWithStatusRunnable ("+this.getClass().getName()+ ") [Thread: "+lngThreadID + "]" , iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
 				throw ez;
 			} catch (IOException e) {
 				e.printStackTrace();
 				try {
 					this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") HASERROR Status gesetzt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] HASERROR Status gesetzt.";
 					this.logProtocolString(sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
 					e1.printStackTrace();
 				}
-				ExceptionZZZ ez = new ExceptionZZZ("IOException happend: '" + e.getMessage() + "'", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+				ExceptionZZZ ez = new ExceptionZZZ("IOException happend: '" + e.getMessage() + "' ObjectWithStatusRunnable ("+this.getClass().getName()+ ") [Thread: "+lngThreadID + "]" , iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
 				throw ez;
 			} finally {
 				if(brin!=null) {

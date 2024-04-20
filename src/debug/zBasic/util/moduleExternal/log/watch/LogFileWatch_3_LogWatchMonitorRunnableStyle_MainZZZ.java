@@ -155,11 +155,11 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 		    }
 		    
 //		    String[]saFlag01= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-//		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()};		    
+//		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()};
+//       		     IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name()};
 		    String[]saFlag01= {
 		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name(),
-		    		 IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-		    		 IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name()};
+		    		 IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name()};		    		 
 			LogFileWatchRunnerZZZ objWatcher01 = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence01, saFlag01);			
 			
 			//2b. Mache den Log Watcher 02 mit dem "Reaktionsstring".
@@ -171,13 +171,15 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 			    }
 			    
 //			    String[]saFlag01= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-//	    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()};		    
+//	    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()};	
+			    
+/*			    
 			    String[]saFlag02= {
 		    		 ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name(),
 		    		 IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
 		    		 IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name()};
 				LogFileWatchRunnerZZZ objWatcher02 = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence02, saFlag02);			
-				
+*/				
 			
 			
 			//3. Schritt: Mache den Monitor
@@ -197,7 +199,7 @@ public class LogFileWatch_3_LogWatchMonitorRunnableStyle_MainZZZ implements ICon
 		                     //IDee: Schaue auf OVPN Projekt und IMain - Pattern.
 		    //Merke: Beim Übergeben der Objekte an den Monitor... diese dabei sofort am Monitor registrieren....
 		    objMonitor.addProgram(objWatcher01);
-		    objMonitor.addProgram(objWatcher02);
+//		    objMonitor.addProgram(objWatcher02);
 		    objMonitor.addProgram(objCreator);
 		    
 			//Registriere auch den Beispiellistener am Monitor, der dann quasi auf die Events des Monitors reagieren kann.
