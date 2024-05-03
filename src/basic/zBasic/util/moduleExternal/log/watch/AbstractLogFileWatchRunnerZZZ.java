@@ -120,7 +120,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 			BufferedReader brin = null;
 			try {
 			sLog = ReflectCodeZZZ.getPositionCurrent() + " LogFileWatchRunner started.";
-			this.logLineDate(sLog);
+			this.logProtocolString(sLog);
 			
 			BufferedReader br=null;
 			

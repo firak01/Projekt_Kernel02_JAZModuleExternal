@@ -37,7 +37,8 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 
 	public static void main(String[] args) {
 			main:{
-			  try {	  
+			  try {	 
+				  
 			  //TODOGOON; //Mache Utility-Methoden im Consolen - Output
 			  //          //- Erstelle eine Box mit Anzahl Breite Zeichen insgesamt, Rahmenzeichen,
 			              //  Rahmenbreite links, Rahmenbreite rechts
