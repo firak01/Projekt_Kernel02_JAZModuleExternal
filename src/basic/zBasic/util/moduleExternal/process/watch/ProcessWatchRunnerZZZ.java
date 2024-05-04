@@ -99,6 +99,8 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	public boolean analyseInputLineCustom(String sLine, String sLinefilter) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{				
+			String sLog;
+			
 			sLine = StringZZZ.trimAnyQuoteMarked(sLine);
 			bReturn = super.analyseInputLineCustom(sLine, sLinefilter);
 			if(bReturn) break main;
@@ -110,10 +112,12 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	        sZaehler = sZaehler.trim();
 			int iZaehler = StringZZZ.toInteger(sZaehler);
 			if(iZaehler % 10 == 0 && iZaehler > 0) {
-				System.out.println(ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - 10er Zaehler gefunden.");				
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - 10er Zaehler gefunden.";
+				this.logProtocolString(sLog);
 				break main;				
 			}else if(iZaehler >= 100) {
-				System.out.println(ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - Zaehler ueber 100. Breche ab.");
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - Zaehler ueber 100. Breche ab.";
+				this.logProtocolString(sLog);
 				//this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, false);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
 				bReturn = true;
 				break main;

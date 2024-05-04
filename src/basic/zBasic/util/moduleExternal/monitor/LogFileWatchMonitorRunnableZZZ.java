@@ -201,7 +201,7 @@ public class LogFileWatchMonitorRunnableZZZ extends AbstractLogFileWatchMonitorR
 					
                 //Ganz wichtig ist es nun noch die anderen Programme ueber das Ende des Monitors zu informieren. Sonst laufen die weiter.
 				this.setStatusLocal(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED,true);
-				this.logLineDate(ReflectCodeZZZ.getPositionCurrent() + "LogFileWatchRunner ended.");
+				this.logProtocolString(ReflectCodeZZZ.getPositionCurrent() + "LogFileWatchRunner ended.");
 				
               	
                 bReturn = true;

@@ -210,7 +210,9 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
                     if(sLine!=null)
                     {
                     	icount++;                    	
-                    	System.out.println(ReflectCodeZZZ.getPositionCurrent() + icount +"\t: " + sLine);
+                    	sLog = ReflectCodeZZZ.getPositionCurrent() + icount +"\t: " + sLine;
+                    	this.logProtocolString(sLog);
+                    	
                     	objLogStream.write(sLine.getBytes());
                     	objLogStream.write(StringZZZ.crlf().getBytes());//Merke: Ohne diese explizite neue Zeile wird alles hintereinander geschrieben.
                     	

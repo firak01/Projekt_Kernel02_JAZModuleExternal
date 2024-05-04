@@ -316,7 +316,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			BufferedReader brin = null;
 			try {
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") ProcessWatchRunner started.";
-			this.logLineDate(sLog);
+			this.logProtocolString(sLog);
 			
 			String sLineFilter = this.getLineFilter();
 			if(StringZZZ.isEmpty(sLineFilter)) {
@@ -371,7 +371,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					//Das kann z.B. bei dem "Direkten" Test auch nicht erfolgen.
 					if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)|
 					   this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
-						sLog = "Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
 						this.logProtocolString(sLog);
 						this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
 					}

@@ -2,6 +2,7 @@ package basic.zKernel.status;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.log.IEnumSetMappedLogStringFormatZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ.STATUSLOCAL;
 
@@ -38,6 +39,8 @@ public class EventObject4LogFileWatchMonitorStatusLocalZZZ  extends AbstractEven
 	@Override
 	public STATUSLOCAL getStatusEnum() {
 		return (STATUSLOCAL) this.objStatusEnum;
-	}	
+	}
+
+	
 }
 

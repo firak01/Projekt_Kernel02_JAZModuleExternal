@@ -5,10 +5,12 @@ import java.io.File;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.IConstantZZZ;
 import basic.zBasic.IObjectWithStatusZZZ;
+import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.ProcessWatchRunnerZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalUserZZZ;
+import custom.zKernel.LogZZZ;
 import debug.zBasic.util.moduleExternal.process.create.ProcessCreateMockRunnerZZZ;
 
 /** In dieser Klasse wird ein LogFile von dem einen Thread erzeugt 
@@ -51,7 +53,9 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 			System.out.println("###    der einfach nur am ProcessWatchRunner registiert ist   ###");
 			System.out.println("#################################################################");
 		
-								
+						
+			String sLog;
+			
 			//0. Schritt: Bereite den Listener vor, der als Beispiel für einen einfachen Listener fungiert.
 		    ProcessWatchListener_ExampleZZZ objListener = new ProcessWatchListener_ExampleZZZ();
 			
@@ -133,8 +137,8 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 //	Wenn nun der Flag FLAGZ.END_ON_FILTERFOUND jeweiligen Thread-Objekt gesetzt ist, wird FLAGZ.REQUEST_STOP gesetzt.
 //  Damit werden auch die anderen Threads angehalten.
 			
-			
-			System.out.println("FERTIG");
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "FERTIG";
+			LogZZZ.logProtocolStringStatic(sLog);
 		 } catch (ExceptionZZZ e1) {
 			System.out.println(e1.getDetailAllLast());
 			e1.printStackTrace();
