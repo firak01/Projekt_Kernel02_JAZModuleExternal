@@ -171,7 +171,7 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 						String sWorkspace = FileEasyZZZ.getFileRootPathAbsolute();
 						//String sWorkspace2 = FileEasyZZZ.getFileRootPathAbsolute();
 					    //String sWorkspace3 = FileEasyZZZ.getDirectoryOfSystemClassloaderAsString();					    
-						sLog = ReflectCodeZZZ.getPositionCurrent()+": Pfad zum Workspace, als Root fuer die Batch: '"+ sWorkspace +"'";						
+						sLog = ReflectCodeZZZ.getPositionCurrent()+"Pfad zum Workspace, als Root fuer die Batch: '"+ sWorkspace +"'";						
 						this.logProtocolString(sLog);
 						
 						sDirectory = FileEasyZZZ.joinFilePathNameForWorkspace(sWorkspace, "bat");
@@ -181,7 +181,7 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 						//Falls in einer .jar Datei, dann muesste die Batch erst entpack werden
 						//alternativ ein fester Absoluter Pfad auf der Festplatte
 						
-						sLog = ReflectCodeZZZ.getPositionCurrent()+": Ausfuehrung nicht im Workspace, Pfad fuer die Batch fehlt !!!";						
+						sLog = ReflectCodeZZZ.getPositionCurrent()+"Ausfuehrung nicht im Workspace, Pfad fuer die Batch fehlt !!!";						
 						this.logProtocolString(sLog);	
 						break main;
 					}
@@ -208,7 +208,7 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 					//Die Batch braucht dann noch den Pfad zum Workspace als Argument, damit die Java-Klasse gefunden werden kann.
 					String sDirectoryRootOfJavaExecution = FileEasyZZZ.getFileRootPathAbsoluteForExecutionJava();
 					String sCommandConcrete = "cmd /c " + sFilePathConcrete + " " + sDirectoryRootOfJavaExecution;
-					sLog = ReflectCodeZZZ.getPositionCurrent()+"- Konkreter Aufruf der Batch: '"+ sCommandConcrete +"'";						
+					sLog = ReflectCodeZZZ.getPositionCurrent()+"Konkreter Aufruf der Batch: '"+ sCommandConcrete +"'";						
 					this.logProtocolString(sLog);
 					
 					Runtime load = Runtime.getRuntime();
@@ -216,12 +216,12 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 					
 					if(objReturn==null){
 						//Hier nicht abbrechen, sondern die Verarbeitung bei der naechsten Datei fortfuehren
-						sLog = ReflectCodeZZZ.getPositionCurrent()+": Unable to create process, using command: '"+ sCommandConcrete +"'";						
+						sLog = ReflectCodeZZZ.getPositionCurrent()+"Unable to create process, using command: '"+ sCommandConcrete +"'";						
 						this.logProtocolString(sLog); 						
 					}else{	
 						
 						//NEU: Einen anderen Thread zum "Monitoren" des Inputstreams des Processes verwenden. Dadurch werden die anderen Prozesse nicht angehalten.
-						sLog = ReflectCodeZZZ.getPositionCurrent()+": Successfull process created, using command: '"+ sCommandConcrete +"'";
+						sLog = ReflectCodeZZZ.getPositionCurrent()+"Successfull process created, using command: '"+ sCommandConcrete +"'";
 						this.logProtocolString(sLog);			
 					}
 				
@@ -410,7 +410,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					//this.getLogObject().WriteLine(this.getNumber() +"#"+ s);
 					//this.setStatusLocal(IProcessWatchRunnerOVPN.STATUSLOCAL.HASOUTPUT, true);
 					
-					s=ReflectCodeZZZ.getPositionCurrent() + "gelesen aus InputStream: '" + s + "'";
+					s=ReflectCodeZZZ.getPositionCurrent() + "Gelesen aus InputStream: '" + s + "'";
 					
 					this.logProtocolString(s);
 					boolean bAny = this.analyseInputLineCustom(s);

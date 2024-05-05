@@ -119,7 +119,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 			long lngThreadID = Thread.currentThread().getId(); 
 			BufferedReader brin = null;
 			try {
-			sLog = ReflectCodeZZZ.getPositionCurrent() + " LogFileWatchRunner started.";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "LogFileWatchRunner started.";
 			this.logProtocolString(sLog);
 			
 			BufferedReader br=null;

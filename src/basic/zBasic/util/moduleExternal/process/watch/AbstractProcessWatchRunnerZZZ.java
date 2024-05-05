@@ -283,14 +283,14 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			if(StringZZZ.isEmpty(sLineFilter)) break main;
 					
 			sLine = StringZZZ.trimAnyQuoteMarked(sLine);
-			String sLog = ReflectCodeZZZ.getPositionCurrent() + " " +"\t: ObjectWithStatusRunnable ("+this.getClass().getName()+") analysierte Zeile: + '" + sLine + "'";
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - analysierte Zeile: + '" + sLine + "'";
     		this.logProtocolString(sLog);
     		
 			if(StringZZZ.isEmpty(sLine)) break main;
 			
 		
 			if(StringZZZ.contains(sLine, sLineFilter)) {
-        		sLog = ReflectCodeZZZ.getPositionCurrent() + " " +"\t: ObjectWithStatusRunnable ("+this.getClass().getName()+") hat Zeilenfilter gefunden: '" + sLineFilter + "'";
+        		sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - hat Zeilenfilter gefunden: '" + sLineFilter + "'";
         		this.logProtocolString(sLog);
         		
         		bReturn = true;
@@ -315,12 +315,12 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			String sLog;
 			BufferedReader brin = null;
 			try {
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") ProcessWatchRunner started.";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - ProcessWatchRunner started.";
 			this.logProtocolString(sLog);
 			
 			String sLineFilter = this.getLineFilter();
 			if(StringZZZ.isEmpty(sLineFilter)) {
-				ExceptionZZZ ez = new ExceptionZZZ("ObjectWithStatusRunnable ("+this.getClass().getName()+"): Keine Zeilenfilter gesetzt.", this.iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+				ExceptionZZZ ez = new ExceptionZZZ("ObjectWithStatusRunnable - Keine Zeilenfilter gesetzt.", this.iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
 				throw ez;
 			}
 			
@@ -344,14 +344,14 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				if(bHasError) break;//das wäre dann ein von mir selbst erzeugter Fehler, der nicht im STDERR auftaucht.
 				
 				if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
 					this.logProtocolString(sLog);
 					break;
 				}
 				
 				icount++;
 				sLine = brin.readLine();
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") gelesene Zeile: '" + sLine + "'";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - gelesene Zeile: '" + sLine + "'";
 				this.logProtocolString(sLog);
 				if(!StringZZZ.isEmpty(sLine)) {
                		this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASOUTPUT, true);
@@ -364,7 +364,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					
 					//... ein Event soll auch beim Setzen des passenden Status erzeugt und geworfen werden.						
 	        		this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
 					this.logProtocolString(sLog);
 					
 					//Hier wird sofort abgebrochen. Es wird also nicht auf das Setzen von REQUEST_STOP per Event gewartet.
@@ -387,7 +387,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				Thread.sleep(100);
 			}while(true);
 			this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED,true);
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") ended.";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - ended.";
 			this.logProtocolString(sLog);
 			              	
             bReturn = true;
@@ -396,7 +396,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				e.printStackTrace();
 				try {
 					this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") HASERROR Status gesetzt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - HASERROR Status gesetzt.";
 					this.logProtocolString(sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
@@ -409,7 +409,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				e.printStackTrace();
 				try {
 					this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") HASERROR Status gesetzt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - HASERROR Status gesetzt.";
 					this.logProtocolString(sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
@@ -840,7 +840,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
     //### Statische Methode (um einfacher darauf zugreifen zu können)
     public static Class getEnumStatusLocalClass(){
     	try{
-    		System.out.println(ReflectCodeZZZ.getPositionCurrent() + ": Diese Methode muss in den daraus erbenden Klassen überschrieben werden.");
+    		System.out.println(ReflectCodeZZZ.getPositionCurrent() + "Diese Methode muss in den daraus erbenden Klassen überschrieben werden.");
     	}catch(ExceptionZZZ ez){
 			String sError = "ExceptionZZZ: " + ez.getMessageLast() + "+\n ThreadID:" + Thread.currentThread().getId() +"\n";			
 			System.out.println(sError);
