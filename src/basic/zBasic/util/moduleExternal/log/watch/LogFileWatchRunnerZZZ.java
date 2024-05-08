@@ -85,9 +85,11 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 			main:{
 				//long lngThreadID = Thread.currentThread().getId();
 				//String sLog = ReflectCodeZZZ.getPositionCurrent() + "[Thread: "+lngThreadID + "] Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", StatusMessage='" + sStatusMessage +"'";
+				//String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", StatusMessage='" + sStatusMessage +"'";
 				String sLog = "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", StatusMessage='" + sStatusMessage +"'";
 				sLog = LogStringZZZ.getInstance().compute(this, ReflectCodeZZZ.getPositionCurrent(), sLog);
-				this.logProtocolString(sLog);
+				this.logLine(sLog);//!!! hier nicht noch mal eine Methode mit "ProtocolString" aufrufen, sonst wird damit erneut ein LogString gebastelt. D.h. man hat z.B. 2x die Datumsangabe oder 2x die Threadangabe 
+							
 				
 				if(bStatusValue) {//nur im true Fall
 					if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
