@@ -2,26 +2,13 @@ package basic.zBasic.util.moduleExternal.process.watch;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
-import base.files.EncodingMaintypeZZZ.TypeZZZ;
-import basic.zKernel.KernelZZZ;
-import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.EventObject4ProcessWatchStatusLocalZZZ;
-import basic.zKernel.status.IEventBrokerStatusLocalUserZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
-import basic.zKernel.status.IStatusLocalMessageUserZZZ;
-import basic.zKernel.status.StatusLocalAvailableHelperZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.AbstractProgramWithStatusOnStatusListeningRunnableZZZ;
@@ -30,15 +17,11 @@ import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.component.IProgramZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
-import basic.zBasic.util.datatype.string.StringArrayZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
-import basic.zKernel.IKernelZZZ;
-import basic.zKernel.AbstractKernelUseObjectWithStatusZZZ;
-import basic.zKernel.AbstractKernelUseObjectZZZ;
+import basic.zKernel.status.IStatusLocalMessageUserZZZ;
 
 /**This class receives the stream from a process, which was started by the ConfigStarterZZZ class.
  * This is necessary, because the process will only goon working, if the streams were "catched" by a target.

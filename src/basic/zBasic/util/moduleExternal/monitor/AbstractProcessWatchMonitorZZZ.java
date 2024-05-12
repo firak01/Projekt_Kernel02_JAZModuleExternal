@@ -1,23 +1,10 @@
 package basic.zBasic.util.moduleExternal.monitor;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import basic.zBasic.AbstractObjectWithStatusOnStatusListeningZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.component.AbstractProgramMonitorZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
-import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.flag.event.EventObjectFlagZsetZZZ;
-import basic.zKernel.flag.event.IEventObjectFlagZsetZZZ;
-import basic.zKernel.status.IEventBrokerStatusLocalUserZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalZZZ;
-import basic.zKernel.status.SenderObjectStatusLocalZZZ;
 
 public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractProgramMonitorZZZ implements IProcessWatchMonitorZZZ{
 	private static final long serialVersionUID = 4532365489539285236L;
@@ -132,129 +119,4 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractProgramMon
 		return this.proofFlagSetBefore(objEnumFlag.name());
 	}	
 
-		
-		
-	//########################################################################
-	//####################################
-	//### STATUS: IProcessWatchMonitorZZZ
-	//####################################
-	
-//	//####### aus ISenderObjectStatusLocalSetUserZZZ
-//	/* (non-Javadoc)
-//	 * @see basic.zKernel.status.ISenderObjectStatusLocalSetUserZZZ#getSenderStatusLocalUsed()
-//	 */
-//	@Override
-//	public ISenderObjectStatusLocalZZZ getSenderStatusLocalUsed() throws ExceptionZZZ {
-//		if(this.objEventStatusLocalBroker==null) {
-//			//++++++++++++++++++++++++++++++
-//			//Nun geht es darum den Sender fuer Aenderungen am Status zu erstellen, der dann registrierte Objekte ueber Aenderung von Flags informiert
-//			ISenderObjectStatusLocalZZZ objSenderStatusLocal = new SenderObjectStatusLocalZZZ();
-//			this.objEventStatusLocalBroker = objSenderStatusLocal;
-//		}
-//		return this.objEventStatusLocalBroker;
-//	}
-//
-//	@Override
-//	public void setSenderStatusLocalUsed(ISenderObjectStatusLocalZZZ objEventSender) {
-//		this.objEventStatusLocalBroker = objEventSender;
-//	}
-//		
-//	
-//	//### aus IEventBrokerStatusLocalSetUserZZZ
-//	@Override
-//	public void registerForStatusLocalEvent(IListenerObjectStatusLocalZZZ objEventListener)throws ExceptionZZZ {
-//		this.getSenderStatusLocalUsed().addListenerObject(objEventListener);		
-//	}
-//	
-//	@Override
-//	public void unregisterForStatusLocalEvent(IListenerObjectStatusLocalZZZ objEventListener) throws ExceptionZZZ {
-//		this.getSenderStatusLocalUsed().removeListenerObject(objEventListener);;
-//	}
-	
-
-//	@Override
-//	public boolean getStatusLocal(Enum objEnumStatusIn) throws ExceptionZZZ {
-//		boolean bFunction = false;
-//		main:{
-//			if(objEnumStatusIn==null) {
-//				break main;
-//			}
-//			
-//			//IProcessWatchMonitorZZZ.STATUSLOCAL enumStatus = (IProcessWatchMonitorZZZ.STATUSLOCAL) objEnumStatusIn;
-//			String sStatusName = objEnumStatusIn.name();
-//			if(StringZZZ.isEmpty(sStatusName)) break main;
-//										
-//			HashMap<String, Boolean> hmFlag = this.getHashMapStatusLocal();
-//			Boolean objBoolean = hmFlag.get(sStatusName.toUpperCase());
-//			if(objBoolean==null){
-//				bFunction = false;
-//			}else{
-//				bFunction = objBoolean.booleanValue();
-//			}
-//							
-//		}	// end main:
-//		
-//		return bFunction;	
-//	}
-	
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		//+++ SET STATUS LOCAL, alle Varianten, gecasted auf dieses Objekt
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//		@Override
-//		public boolean setStatusLocal(Enum enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
-//			boolean bFunction = false;
-//			main:{
-//				if(enumStatusIn==null) break main;
-//				
-//				//ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) enumStatusIn;
-//								
-//				bFunction = this.offerStatusLocal(enumStatusIn, null, bStatusValue);
-//			}//end main:
-//			return bFunction;
-//		}
-//			
-//		/* (non-Javadoc)
-//		 * @see basic.zBasic.AbstractObjectWithStatusZZZ#setStatusLocalEnum(basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ, boolean)
-//		 */
-//		@Override 
-//		public boolean setStatusLocalEnum(IEnumSetMappedStatusZZZ enumStatusIn, boolean bStatusValue) throws ExceptionZZZ {
-//			boolean bReturn = false;
-//			main:{
-//				if(enumStatusIn==null) break main;
-//
-//				//ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) enumStatusIn;
-//				
-//				bReturn = this.offerStatusLocal(enumStatusIn.getName(), null, bStatusValue);
-//			}//end main:
-//			return bReturn;
-//		}
-//		
-//		//+++ aus IStatusLocalUserMessageZZZ			
-//		@Override 
-//		public boolean setStatusLocal(Enum enumStatusIn, String sMessage, boolean bStatusValue) throws ExceptionZZZ {
-//			boolean bFunction = false;
-//			main:{
-//				if(enumStatusIn==null) break main;
-//				
-//				//ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) enumStatusIn;
-//				
-//				bFunction = this.offerStatusLocal(enumStatusIn.name(), sMessage, bStatusValue);
-//			}//end main:
-//			return bFunction;
-//		}
-//			
-//		@Override 
-//		public boolean setStatusLocalEnum(IEnumSetMappedStatusZZZ enumStatusIn, String sMessage, boolean bStatusValue) throws ExceptionZZZ {
-//			boolean bReturn = false;
-//			main:{
-//				if(enumStatusIn==null) break main;
-//				
-//				//ILogFileWatchMonitorZZZ.STATUSLOCAL enumStatus = (ILogFileWatchMonitorZZZ.STATUSLOCAL) enumStatusIn;
-//				
-//				bReturn = this.offerStatusLocal(enumStatusIn.getName(), sMessage, bStatusValue);
-//			}//end main:
-//			return bReturn;
-//		}				
-//				
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }

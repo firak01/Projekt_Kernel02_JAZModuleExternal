@@ -1,6 +1,5 @@
 package basic.zBasic.util.moduleExternal.monitor;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,22 +7,12 @@ import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.component.IProgramZZZ;
-import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
-import basic.zBasic.util.abstractList.ArrayListUniqueZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
-import basic.zBasic.util.moduleExternal.monitor.AbstractProcessWatchMonitorZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ;
-import basic.zKernel.AbstractKernelUseObjectWithStatusZZZ;
-import basic.zKernel.IKernelZZZ;
-import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.flag.event.EventObjectFlagZsetZZZ;
-import basic.zKernel.flag.event.IEventObjectFlagZsetZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
-import basic.zKernel.status.ISenderObjectStatusLocalZZZ;
 
 
 /**This class watches the ServerMainZZZ-class and the ServerConnectionListenerRuner-objects.

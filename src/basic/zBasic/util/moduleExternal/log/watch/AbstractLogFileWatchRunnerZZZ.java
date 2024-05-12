@@ -20,14 +20,6 @@ import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
-import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ;
-import basic.zBasic.util.moduleExternal.process.watch.ProcessWatchRunnerZZZ;
-import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.EventObject4LogFileWatchRunnerStatusLocalZZZ;
-import basic.zKernel.status.EventObject4ProcessWatchStatusLocalZZZ;
-import basic.zKernel.status.IEventObject4LogFileWatchRunnerStatusLocalZZZ;
-import basic.zKernel.status.IEventObjectStatusLocalZZZ;
-import basic.zKernel.status.IListenerObjectStatusBasicZZZ;
 import basic.zKernel.status.IStatusLocalMessageUserZZZ;
 
 public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithStatusOnStatusListeningRunnableZZZ implements ILogFileWatchRunnerZZZ{
@@ -121,26 +113,24 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 			try {
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "LogFileWatchRunner started.";
 			this.logProtocolString(sLog);
-			
-			BufferedReader br=null;
-			
+					
 				File objFileLog = this.getLogFileWatched();
 				
 				//Warte auf die Existenz der Datei.
 				boolean bExists = false;
 				do {
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] hat Flag gesetzt ('" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "Hat Flag gesetzt ('" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
 						this.logProtocolString(sLog);
 						break main;
 					}
 					bExists = FileEasyZZZ.exists(objFileLog);
 					if(!bExists) {
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] wartet auf Existenz der Datei  ('"+ objFileLog.getAbsolutePath() +"') ...";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "Wartet auf Existenz der Datei  ('"+ objFileLog.getAbsolutePath() +"') ...";
 						this.logProtocolString(sLog);
 						Thread.sleep(5000);
 					}else {
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] Datei existiert ('"+ objFileLog.getAbsolutePath() +"')";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "Datei existiert ('"+ objFileLog.getAbsolutePath() +"')";
 						this.logProtocolString(sLog);
 						Thread.sleep(5000);
 					}
@@ -148,14 +138,14 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				
 				String sLineFilter = this.getLineFilter();
 				if(StringZZZ.isEmpty(sLineFilter)) {
-					ExceptionZZZ ez = new ExceptionZZZ("ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] Keine Zeilenfilter gesetzt.", this.iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+					ExceptionZZZ ez = new ExceptionZZZ("Keine Zeilenfilter gesetzt.", this.iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
 					throw ez;
 				}
 				
 				InputStream objStream = new FileInputStream(objFileLog);
 				brin = new BufferedReader(new InputStreamReader(objStream));
 				if(!brin.ready()){
-					ExceptionZZZ ez = new ExceptionZZZ("ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] BufferdReader-Object not ready", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+					ExceptionZZZ ez = new ExceptionZZZ("BufferdReader-Object not ready", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
 					throw ez;
 				}
 				
@@ -169,7 +159,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 					if(bHasError) break;//das wäre dann ein von mir selbst erzeugter Fehler, der nicht im STDERR auftaucht.
 					
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+ ") [Thread: "+lngThreadID + "] hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "Hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
 						this.logProtocolString(sLog);
 						break;
 					}
@@ -182,24 +172,24 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 										
 					boolean bFilterFound = this.writeOutputToLogPLUSanalyse(icount, sLine, sLineFilter);		//Man muss wohl erst den InputStream abgreifen, damit der Process weiterlaufen kann.
 					if(bFilterFound) {																								
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+ ") [Thread: "+lngThreadID + "] Filter '" + sLineFilter + "' wurde gefunden in Zeile " + icount;
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter '" + sLineFilter + "' wurde gefunden in Zeile " + icount;
 						this.logProtocolString(sLog);
 						
 						//... ein Event soll auch beim Setzen des passenden Status erzeugt und geworfen werden.						
 		        		this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND,true);
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
 						this.logProtocolString(sLog);
 						
 						//Merke: Das wird in der Erweiterung, bzw. am Ende des offerStatus ggfs. für eine gemappte Action gemacht.
 						//       Darum hier nicht mehr notwendig.
 						//Hier wird sofort abgebrochen. Es wird also nicht auf das Setzen von REQUEST_STOP per Event gewartet.
 						//Das kann z.B. bei dem "Direkten" Test auch nicht erfolgen.
-//						if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)|
-//						   this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
-//							sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
-//							this.logProtocolString(sLog);
-//							this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
-//						}
+	//						if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND)|
+	//						   this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
+	//							sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMIDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
+	//							this.logProtocolString(sLog);
+	//							this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
+	//						}
 					
 						Thread.sleep(100);
 					}else{
@@ -212,16 +202,16 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 					Thread.sleep(100);
 				}while(true);
 				this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED,true);
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+ ") [Thread: "+lngThreadID + "] ended.";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Ended.";
 				this.logProtocolString(sLog);
 				              	
-                bReturn = true;
-                  
+	            bReturn = true;
+	              
 			} catch (InterruptedException e) {				
 				e.printStackTrace();
 				try {
 					this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] HASERROR Status gesetzt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
 					this.logProtocolString(sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
@@ -234,7 +224,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				e.printStackTrace();
 				try{
 					this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] HASERROR Status gesetzt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
 					this.logProtocolString(sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
@@ -246,7 +236,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				e.printStackTrace();
 				try {
 					this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") [Thread: "+lngThreadID + "] HASERROR Status gesetzt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
 					this.logProtocolString(sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
@@ -337,7 +327,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				String sLog;
 				
 				//+++ Die Zeile ausgeben und analysieren					
-                sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") Gelesen aus InputStream - " + iLineCounter +"\t: '" + sLine + "'";
+                sLog = ReflectCodeZZZ.getPositionCurrent() + "Gelesen aus InputStream - " + iLineCounter +"\t: '" + sLine + "'";
                 this.logProtocolString(sLog);
                		
 				bReturn = this.analyseInputLineCustom(sLine, sLineFilter);												
@@ -349,7 +339,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	public boolean writeErrorToLog(int iLineCounter, String sErrorLine) throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{					
-			String sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable ("+this.getClass().getName()+") ERROR: " +sErrorLine;
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "ERROR: " +sErrorLine;
 			this.logProtocolString(sLog);			
 			
 			bReturn = true;
@@ -391,7 +381,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 						
 			String sLog;
 			if(StringZZZ.contains(sLine, sLineFilter)) {
-        		sLog = ReflectCodeZZZ.getPositionCurrent() + " " +"\t: ObjectWithStatusRunnable ("+this.getClass().getName()+") hat Zeilenfilter gefunden: '" + sLineFilter + "'";
+        		sLog = ReflectCodeZZZ.getPositionCurrent() + "Hat Zeilenfilter gefunden: '" + sLineFilter + "'";
         		this.logProtocolString(sLog);
         		
         		bReturn = true;

@@ -6,15 +6,11 @@ import java.util.HashMap;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.AbstractProgramMonitorRunnableZZZ;
-import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zKernel.flag.IFlagZUserZZZ;
-import basic.zKernel.status.EventObject4LogFileWatchMonitorStatusLocalZZZ;
-import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
-import basic.zKernel.status.IListenerObjectStatusLocalZZZ;
 
 /**Beachte: Es wird ILogFileWatchMonitorZZZ implementiert
  *          und nicht etwa ein ILogFileWatchMonitorRunnableZZZ.
@@ -245,14 +241,14 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 			String sStatusName = enumStatus.name();
 			bFunction = this.proofStatusLocalExists(sStatusName);															
 			if(!bFunction) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") would like to fire event, but this status is not available: '" + sStatusName + "'";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Would like to fire event, but this status is not available: '" + sStatusName + "'";
 				this.logProtocolString(sLog);			
 				break main;
 			}
 			
 		bFunction = this.proofStatusLocalValueChanged(sStatusName, bStatusValue);
 		if(!bFunction) {
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") would like to fire event, but this status has not changed: '" + sStatusName + "'";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Would like to fire event, but this status has not changed: '" + sStatusName + "'";
 			this.logProtocolString(sLog);
 			break main;
 		}	
@@ -276,12 +272,12 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 			sStatusMessageToSet = sStatusMessage;
 		}
 		
-		sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+") verarbeitet sStatusMessageToSet='" + sStatusMessageToSet + "'";
+		sLog = ReflectCodeZZZ.getPositionCurrent() + "Verarbeitet sStatusMessageToSet='" + sStatusMessageToSet + "'";
 		this.logProtocolString(sLog);
 
 		//Falls eine Message extra uebergeben worden ist, ueberschreibe...
 		if(sStatusMessageToSet!=null) {
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatus ("+this.getClass().getName()+")  setzt sStatusMessageToSet='" + sStatusMessageToSet + "'";
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "Setzt sStatusMessageToSet='" + sStatusMessageToSet + "'";
 			this.logProtocolString(sLog);
 		}
 		//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte
