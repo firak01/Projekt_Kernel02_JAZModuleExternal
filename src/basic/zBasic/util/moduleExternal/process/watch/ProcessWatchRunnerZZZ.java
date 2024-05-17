@@ -4,8 +4,11 @@ import java.util.HashMap;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
+import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
+import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
+import basic.zBasic.util.moduleExternal.monitor.IProcessWatchMonitorZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalZZZ;
 
@@ -35,6 +38,43 @@ public class ProcessWatchRunnerZZZ extends AbstractProcessWatchRunnerZZZ {
 		super(objProcess, sLineFilter, saFlag);
 	}
 	
+	
+	//Methode wird in der ReactionHashMap angegeben....
+	public boolean doStop(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+			this.logProtocolString(sLog);
+			
+			sLog = ReflectCodeZZZ.getPositionCurrent() + "DOSTOP!!!";
+			this.logProtocolString(sLog);
+			
+			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
+		}//end main
+		return bReturn;
+	}
+	
+	//Methode wird in der ReactionHashMap angegeben....
+			public boolean doFilterFound(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+				boolean bReturn = false;
+				main:{
+					
+					String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+					this.logProtocolString(sLog);
+					
+					if(bStatusValue) {//nur im true Fall
+						if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
+						   if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)) {
+							   System.exit(1);
+						   }else {
+							   bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+						   }												
+						}
+					}						
+				}//end main
+				return bReturn;
+			}
 
 	//### Statische Methode (um einfacher darauf zugreifen zu können)
     public static Class getEnumStatusLocalClass(){    	
@@ -114,8 +154,8 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - 10er Zaehler gefunden.";
 				this.logProtocolString(sLog);
 				break main;				
-			}else if(iZaehler >= 100) {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - Zaehler ueber 100. Breche ab.";
+			}else if(iZaehler >= 50) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - Zaehler ueber 50. Breche ab.";
 				this.logProtocolString(sLog);
 				//this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, false);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
 				bReturn = true;
@@ -244,12 +284,48 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 
 	@Override
 	public HashMap createHashMapStatusLocal4ReactionCustom() {
-		return null;
+	HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
+		
+		//Reagiere auf diee Events... mit dem angegebenen Alias.
+	    //Also: Da dieser ProcessWatchRunner nicht mit einem ProcessWatchMonitorRunner(!) sondern nur mit einem ProcessWatchMonitor zusammenarbeitet, wird der Status "isstopped" nie gesetzt werden.
+		hmReturn.put(IProcessWatchMonitorZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
+		hmReturn.put(IProcessWatchMonitorZZZ.STATUSLOCAL.HASERROR, "doStop");
+		
+		//Also kann nur direkt auf den "FilterFound" Status reagiert werden.
+		//Den der ProcesswatchRunner selbst ausgeloest hat.
+		hmReturn.put(IProcessWatchMonitorZZZ.STATUSLOCAL.HASPROCESSWATCHRUNNERFILTERFOUND, "doFilterFound");
+				
+		return hmReturn;
 	}
 
 	@Override
-	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus,		boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {	
-		return false;
+	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus,		boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			if(!bStatusValue) break main;
+			
+			String sLog;
+	
+			//TODO Idee: Per Reflection API die so genannte Methode aufrufen... aber dann sollte das Event-Objekt als Parameter mit uebergeben werden.
+			if(!StringZZZ.isEmpty(sAction)) {
+				switch(sAction) {
+				case "doStop":
+					bReturn = this.doStop(enumStatus, bStatusValue, sStatusMessage);	
+					break;	
+				case "doFilterFound":
+					bReturn = this.doFilterFound(enumStatus, bStatusValue, sStatusMessage);	
+					break;
+				default:
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
+					this.logProtocolString(sLog);
+				}
+			}else {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
+				this.logProtocolString(sLog);
+			}
+	
+	}//end main:
+	return bReturn;	
 	}
 
 	@Override

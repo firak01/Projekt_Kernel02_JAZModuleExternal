@@ -314,6 +314,9 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 				this.logProtocolString(sLog);
 				
 				if(bStatusValue) {//nur im true Fall
+					this.setStatusLocal(IProcessWatchMonitorZZZ.STATUSLOCAL.HASPROCESSWATCHRUNNERFILTERFOUND, bStatusValue);
+					
+					
 					if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
 					   if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)) {
 						   System.exit(1);
@@ -382,10 +385,10 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
 		//Reagiere auf diee Events... mit dem angegebenen Alias.
-		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
-		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR, "doStop");
+		hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED, "doStop");
+		hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR, "doStop");
 		
-		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
+		hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
 				
 		return hmReturn;
 	}

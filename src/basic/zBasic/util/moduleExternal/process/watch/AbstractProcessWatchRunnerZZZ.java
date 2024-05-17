@@ -298,82 +298,85 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			String sLog;
 			BufferedReader brin = null;
 			try {
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - ProcessWatchRunner started.";
-			this.logProtocolString(sLog);
-			
-			String sLineFilter = this.getLineFilter();
-			if(StringZZZ.isEmpty(sLineFilter)) {
-				ExceptionZZZ ez = new ExceptionZZZ("ObjectWithStatusRunnable - Keine Zeilenfilter gesetzt.", this.iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
-				throw ez;
-			}
-			
-			//Warte auf die Existenz einer auszulesenden Datei ist nicht notwendig.
-			//... hier wird mit einem Process gearbeitet.
-						
-			Process objProcess = this.getProcessWatched();
-			brin = new BufferedReader(new InputStreamReader(objProcess.getInputStream()) );
-			if(!brin.ready()){
-				ExceptionZZZ ez = new ExceptionZZZ("BufferdReader-Object not ready", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
-				throw ez;
-			}
-			
-			//Merke: Darin ist ene Endlosschleife
-			int icount=0;
-			String sLine;
-			
-			do{
-				//Solange laufen, bis ein Fehler auftritt oder ein Filter erkannt wird.
-				boolean bHasError = this.getStatusLocal(ProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR);
-				if(bHasError) break;//das wäre dann ein von mir selbst erzeugter Fehler, der nicht im STDERR auftaucht.
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - ProcessWatchRunner started.";
+				this.logProtocolString(sLog);
 				
-				if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
-					this.logProtocolString(sLog);
-					break;
+				String sLineFilter = this.getLineFilter();
+				if(StringZZZ.isEmpty(sLineFilter)) {
+					ExceptionZZZ ez = new ExceptionZZZ("ObjectWithStatusRunnable - Keine Zeilenfilter gesetzt.", this.iERROR_PROPERTY_MISSING, this, ReflectCodeZZZ.getMethodCurrentName());
+					throw ez;
 				}
 				
-				icount++;
-				sLine = brin.readLine();
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - gelesene Zeile: '" + sLine + "'";
-				this.logProtocolString(sLog);
-				if(!StringZZZ.isEmpty(sLine)) {
-               		this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASOUTPUT, true);
-               	}
+				//Warte auf die Existenz einer auszulesenden Datei ist nicht notwendig.
+				//... hier wird mit einem Process gearbeitet.
+							
+				Process objProcess = this.getProcessWatched();
+				brin = new BufferedReader(new InputStreamReader(objProcess.getInputStream()) );
+				if(!brin.ready()){
+					ExceptionZZZ ez = new ExceptionZZZ("BufferdReader-Object not ready", iERROR_RUNTIME, this, ReflectCodeZZZ.getMethodCurrentName());
+					throw ez;
+				}
 				
-				boolean bFilterFound = this.writeOutputToLogPLUSanalyse(icount, sLine, sLineFilter);		//Man muss wohl erst den InputStream abgreifen, damit der Process weiterlaufen kann.
-				if(bFilterFound) {
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter '" + sLineFilter + "' wurde gefunden in Zeile " + icount;
-					this.logProtocolString(sLog);
+				//Merke: Darin ist ene Endlosschleife
+				int icount=0;
+				String sLine;
+				
+				do{
+					//Solange laufen, bis ein Fehler auftritt oder ein Filter erkannt wird.
+					boolean bHasError = this.getStatusLocal(ProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR);
+					if(bHasError) break;//das wäre dann ein von mir selbst erzeugter Fehler, der nicht im STDERR auftaucht.
 					
-					//... ein Event soll auch beim Setzen des passenden Status erzeugt und geworfen werden.						
-	        		this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
-					this.logProtocolString(sLog);
-					
-					//Hier wird sofort abgebrochen. Es wird also nicht auf das Setzen von REQUEST_STOP per Event gewartet.
-					//Das kann z.B. bei dem "Direkten" Test auch nicht erfolgen.
-					if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)|
-					   this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
+					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
 						this.logProtocolString(sLog);
-						this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
+						break;
 					}
-				
-					Thread.sleep(100);
-				}else{
-					//Entsprechend hier wieder den Filter verloren
-					//Einen Extra Event sollte man hier nicht erzeugen muessen. Den Status zu setzen sollte bereits einen entsprechenden Status Event abfeuern.
-					this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, false);	
 					
-				}//end bFilterFound	
-				
-				Thread.sleep(100);
-			}while(true);
-			this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED,true);
-			sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - ended.";
-			this.logProtocolString(sLog);
-			              	
-            bReturn = true;
+					icount++;
+					sLine = brin.readLine();
+					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - gelesene Zeile: '" + sLine + "'";
+					this.logProtocolString(sLog);
+					if(!StringZZZ.isEmpty(sLine)) {
+	               		this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASOUTPUT, true);
+	               	}
+					
+					boolean bFilterFound = this.writeOutputToLogPLUSanalyse(icount, sLine, sLineFilter);		//Man muss wohl erst den InputStream abgreifen, damit der Process weiterlaufen kann.
+					if(bFilterFound) {
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter '" + sLineFilter + "' wurde gefunden in Zeile " + icount;
+						this.logProtocolString(sLog);
+						
+						//... ein Event soll auch beim Setzen des passenden Status erzeugt und geworfen werden.						
+		        		this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND,true);
+						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
+						this.logProtocolString(sLog);
+						
+						//Hier wird sofort abgebrochen. Es wird also nicht auf das Setzen von REQUEST_STOP per Event gewartet.
+						//Das kann z.B. bei dem "Direkten" Test auch nicht erfolgen.
+						boolean bFlagEndImmediate = this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND);
+						if(bFlagEndImmediate){
+						   if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
+								sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
+								this.logProtocolString(sLog);
+								this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
+							}					
+							Thread.sleep(100);
+						}else {
+							//Warte darauf, dass der Monitor beendet wird und ende erst dann...
+							
+						}	
+					}else{
+						//Entsprechend hier wieder den Filter verloren
+						//Einen Extra Event sollte man hier nicht erzeugen muessen. Den Status zu setzen sollte bereits einen entsprechenden Status Event abfeuern.
+						this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, false);	
+						//end bFilterFound
+					}
+					Thread.sleep(100);
+				}while(true);
+				this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED,true);
+				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - ended.";
+				this.logProtocolString(sLog);
+				              	
+	            bReturn = true;
               
 			}catch (InterruptedException e) {
 				e.printStackTrace();
@@ -785,40 +788,40 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	//### Aus IStatusLocalUserZZZ
 	
 	//Merke: Hier wird zusätzlich noch ein Event gefeuert
-	@Override
-	public boolean setStatusLocal(String sStatusName, boolean bStatusValue) throws ExceptionZZZ {
-		boolean bFunction = false;
-		main:{
-			if(StringZZZ.isEmpty(sStatusName)) {
-				bFunction = true;
-				break main;
-			}
-						
-			bFunction = this.proofStatusLocalExists(sStatusName);															
-			if(bFunction){
-				
-				bFunction = this.proofStatusLocalValueChanged(sStatusName, bStatusValue);
-				if(bFunction) {		
-					
-					//Holes die HashMap
-					HashMap<String, Boolean> hmStatus = this.getHashMapStatusLocal();
-					//Setze den erwiesenermassen geaenderten Status nun in die HashMap
-					hmStatus.put(sStatusName.toUpperCase(), bStatusValue);
-					
-					//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
-					//Dann erzeuge den Event und feuer ihn ab.
+//	@Override
+//	public boolean setStatusLocal(String sStatusName, boolean bStatusValue) throws ExceptionZZZ {
+//		boolean bFunction = false;
+//		main:{
+//			if(StringZZZ.isEmpty(sStatusName)) {
+//				bFunction = true;
+//				break main;
+//			}
+//						
+//			bFunction = this.proofStatusLocalExists(sStatusName);															
+//			if(bFunction){
+//				
+//				bFunction = this.proofStatusLocalValueChanged(sStatusName, bStatusValue);
+//				if(bFunction) {		
+//					
+//					//Holes die HashMap
+//					HashMap<String, Boolean> hmStatus = this.getHashMapStatusLocal();
+//					//Setze den erwiesenermassen geaenderten Status nun in die HashMap
+//					hmStatus.put(sStatusName.toUpperCase(), bStatusValue);
+//					
+//					//Falls irgendwann ein Objekt sich fuer die Eventbenachrichtigung registriert hat, gibt es den EventBroker.
+//					//Dann erzeuge den Event und feuer ihn ab.
 //					if(this.getSenderStatusLocalUsed()!=null) {
 //						IEventObjectStatusLocalSetZZZ event = new EventObject4ProcessWatchStatusLocalSetZZZ(this,1,sStatusName.toUpperCase(), bStatusValue);
 //						this.getSenderStatusLocalUsed().fireEvent(event);
 //					}
-					
-					bFunction = true;
-				}
-			}										
-		}	// end main:
-		
-		return bFunction;
-	}
+//					
+//					bFunction = true;
+//				}
+//			}										
+//		}	// end main:
+//		
+//		return bFunction;
+//	}
 		
     //### Statische Methode (um einfacher darauf zugreifen zu können)
     public static Class getEnumStatusLocalClass(){
