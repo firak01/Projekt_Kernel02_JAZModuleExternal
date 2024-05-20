@@ -291,10 +291,16 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 	//Methode wird in der ReactionHashMap angegeben....
 		public boolean doStop(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 			boolean bReturn = false;
-			main:{
-				
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+			main:{								
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 				this.logProtocolString(sLog);
+				
+				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
+				if(bReturn) {
+					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+					this.logProtocolString(sLog);
+					break main;
+				}
 				
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "DOSTOP!!!";
 				this.logProtocolString(sLog);
@@ -310,9 +316,16 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			boolean bReturn = false;
 			main:{
 				
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+"=> Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 				this.logProtocolString(sLog);
 				
+				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
+				if(bReturn) {
+					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+					this.logProtocolString(sLog);
+					break main;
+				}
+								
 				if(bStatusValue) {//nur im true Fall
 					this.setStatusLocal(IProcessWatchMonitorZZZ.STATUSLOCAL.HASPROCESSWATCHRUNNERFILTERFOUND, bStatusValue);
 					
@@ -411,11 +424,11 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 					bReturn = this.doFilterFound(enumStatus, bStatusValue, sStatusMessage);		
 					break;
 				default:
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> ActionAlias wird noch nicht behandelt. '" + sAction + "'";
 					this.logProtocolString(sLog);
 				}
 			}else {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
 				this.logProtocolString(sLog);
 			}
 	

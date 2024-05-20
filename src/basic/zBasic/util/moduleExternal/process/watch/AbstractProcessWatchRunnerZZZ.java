@@ -179,7 +179,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				String sLog;
 				
 				//+++ Die Zeile ausgeben und analysieren					
-                sLog = ReflectCodeZZZ.getPositionCurrent() + "Gelesen aus InputStream - " + iLineCounter +"\t: '" + sLine + "'";
+                sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Gelesen aus InputStream - " + iLineCounter +"\t: '" + sLine + "'";
                 this.logProtocolString(sLog);
                		
 				bReturn = this.analyseInputLineCustom(sLine, sLineFilter);												
@@ -266,14 +266,14 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			if(StringZZZ.isEmpty(sLineFilter)) break main;
 					
 			sLine = StringZZZ.trimAnyQuoteMarked(sLine);
-			String sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - analysierte Zeile: + '" + sLine + "'";
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Analysierte Zeile: + '" + sLine + "'";
     		this.logProtocolString(sLog);
     		
 			if(StringZZZ.isEmpty(sLine)) break main;
 			
 		
 			if(StringZZZ.contains(sLine, sLineFilter)) {
-        		sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - hat Zeilenfilter gefunden: '" + sLineFilter + "'";
+        		sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Hat Zeilenfilter gefunden: '" + sLineFilter + "'";
         		this.logProtocolString(sLog);
         		
         		bReturn = true;
@@ -298,7 +298,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			String sLog;
 			BufferedReader brin = null;
 			try {
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - ProcessWatchRunner started.";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> ProcessWatchRunner started.";
 				this.logProtocolString(sLog);
 				
 				String sLineFilter = this.getLineFilter();
@@ -327,14 +327,14 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					if(bHasError) break;//das wäre dann ein von mir selbst erzeugter Fehler, der nicht im STDERR auftaucht.
 					
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
 						this.logProtocolString(sLog);
 						break;
 					}
 					
 					icount++;
 					sLine = brin.readLine();
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - gelesene Zeile: '" + sLine + "'";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Gelesene Zeile: '" + sLine + "'";
 					this.logProtocolString(sLog);
 					if(!StringZZZ.isEmpty(sLine)) {
 	               		this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASOUTPUT, true);
@@ -342,12 +342,12 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					
 					boolean bFilterFound = this.writeOutputToLogPLUSanalyse(icount, sLine, sLineFilter);		//Man muss wohl erst den InputStream abgreifen, damit der Process weiterlaufen kann.
 					if(bFilterFound) {
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter '" + sLineFilter + "' wurde gefunden in Zeile " + icount;
+						sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Filter '" + sLineFilter + "' wurde gefunden in Zeile " + icount;
 						this.logProtocolString(sLog);
 						
 						//... ein Event soll auch beim Setzen des passenden Status erzeugt und geworfen werden.						
 		        		this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND,true);
-						sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
+						sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
 						this.logProtocolString(sLog);
 						
 						//Hier wird sofort abgebrochen. Es wird also nicht auf das Setzen von REQUEST_STOP per Event gewartet.
@@ -355,7 +355,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 						boolean bFlagEndImmediate = this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND);
 						if(bFlagEndImmediate){
 						   if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
-								sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
+								sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Filter gefunden... Gemaess Flag '" + IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND.name() +"', beende per Flag aber ohne auf den Event zu warten '" +IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'";
 								this.logProtocolString(sLog);
 								this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, true);
 							}					
@@ -373,7 +373,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					Thread.sleep(100);
 				}while(true);
 				this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED,true);
-				sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - ended.";
+				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Ended.";
 				this.logProtocolString(sLog);
 				              	
 	            bReturn = true;
@@ -382,7 +382,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				e.printStackTrace();
 				try {
 					this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - HASERROR Status gesetzt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> HASERROR Status gesetzt.";
 					this.logProtocolString(sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
@@ -395,7 +395,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				e.printStackTrace();
 				try {
 					this.setStatusLocal(IProcessWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
-					sLog = ReflectCodeZZZ.getPositionCurrent() + "ObjectWithStatusRunnable - HASERROR Status gesetzt.";
+					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> HASERROR Status gesetzt.";
 					this.logProtocolString(sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
@@ -435,7 +435,8 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				BufferedWriter out = new BufferedWriter( new OutputStreamWriter(objProcess.getOutputStream()) );
 				out.write(sOut);
 			
-				this.logProtocolString("STRING SEND TO PROCESS: "+ sOut);
+				String sLog = ReflectCodeZZZ.getPositionCurrent()+ this.getClass().getSimpleName() + "=> STRING SEND TO PROCESS: '"+ sOut + "'";
+				this.logProtocolString(sLog);
 				this.setFlag("hasInput", true);
 				
 			} catch (IOException e) {

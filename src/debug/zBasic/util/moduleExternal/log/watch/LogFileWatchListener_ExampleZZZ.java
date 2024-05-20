@@ -108,7 +108,7 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 				
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 				this.logProtocolString(sLog);
-				
+								
 				if(bStatusValue) {//nur im true Fall
 					if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
 					   if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)) {

@@ -108,8 +108,15 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		boolean bReturn = false;
 		main:{
 			
-			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 			this.logProtocolString(sLog);
+			
+			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
+			if(bReturn) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+				this.logProtocolString(sLog);
+				break main;
+			}
 			
 			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
 		}//end main
@@ -121,8 +128,15 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 			boolean bReturn = false;
 			main:{
 				
-				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+				String sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
 				this.logProtocolString(sLog);
+				
+				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
+				if(bReturn) {
+					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+					this.logProtocolString(sLog);
+					break main;
+				}
 				
 				if(bStatusValue) {//nur im true Fall
 					if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
