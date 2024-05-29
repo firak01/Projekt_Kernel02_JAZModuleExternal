@@ -47,7 +47,7 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractProgramMon
 	public boolean[] setFlag(IProcessWatchMonitorZZZ.FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
 		boolean[] baReturn=null;
 		main:{
-			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+			if(!ArrayUtilZZZ.isNull(objaEnumFlag)) {
 				baReturn = new boolean[objaEnumFlag.length];
 				int iCounter=-1;
 				for(IProcessWatchMonitorZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
@@ -92,7 +92,7 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractProgramMon
 	public boolean[] setFlag(IWatchListenerZZZ.FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ {
 		boolean[] baReturn=null;
 		main:{
-			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+			if(!ArrayUtilZZZ.isNull(objaEnumFlag)) {
 				baReturn = new boolean[objaEnumFlag.length];
 				int iCounter=-1;
 				for(IWatchListenerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {

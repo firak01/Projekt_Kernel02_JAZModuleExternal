@@ -460,7 +460,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	public boolean[] setFlag(IProcessCreateRunnerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
 		boolean[] baReturn=null;
 		main:{
-			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+			if(!ArrayUtilZZZ.isNull(objaEnumFlag)) {
 				baReturn = new boolean[objaEnumFlag.length];
 				int iCounter=-1;
 				for(IProcessCreateRunnerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {

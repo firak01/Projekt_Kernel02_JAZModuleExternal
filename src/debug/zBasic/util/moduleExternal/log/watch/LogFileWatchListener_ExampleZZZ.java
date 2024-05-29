@@ -141,7 +141,7 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 	public boolean[] setFlag(IWatchListenerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
 		boolean[] baReturn=null;
 		main:{
-			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+			if(!ArrayUtilZZZ.isNull(objaEnumFlag)) {
 				baReturn = new boolean[objaEnumFlag.length];
 				int iCounter=-1;
 				for(IWatchListenerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {

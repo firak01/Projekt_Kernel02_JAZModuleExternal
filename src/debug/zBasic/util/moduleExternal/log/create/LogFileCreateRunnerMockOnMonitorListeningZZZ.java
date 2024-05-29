@@ -290,7 +290,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	public boolean[] setFlag(ILogFileCreateRunnerOnMonitorListeningZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
 		boolean[] baReturn=null;
 		main:{
-			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+			if(!ArrayUtilZZZ.isNull(objaEnumFlag)) {
 				baReturn = new boolean[objaEnumFlag.length];
 				int iCounter=-1;
 				for(ILogFileCreateRunnerOnMonitorListeningZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
@@ -331,7 +331,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	public boolean[] setFlag(ILogFileCreateRunnerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
 		boolean[] baReturn=null;
 		main:{
-			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+			if(!ArrayUtilZZZ.isNull(objaEnumFlag)) {
 				baReturn = new boolean[objaEnumFlag.length];
 				int iCounter=-1;
 				for(ILogFileCreateRunnerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
@@ -450,7 +450,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	public boolean[] setFlag(IWatchListenerZZZ.FLAGZ[] objaEnumFlag,boolean bFlagValue) throws ExceptionZZZ {
 		boolean[] baReturn=null;
 		main:{
-			if(!ArrayUtilZZZ.isEmpty(objaEnumFlag)) {
+			if(!ArrayUtilZZZ.isNull(objaEnumFlag)) {
 				baReturn = new boolean[objaEnumFlag.length];
 				int iCounter=-1;
 				for(IWatchListenerZZZ.FLAGZ objEnumFlag:objaEnumFlag) {
