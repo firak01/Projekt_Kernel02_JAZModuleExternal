@@ -87,7 +87,7 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 			boolean bReturn = false;
 			main:{
 				String sLog = ReflectCodeZZZ.getPositionCurrent() +  "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", StatusMessage='" + sStatusMessage +"'";
-				this.logLine(sLog);//!!! hier nicht noch mal eine Methode mit "ProtocolString" aufrufen, sonst wird damit erneut ein LogString gebastelt. D.h. man hat z.B. 2x die Datumsangabe oder 2x die Threadangabe 
+				this.logProtocolString(sLog);//!!! hier nicht noch mal eine Methode mit "ProtocolString" aufrufen, sonst wird damit erneut ein LogString gebastelt. D.h. man hat z.B. 2x die Datumsangabe oder 2x die Threadangabe 
 						
 				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 				if(bReturn) {
