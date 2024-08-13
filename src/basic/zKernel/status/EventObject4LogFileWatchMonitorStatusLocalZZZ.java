@@ -36,8 +36,6 @@ public class EventObject4LogFileWatchMonitorStatusLocalZZZ  extends AbstractEven
 	@Override
 	public STATUSLOCAL getStatusEnum() {
 		return (STATUSLOCAL) this.objStatusEnum;
-	}
-
-	
+	}	
 }
 
