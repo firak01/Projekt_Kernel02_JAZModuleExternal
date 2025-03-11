@@ -4,7 +4,7 @@ import java.io.File;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.IConstantZZZ;
-import basic.zBasic.IObjectWithStatusZZZ;
+import basic.zBasic.IObjectWithStatusEnabledZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
@@ -88,8 +88,8 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 		    }
 			
 		    String[]saFlag= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-		    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
-		    		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name(),
+		    		         IObjectWithStatusEnabledZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
+		    		         IObjectWithStatusEnabledZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name(),
 		    		         ISenderObjectStatusLocalUserZZZ.FLAGZ.STATUSLOCAL_SEND_VALUEFALSE.name()
 		    		         };
 		    

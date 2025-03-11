@@ -12,7 +12,7 @@ import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
-import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.flag.IFlagZEnabledZZZ;
 import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerOnMonitorListeningZZZ;

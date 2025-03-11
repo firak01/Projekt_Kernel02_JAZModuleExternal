@@ -25,7 +25,7 @@ import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.create.IProcessCreateRunnerZZZ;
-import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.flag.IFlagZEnabledZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 
 /**Diese Klasse erzeugt laaangsam, Zeile fuer Zeile eine Log-Datei.
@@ -67,7 +67,7 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 					stemp = saFlagControl[iCount];
 					btemp = setFlag(stemp, true);
 					if(btemp==false){ 								   
-						   ExceptionZZZ ez = new ExceptionZZZ( stemp, IFlagZUserZZZ.iERROR_FLAG_UNAVAILABLE, this, ReflectCodeZZZ.getMethodCurrentName()); 						
+						   ExceptionZZZ ez = new ExceptionZZZ( stemp, IFlagZEnabledZZZ.iERROR_FLAG_UNAVAILABLE, this, ReflectCodeZZZ.getMethodCurrentName()); 						
 						   throw ez;		 
 					}
 				}

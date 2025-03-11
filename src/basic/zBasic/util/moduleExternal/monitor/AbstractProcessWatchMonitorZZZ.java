@@ -4,7 +4,7 @@ import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.component.AbstractProgramMonitorZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
-import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.flag.IFlagZEnabledZZZ;
 
 public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractProgramMonitorZZZ implements IProcessWatchMonitorZZZ{
 	private static final long serialVersionUID = 4532365489539285236L;
@@ -58,7 +58,7 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractProgramMon
 				
 				//!!! Ein mögliches init-Flag ist beim direkten setzen der Flags unlogisch.
 				//    Es wird entfernt.
-				this.setFlag(IFlagZUserZZZ.FLAGZ.INIT, false);
+				this.setFlag(IFlagZEnabledZZZ.FLAGZ.INIT, false);
 			}
 		}//end main:
 		return baReturn;
@@ -103,7 +103,7 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractProgramMon
 				
 				//!!! Ein mögliches init-Flag ist beim direkten setzen der Flags unlogisch.
 			//    Es wird entfernt.
-			this.setFlag(IFlagZUserZZZ.FLAGZ.INIT, false);
+			this.setFlag(IFlagZEnabledZZZ.FLAGZ.INIT, false);
 		}
 	}//end main:
 		return baReturn;

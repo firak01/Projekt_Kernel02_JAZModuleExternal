@@ -16,7 +16,7 @@ import basic.zBasic.component.IProgramZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.ICreateRunnerZZZ;
-import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.flag.IFlagZEnabledZZZ;
 import basic.zKernel.status.IStatusLocalMessageUserZZZ;
 
 /**This class receives the stream from a process, which was started by the ConfigStarterZZZ class.
@@ -58,7 +58,7 @@ public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWith
 					stemp = saFlagControl[iCount];
 					btemp = setFlag(stemp, true);
 					if(btemp==false){ 								   
-						   ExceptionZZZ ez = new ExceptionZZZ( stemp, IFlagZUserZZZ.iERROR_FLAG_UNAVAILABLE, this, ReflectCodeZZZ.getMethodCurrentName()); 						
+						   ExceptionZZZ ez = new ExceptionZZZ( stemp, IFlagZEnabledZZZ.iERROR_FLAG_UNAVAILABLE, this, ReflectCodeZZZ.getMethodCurrentName()); 						
 						   throw ez;		 
 					}
 				}

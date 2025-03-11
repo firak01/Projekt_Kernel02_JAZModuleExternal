@@ -6,7 +6,7 @@ import base.files.DateiUtil;
 import base.io.IoUtil;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.IConstantZZZ;
-import basic.zBasic.IObjectWithStatusZZZ;
+import basic.zBasic.IObjectWithStatusEnabledZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
@@ -155,8 +155,8 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 		    
 		    //Logoutput reduzieren.. keine False Werte versenden
 		    String[]saFlag= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-		    	 IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
-   		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()};
+		    	 IObjectWithStatusEnabledZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
+   		         IObjectWithStatusEnabledZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()};
 			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence, saFlag);			
 			
 			
@@ -172,8 +172,8 @@ public class LogFileWatch_2_LogWatchMonitorStyle_MainZZZ implements IConstantZZZ
 		    
 			//Logausgaben reduzieren. Keine False-Werte mehr versenden
 		    String[] saFlagMonitor = {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),
-		    		 IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
-   		             IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()};
+		    		 IObjectWithStatusEnabledZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
+   		             IObjectWithStatusEnabledZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()};
 		    LogFileWatchMonitorZZZ objMonitor = new LogFileWatchMonitorZZZ(objLogFile, saFlagMonitor);//, sFilterSequence, saFlagMonitor);
 		    
 		    //4. Schritt: Statt im Konstruktor des Monitors alles zu definieren...

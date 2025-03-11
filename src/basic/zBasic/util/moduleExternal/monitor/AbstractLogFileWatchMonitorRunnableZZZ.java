@@ -10,7 +10,7 @@ import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
-import basic.zKernel.flag.IFlagZUserZZZ;
+import basic.zKernel.flag.IFlagZEnabledZZZ;
 
 /**Beachte: Es wird ILogFileWatchMonitorZZZ implementiert
  *          und nicht etwa ein ILogFileWatchMonitorRunnableZZZ.
@@ -66,7 +66,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 				
 				//!!! Ein mögliches init-Flag ist beim direkten setzen der Flags unlogisch.
 			//    Es wird entfernt.
-			this.setFlag(IFlagZUserZZZ.FLAGZ.INIT, false);
+			this.setFlag(IFlagZEnabledZZZ.FLAGZ.INIT, false);
 		}
 	}//end main:
 		return baReturn;
@@ -111,7 +111,7 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 				
 				//!!! Ein mögliches init-Flag ist beim direkten setzen der Flags unlogisch.
 			//    Es wird entfernt.
-			this.setFlag(IFlagZUserZZZ.FLAGZ.INIT, false);
+			this.setFlag(IFlagZEnabledZZZ.FLAGZ.INIT, false);
 		}
 	}//end main:
 		return baReturn;

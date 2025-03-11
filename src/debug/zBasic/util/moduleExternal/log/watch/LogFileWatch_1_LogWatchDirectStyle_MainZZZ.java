@@ -6,7 +6,7 @@ import base.files.DateiUtil;
 import base.io.IoUtil;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.IConstantZZZ;
-import basic.zBasic.IObjectWithStatusZZZ;
+import basic.zBasic.IObjectWithStatusEnabledZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.file.FileEasyZZZ;
@@ -140,8 +140,8 @@ public class LogFileWatch_1_LogWatchDirectStyle_MainZZZ implements IConstantZZZ{
 		    
 		    //LogOutput reduzieren... keine False Werte versenden
 		    String[]saFlag= {IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND.name(),		    		
-   				 IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
-   		         IObjectWithStatusZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()};
+   				 IObjectWithStatusEnabledZZZ.FLAGZ.STATUSLOCAL_PROOF_VALUECHANGED.name(),
+   		         IObjectWithStatusEnabledZZZ.FLAGZ.STATUSLOCAL_PROOF_MESSAGECHANGED.name()};
 			LogFileWatchRunnerZZZ objWatcher = new LogFileWatchRunnerZZZ(objLogFile, sFilterSentence,saFlag);			
 			
 			//Hole den Broker aus dem Watcher - Objekt und registriere den Monitor daran.						
