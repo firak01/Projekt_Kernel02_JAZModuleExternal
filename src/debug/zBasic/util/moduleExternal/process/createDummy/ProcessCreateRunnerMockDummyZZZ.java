@@ -1,10 +1,10 @@
 package debug.zBasic.util.moduleExternal.process.createDummy;
 
-import basic.zBasic.AbstractObjectZZZ;
+import basic.zBasic.AbstractObjectWithExceptionZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 
-public class ProcessCreateRunnerMockDummyZZZ extends AbstractObjectZZZ implements Runnable{
+public class ProcessCreateRunnerMockDummyZZZ extends AbstractObjectWithExceptionZZZ implements Runnable{
 
 	@Override
 	public void run() {

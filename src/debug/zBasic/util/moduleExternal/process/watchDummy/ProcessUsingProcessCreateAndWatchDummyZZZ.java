@@ -4,14 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import basic.zBasic.AbstractObjectZZZ;
+import basic.zBasic.AbstractObjectWithExceptionZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ;
 
-public class ProcessUsingProcessCreateAndWatchDummyZZZ extends AbstractObjectZZZ{
+public class ProcessUsingProcessCreateAndWatchDummyZZZ extends AbstractObjectWithExceptionZZZ{
 	private Process objProcess=null;
 	
 	public Process getProcessUsed() {

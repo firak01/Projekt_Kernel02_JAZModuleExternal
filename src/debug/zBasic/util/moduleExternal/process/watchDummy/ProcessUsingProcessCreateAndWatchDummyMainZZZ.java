@@ -1,9 +1,9 @@
 package debug.zBasic.util.moduleExternal.process.watchDummy;
 
-import basic.zBasic.AbstractObjectZZZ;
+import basic.zBasic.AbstractObjectWithExceptionZZZ;
 import basic.zBasic.ExceptionZZZ;
 
-public class ProcessUsingProcessCreateAndWatchDummyMainZZZ extends AbstractObjectZZZ {
+public class ProcessUsingProcessCreateAndWatchDummyMainZZZ extends AbstractObjectWithExceptionZZZ {
 	
 	public static void main(String[] args) {
 	try {
