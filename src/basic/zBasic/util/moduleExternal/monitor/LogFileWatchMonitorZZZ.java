@@ -209,6 +209,19 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 		return hmReturn;	
 	}
 	
+	
+	@Override
+	public HashMap createHashMapStatusLocal4ReactionCustom_Enum() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap createHashMapStatusLocal4ReactionCustom_EnumStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	@Override
 	public boolean isEventRelevant2ChangeStatusLocalByClass(IEventObjectStatusLocalZZZ eventStatusLocalSet)	throws ExceptionZZZ {
 		return true;
@@ -221,7 +234,7 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 
 
 	@Override
-	public HashMap createHashMapStatusLocal4ReactionCustom() {
+	public HashMap createHashMapStatusLocal4ReactionCustom_String() {
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
 		//Reagiere auf diee Events... mit dem angegebenen Alias.
@@ -277,4 +290,5 @@ public class LogFileWatchMonitorZZZ extends AbstractLogFileWatchMonitorZZZ {
 	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		return true;
 	}
+
 }//END class

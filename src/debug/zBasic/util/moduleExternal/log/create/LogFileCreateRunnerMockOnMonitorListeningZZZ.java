@@ -382,7 +382,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	}
 
 	@Override
-	public HashMap<IEnumSetMappedStatusZZZ, String> createHashMapStatusLocal4ReactionCustom() {
+	public HashMap<IEnumSetMappedStatusZZZ, String> createHashMapStatusLocal4ReactionCustom_String() {
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
 		//Reagiere auf diee Events... mit dem angegebenen Alias.
@@ -400,6 +400,18 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 		
 			
 		return hmReturn;
+	}
+	
+	@Override
+	public HashMap createHashMapStatusLocal4ReactionCustom_Enum() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap createHashMapStatusLocal4ReactionCustom_EnumStatus() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -487,5 +499,4 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	public boolean queryReactOnStatusLocal4Action(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus,	boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		return true;
 	}
-	
 }

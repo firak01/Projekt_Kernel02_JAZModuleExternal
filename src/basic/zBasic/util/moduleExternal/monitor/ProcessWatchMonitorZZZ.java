@@ -394,7 +394,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 
 
 	@Override
-	public HashMap createHashMapStatusLocal4ReactionCustom() {
+	public HashMap createHashMapStatusLocal4ReactionCustom_String() {
 		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
 		//Reagiere auf diee Events... mit dem angegebenen Alias.
@@ -404,6 +404,18 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		hmReturn.put(IProcessWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
 				
 		return hmReturn;
+	}
+	
+	@Override
+	public HashMap createHashMapStatusLocal4ReactionCustom_Enum() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap createHashMapStatusLocal4ReactionCustom_EnumStatus() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -450,4 +462,5 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		return true;
 	}
+
 }//END class

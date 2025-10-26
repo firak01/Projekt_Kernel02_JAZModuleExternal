@@ -6,6 +6,7 @@ import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.IProcessWatchMonitorZZZ;
@@ -63,32 +64,32 @@ public class ProcessWatchRunnerZZZ extends AbstractProcessWatchRunnerZZZ {
 	}
 	
 	//Methode wird in der ReactionHashMap angegeben....
-			public boolean doFilterFound(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
-				boolean bReturn = false;
-				main:{
-					
-					String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-					this.logProtocolString(sLog);
-					
-					bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
-					if(bReturn) {
-						sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-						this.logProtocolString(sLog);
-						break main;
-					}
-					
-					if(bStatusValue) {//nur im true Fall
-						if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
-						   if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)) {
-							   System.exit(1);
-						   }else {
-							   bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
-						   }												
-						}
-					}						
-				}//end main
-				return bReturn;
+	public boolean doFilterFound(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		boolean bReturn = false;
+		main:{
+			
+			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+			this.logProtocolString(sLog);
+			
+			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
+			if(bReturn) {
+				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
+				this.logProtocolString(sLog);
+				break main;
 			}
+			
+			if(bStatusValue) {//nur im true Fall
+				if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
+				   if(this.getFlag(IWatchListenerZZZ.FLAGZ.IMMEDIATE_END_ON_FILTER_FOUND)) {
+					   System.exit(1);
+				   }else {
+					   bReturn = this.doStop(enumStatus,bStatusValue,sStatusMessage);
+				   }												
+				}
+			}						
+		}//end main
+		return bReturn;
+	}
 
 	//### Statische Methode (um einfacher darauf zugreifen zu können)
     public static Class getEnumStatusLocalClass(){    	
@@ -297,7 +298,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	
 
 	@Override
-	public HashMap createHashMapStatusLocal4ReactionCustom() {
+	public HashMap createHashMapStatusLocal4ReactionCustom_String() {
 	HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
 		
 		//Reagiere auf diee Events... mit dem angegebenen Alias.
@@ -311,9 +312,21 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				
 		return hmReturn;
 	}
+	
+	@Override
+	public HashMap<IEnumSetMappedStatusZZZ, IEnumSetMappedZZZ> createHashMapStatusLocal4ReactionCustom_Enum() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
-	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus,		boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public HashMap<IEnumSetMappedStatusZZZ, IEnumSetMappedStatusZZZ> createHashMapStatusLocal4ReactionCustom_EnumStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus,	boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		boolean bReturn = false;
 		main:{
 			if(!bStatusValue) break main;

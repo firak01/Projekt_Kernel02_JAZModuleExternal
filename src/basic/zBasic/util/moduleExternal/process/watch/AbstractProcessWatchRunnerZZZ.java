@@ -191,7 +191,8 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	public boolean writeErrorToLog(int iLineCounter, String sErrorLine) throws ExceptionZZZ{
 		boolean bReturn = false;
 		main:{								   		    
-			this.logProtocolString("ERROR: "+ sErrorLine);			
+
+			this.logProtocolString("ERROR processing line (" + iLineCounter + ") : " + sErrorLine + "'");			
 			
 			bReturn = true;
 		}//END Main:	
