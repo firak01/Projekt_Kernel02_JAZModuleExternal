@@ -46,17 +46,17 @@ public class ProcessWatchRunnerZZZ extends AbstractProcessWatchRunnerZZZ {
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				break main;
 			}
 			
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "DOSTOP!!!";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			
 			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
 		}//end main
@@ -69,12 +69,12 @@ public class ProcessWatchRunnerZZZ extends AbstractProcessWatchRunnerZZZ {
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				break main;
 			}
 			
@@ -167,11 +167,11 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			int iZaehler = StringZZZ.toInteger(sZaehler);
 			if(iZaehler % 10 == 0 && iZaehler > 0) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - 10er Zaehler gefunden.";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				break main;				
 			}else if(iZaehler >= 50) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - Zaehler ueber 50. Breche ab.";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				//this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, false);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
 				bReturn = true;
 				break main;
@@ -344,11 +344,11 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					break;
 				default:
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-					this.logProtocolString(sLog);
+					this.logProtocol(sLog);
 				}
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 			}
 	
 	}//end main:

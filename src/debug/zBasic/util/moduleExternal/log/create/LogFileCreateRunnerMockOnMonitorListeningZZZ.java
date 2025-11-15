@@ -94,12 +94,12 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				break main;
 			}
 			
@@ -116,12 +116,12 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				break main;
 			}
 			
@@ -197,7 +197,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 					bExists = FileEasyZZZ.exists(objFileSource);
 					if(!bExists) {
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "File not exists, waiting for: '" + objFileSource.getAbsolutePath() + "'.";
-						this.logProtocolString(sLog);
+						this.logProtocol(sLog);
 						Thread.sleep(5000);
 					}
 				}while(!bExists);
@@ -226,7 +226,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
                     {
                     	icount++;                    	
                     	sLog = ReflectCodeZZZ.getPositionCurrent() + icount +"\t: " + sLine;
-                    	this.logProtocolString(sLog);
+                    	this.logProtocol(sLog);
                     	
                     	objLogStream.write(sLine.getBytes());
                     	objLogStream.write(StringZZZ.crlf().getBytes());//Merke: Ohne diese explizite neue Zeile wird alles hintereinander geschrieben.
@@ -249,17 +249,17 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 				e.printStackTrace();
 				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 			} catch (IOException e) {
 				e.printStackTrace();	
 				//Kein eigener Status vorhanden: this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 			} finally {
 				
 				if(br!=null) {
@@ -368,7 +368,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 			
 			if(eventStatusLocal instanceof IEventObject4LogFileWatchMonitorStatusLocalZZZ) {
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Event vom Monitor!!!";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				
 				bReturn = true;
 			}	
@@ -434,11 +434,11 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 					break;	
 				default:
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-					this.logProtocolString(sLog);
+					this.logProtocol(sLog);
 				}
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 			}
 	
 	}//end main:

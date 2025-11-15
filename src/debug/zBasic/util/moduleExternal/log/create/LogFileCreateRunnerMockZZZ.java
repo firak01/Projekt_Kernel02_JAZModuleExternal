@@ -124,12 +124,12 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				break main;
 			}
 			
@@ -144,12 +144,12 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				break main;
 			}
 			
@@ -194,17 +194,17 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 				do {
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) {
 						String sLog = ReflectCodeZZZ.getPositionCurrent() + "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'. Breche ab.";
-						this.logProtocolString(sLog);
+						this.logProtocol(sLog);
 						break main;
 					}
 					bExists = FileEasyZZZ.exists(objFileSource);
 					if(!bExists) {
 						String sLog = ReflectCodeZZZ.getPositionCurrent() + "File not exists, waiting for: '" + objFileSource.getAbsolutePath() + "'.";
-						this.logProtocolString(sLog);
+						this.logProtocol(sLog);
 						Thread.sleep(5000);
 					}else {
 						String sLog = ReflectCodeZZZ.getPositionCurrent() + "File exists: '" + objFileSource.getAbsolutePath() + "'.";
-						this.logProtocolString(sLog);
+						this.logProtocol(sLog);
 					}
 				}while(!bExists);
 								
@@ -231,7 +231,7 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
                 	Thread.sleep(300); //Bremse zum Debuggen ab. Sonst gehen mir die Zeilen aus... ;-))
                 	if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) {
                 		String sLog = ReflectCodeZZZ.getPositionCurrent() + "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'. Breche ab.";
-						this.logProtocolString(sLog);
+						this.logProtocol(sLog);
     					break main;
     				}
                     sLine = br.readLine();
@@ -239,7 +239,7 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
                     {
                     	icount++;          
                     	String sLog = ReflectCodeZZZ.getPositionCurrent() + icount +"\t: " + sLine;
-                    	this.logProtocolString(sLog);
+                    	this.logProtocol(sLog);
                     	objLogStream.write(sLine.getBytes());
                     	objLogStream.write(StringZZZ.crlf().getBytes());//Merke: Ohne diese explizite neue Zeile wird alles hintereinander geschrieben.
                     	
@@ -349,11 +349,11 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 					break;
 				default:
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-					this.logProtocolString(sLog);
+					this.logProtocol(sLog);
 				}
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 			}
 	
 	}//end main:

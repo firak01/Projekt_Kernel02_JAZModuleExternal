@@ -91,7 +91,7 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 			}catch (InterruptedException e) {					
 				try {
 					String sLogIE = e.getMessage();
-					this.logProtocolString("An error happend: '" + sLogIE + "'");
+					this.logProtocol("An error happend: '" + sLogIE + "'");
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
 					e1.printStackTrace();
@@ -112,12 +112,12 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				break main;
 			}
 			
@@ -132,12 +132,12 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 			main:{
 				
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				
 				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 				if(bReturn) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-					this.logProtocolString(sLog);
+					this.logProtocol(sLog);
 					break main;
 				}
 				
@@ -298,11 +298,11 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 						break;	
 					default:
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-						this.logProtocolString(sLog);
+						this.logProtocol(sLog);
 					}
 				}else {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-					this.logProtocolString(sLog);
+					this.logProtocol(sLog);
 				}
 		
 		}//end main:

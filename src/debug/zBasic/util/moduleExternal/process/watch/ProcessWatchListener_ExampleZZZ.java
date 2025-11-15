@@ -39,7 +39,7 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 				boolean bRelevant = this.isEventRelevantAny((IEventObjectStatusLocalZZZ) eventStatusLocal); 
 				if(!bRelevant) {
 					sLog = 	ReflectCodeZZZ.getPositionCurrent() + ": Event / Status nicht relevant. Breche ab.";
-					this.logProtocolString(sLog);
+					this.logProtocol(sLog);
 					break main;
 				}
 				
@@ -90,7 +90,7 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 			//int iIndex = eventStatusLocalSet.getProcessID();
 			String sStatusMessage = eventStatusLocalSet.getStatusMessage();	
 			sLog = ReflectCodeZZZ.getPositionCurrent() + ": StatusMessage ist = '" + sStatusMessage + "'";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			
 
 			//Einen Status Anzunehmen ist hier nicht implementiert			

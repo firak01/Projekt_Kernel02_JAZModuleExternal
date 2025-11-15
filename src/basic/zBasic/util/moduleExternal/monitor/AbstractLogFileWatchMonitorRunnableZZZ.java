@@ -242,14 +242,14 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 			bFunction = this.proofStatusLocalExists(sStatusName);															
 			if(!bFunction) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Would like to fire event, but this status is not available: '" + sStatusName + "'";
-				this.logProtocolString(sLog);			
+				this.logProtocol(sLog);			
 				break main;
 			}
 			
 		bFunction = this.proofStatusLocalValueChanged(sStatusName, bStatusValue);
 		if(!bFunction) {
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "Would like to fire event, but this status has not changed: '" + sStatusName + "'";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			break main;
 		}	
 		
@@ -273,12 +273,12 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		}
 		
 		sLog = ReflectCodeZZZ.getPositionCurrent() + "Verarbeitet sStatusMessageToSet='" + sStatusMessageToSet + "'";
-		this.logProtocolString(sLog);
+		this.logProtocol(sLog);
 
 		//Falls eine Message extra uebergeben worden ist, ueberschreibe...
 		if(sStatusMessageToSet!=null) {
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "Setzt sStatusMessageToSet='" + sStatusMessageToSet + "'";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 		}
 		//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte
 		//       und der Event wird ggfs. geworfen...

@@ -16,7 +16,7 @@ public class ProcessCreateRunnerMockDummyZZZ extends AbstractObjectWithException
 		while(true) {
 
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "Zaehler " + lcount;
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			
 			Thread.sleep(500);
 			lcount++;
@@ -25,7 +25,7 @@ public class ProcessCreateRunnerMockDummyZZZ extends AbstractObjectWithException
 			//wird die Anzahl der Ausgaben begrenzt.
 			if(lcount>=1010) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Zaehlerende erreicht. Breche ab.";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 				break; //Für einen Test schaut sich niemand mehr als 1009 Zeilen an. 
 			}
 		}

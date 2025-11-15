@@ -89,11 +89,11 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 					break;
 				default:
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-					this.logProtocolString(sLog);
+					this.logProtocol(sLog);
 				}
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 			}
 	
 	}//end main:
@@ -106,7 +106,7 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.logProtocolString(sLog);
+			this.logProtocol(sLog);
 			
 			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
 		}//end main
@@ -119,7 +119,7 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 			main:{
 				
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocolString(sLog);
+				this.logProtocol(sLog);
 								
 				if(bStatusValue) {//nur im true Fall
 					if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){
