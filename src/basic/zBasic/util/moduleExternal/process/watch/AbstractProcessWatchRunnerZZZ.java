@@ -452,7 +452,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	//### FLAG HANDLING aus: IWatchRunnerZZZ
 	//###############################
 	@Override
-	public boolean getFlag(IWatchRunnerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IWatchRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
@@ -493,7 +493,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	//### FLAG HANDLING aus: IProcessWatchRunnerZZZ
 	//###############################
 	@Override
-	public boolean getFlag(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IProcessWatchRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
@@ -533,7 +533,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	//### FLAG HANDLING aus: IStatusLocalMessageUserZZZ
 	//###############################
 	@Override
-	public boolean getFlag(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
@@ -573,7 +573,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	//##########################################
 	//### FLAG HANDLING: IProgramRunnableZZZ
 	@Override
-	public boolean getFlag(IProgramRunnableZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IProgramRunnableZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 	@Override
@@ -611,7 +611,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	//##########################################
 	//### FLAG HANDLING: IWatchListenerZZZ
 	@Override
-	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 	@Override
@@ -649,7 +649,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	
 	//### Aus IProgramZZZ
 	@Override
-	public String getProgramName(){
+	public String getProgramName() throws ExceptionZZZ{
 		if(StringZZZ.isEmpty(this.sProgramName)) {
 			if(this.getFlag(IProgramZZZ.FLAGZ.ISPROGRAM.name())) {
 				this.sProgramName = this.getClass().getName();
@@ -669,7 +669,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	}
 	
 	@Override
-	public boolean getFlag(IProgramZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IProgramZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 	@Override
@@ -747,7 +747,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	
 	
 	@Override
-	public boolean getFlag(IModuleUserZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IModuleUserZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 	@Override

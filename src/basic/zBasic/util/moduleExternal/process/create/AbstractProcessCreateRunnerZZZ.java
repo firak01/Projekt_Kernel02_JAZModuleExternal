@@ -112,7 +112,7 @@ public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWith
 	//### FLAG HANDLING aus: ICreateRunnerZZZ
 	//###############################
 	@Override
-	public boolean getFlag(ICreateRunnerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(ICreateRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
@@ -153,7 +153,7 @@ public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWith
 	//### FLAG HANDLING aus: IProcessCreateRunnerZZZ
 	//###############################
 	@Override
-	public boolean getFlag(IProcessCreateRunnerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IProcessCreateRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
@@ -193,7 +193,7 @@ public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWith
 	//### FLAG HANDLING II aus: IStatusLocalMessageUserZZZ
 	//###############################
 	@Override
-	public boolean getFlag(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IStatusLocalMessageUserZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
@@ -266,7 +266,7 @@ public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWith
 	//##########################################
 	//### FLAG HANDLING
 	@Override
-	public boolean getFlag(IProgramRunnableZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IProgramRunnableZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 	@Override
@@ -304,7 +304,7 @@ public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWith
 	
 	//### Aus IProgramZZZ
 	@Override
-	public String getProgramName(){
+	public String getProgramName() throws ExceptionZZZ{
 		if(StringZZZ.isEmpty(this.sProgramName)) {
 			if(this.getFlag(IProgramZZZ.FLAGZ.ISPROGRAM.name())) {
 				this.sProgramName = this.getClass().getName();
@@ -324,7 +324,7 @@ public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWith
 	}
 	
 	@Override
-	public boolean getFlag(IProgramZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IProgramZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 	@Override
@@ -402,7 +402,7 @@ public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWith
 	
 	
 	@Override
-	public boolean getFlag(IModuleUserZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IModuleUserZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 	@Override

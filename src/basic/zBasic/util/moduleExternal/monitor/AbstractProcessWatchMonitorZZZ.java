@@ -34,7 +34,7 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractProgramMon
 	//###################################################
 		
 	@Override
-	public boolean getFlag(IProcessWatchMonitorZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IProcessWatchMonitorZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}	
 	
@@ -79,7 +79,7 @@ public abstract class AbstractProcessWatchMonitorZZZ  extends AbstractProgramMon
 	//##################################################
 		
 	@Override
-	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 	

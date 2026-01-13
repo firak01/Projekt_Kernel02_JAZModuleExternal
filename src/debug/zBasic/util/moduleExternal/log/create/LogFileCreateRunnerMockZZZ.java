@@ -278,7 +278,7 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 	//### FLAG HANDLING
 	//###############################
 	@Override
-	public boolean getFlag(ILogFileCreateRunnerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(ILogFileCreateRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
@@ -394,7 +394,7 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 	//### FLAG HANDLING AUS: IWatchListenerZZZ
 	//###############################
 	@Override
-	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 

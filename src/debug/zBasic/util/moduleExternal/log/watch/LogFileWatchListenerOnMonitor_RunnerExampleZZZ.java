@@ -158,7 +158,7 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	//### FLAG AUS: ILogFileWatchOnMonitorListenerRunnerExampleZZZ
 	//###############################
 	@Override
-	public boolean getFlag(ILogFileWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(ILogFileWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
@@ -199,7 +199,7 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	//### FLAG aus IWatchListenerZZZ
 	//####################################################
 	@Override
-	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 

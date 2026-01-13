@@ -277,7 +277,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	//### FLAG ILogFileCreateRunnerOnMonitorListeningZZZ
 	//####################################################
 	@Override
-	public boolean getFlag(ILogFileCreateRunnerOnMonitorListeningZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(ILogFileCreateRunnerOnMonitorListeningZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
@@ -318,7 +318,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	//### FLAG ILogFileCreateRunnerZZZ
 	//####################################################
 	@Override
-	public boolean getFlag(ILogFileCreateRunnerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(ILogFileCreateRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
@@ -449,7 +449,7 @@ public class LogFileCreateRunnerMockOnMonitorListeningZZZ extends AbstractProgra
 	//### FLAG aus IWatchListenerZZZ
 	//####################################################
 	@Override
-	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 

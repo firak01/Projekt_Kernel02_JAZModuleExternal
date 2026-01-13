@@ -140,7 +140,7 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 	//### FLAG aus IWatchListenerZZZ
 	//####################################################
 	@Override
-	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 

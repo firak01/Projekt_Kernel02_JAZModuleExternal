@@ -448,7 +448,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 	//### FLAG HANDLING AUS: IProcessCreateRunnerZZZ
 	//###############################
 	@Override
-	public boolean getFlag(IProcessCreateRunnerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IProcessCreateRunnerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 

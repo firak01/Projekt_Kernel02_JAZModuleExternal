@@ -13,7 +13,7 @@ public interface ICreateRunnerZZZ {
 		DUMMY,END_ON_FILTER_FOUND,IMMEDIATE_END_ON_FILTER_FOUND
 	}
 
-	boolean getFlag(FLAGZ objEnumFlag);
+	boolean getFlag(FLAGZ objEnumFlag) throws ExceptionZZZ;
 	boolean setFlag(FLAGZ objEnumFlag, boolean bFlagValue) throws ExceptionZZZ;
 	boolean[] setFlag(FLAGZ[] objaEnumFlag, boolean bFlagValue) throws ExceptionZZZ;
 	boolean proofFlagExists(FLAGZ objEnumFlag) throws ExceptionZZZ;

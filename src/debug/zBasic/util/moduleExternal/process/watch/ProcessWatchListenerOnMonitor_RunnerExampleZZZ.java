@@ -155,7 +155,7 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	//### FLAG AUS: IProcessWatchOnMonitorListenerRunnerExampleZZZ
 	//###############################
 	@Override
-	public boolean getFlag(IProcessWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IProcessWatchOnMonitorListenerRunnerExampleZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
@@ -195,7 +195,7 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	//### FLAG aus IWatchListenerZZZ
 	//####################################################
 	@Override
-	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) {
+	public boolean getFlag(IWatchListenerZZZ.FLAGZ objEnumFlag) throws ExceptionZZZ {
 		return this.getFlag(objEnumFlag.name());
 	}
 
