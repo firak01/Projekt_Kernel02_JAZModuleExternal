@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramWithStatusOnStatusListeningRunnableZZZ;
+import basic.zBasic.component.AbstractProgramWithStatusLocalOnStatusLocalListeningRunnableZZZ;
 import basic.zBasic.component.IModuleUserZZZ;
 import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
@@ -25,7 +25,7 @@ import basic.zKernel.status.IStatusLocalMessageUserZZZ;
  * @author 0823
  *
  */
-public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWithStatusOnStatusListeningRunnableZZZ implements IProcessCreateRunnerZZZ{
+public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWithStatusLocalOnStatusLocalListeningRunnableZZZ implements IProcessCreateRunnerZZZ{
 	private static final long serialVersionUID = 6586079955658760005L;
 	private File objSourceFile = null;
 	private Process objProcess=null;

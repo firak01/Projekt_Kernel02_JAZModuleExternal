@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.EnumSet;
 
 import basic.zBasic.ExceptionZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusLocalZZZ;
 import basic.zBasic.util.moduleExternal.ICreateRunnerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ.FLAGZ;
 import basic.zBasic.util.moduleExternal.process.watch.AbstractProcessWatchRunnerZZZ;
@@ -55,7 +55,7 @@ public interface IProcessCreateRunnerZZZ extends ICreateRunnerZZZ{
 	
 	//Merke: Obwohl fullName und abbr nicht direkt abgefragt werden, müssen Sie im Konstruktor sein, um die Enumeration so zu definieren.
 	//ALIAS("Uniquename","Statusmeldung","Beschreibung, wird nicht genutzt....",)
-	public enum STATUSLOCAL implements IEnumSetMappedStatusZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{	
+	public enum STATUSLOCAL implements IEnumSetMappedStatusLocalZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{	
 		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ProcessCreateRunner",""),
 		HASCONNECTION(iSTATUSLOCAL_GROUPID,"hasconnection","ProcessWatchRunner ist mit dem Process verbunden",""),
 		HASOUTPUT(iSTATUSLOCAL_GROUPID,"hasoutput","Prozess hat Output",""),

@@ -2,12 +2,12 @@ package debug.zBasic.util.moduleExternal.log.watch;
 
 import java.util.HashMap;
 
-import basic.zBasic.AbstractObjectWithFlagOnStatusListeningZZZ;
+import basic.zBasic.AbstractObjectWithFlagOnStatusLocalListeningZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusLocalZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
@@ -19,7 +19,7 @@ import basic.zKernel.status.IEventObjectStatusLocalZZZ;
  * @author fl86kyvo
  *
  */
-public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnStatusListeningZZZ implements IWatchListenerZZZ{
+public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnStatusLocalListeningZZZ implements IWatchListenerZZZ{
 	private static final long serialVersionUID = -2338056174362726426L;
 
 	public LogFileWatchListener_ExampleZZZ() throws ExceptionZZZ {
@@ -43,7 +43,7 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 
 	@Override
 	public HashMap createHashMapStatusLocal4ReactionCustom_String() {
-		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
+		HashMap<IEnumSetMappedStatusLocalZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusLocalZZZ, String>();
 		
 		//Fuer die "Direkttests"
 		hmReturn.put(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND, "doFilterFound");
@@ -71,7 +71,7 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 	}	
 
 	@Override
-	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {			
+	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusLocalZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {			
 		boolean bReturn = false;
 		main:{
 			if(!bStatusValue)break main;
@@ -114,7 +114,7 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 	}
 	
 	//Methode wird in der ReactionHashMap angegeben....
-		public boolean doFilterFound(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		public boolean doFilterFound(IEnumSetMappedStatusLocalZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 			boolean bReturn = false;
 			main:{
 				
@@ -184,7 +184,7 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 	}
 
 	@Override
-	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus,	boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusLocalZZZ enumStatus,	boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		return true;
 	}
 }

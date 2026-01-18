@@ -13,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramWithStatusOnStatusListeningRunnableZZZ;
+import basic.zBasic.component.AbstractProgramWithStatusLocalOnStatusLocalListeningRunnableZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
@@ -22,7 +22,7 @@ import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zKernel.status.IStatusLocalMessageUserZZZ;
 
-public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithStatusOnStatusListeningRunnableZZZ implements ILogFileWatchRunnerZZZ{
+public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithStatusLocalOnStatusLocalListeningRunnableZZZ implements ILogFileWatchRunnerZZZ{
 	private static final long serialVersionUID = 6586079955658760005L;
 	protected volatile File objLogFile=null;
 	protected volatile String sLineFilter = null;

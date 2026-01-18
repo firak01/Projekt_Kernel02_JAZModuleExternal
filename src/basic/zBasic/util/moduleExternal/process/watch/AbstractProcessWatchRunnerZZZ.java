@@ -11,7 +11,7 @@ import org.apache.commons.io.IOUtils;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramWithStatusOnStatusListeningRunnableZZZ;
+import basic.zBasic.component.AbstractProgramWithStatusLocalOnStatusLocalListeningRunnableZZZ;
 import basic.zBasic.component.IModuleUserZZZ;
 import basic.zBasic.component.IModuleZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
@@ -29,7 +29,7 @@ import basic.zKernel.status.IStatusLocalMessageUserZZZ;
  * @author 0823
  *
  */
-public abstract class AbstractProcessWatchRunnerZZZ extends AbstractProgramWithStatusOnStatusListeningRunnableZZZ implements IProcessWatchRunnerZZZ{
+public abstract class AbstractProcessWatchRunnerZZZ extends AbstractProgramWithStatusLocalOnStatusLocalListeningRunnableZZZ implements IProcessWatchRunnerZZZ{
 	private static final long serialVersionUID = 6586079955658760005L;
 	protected volatile Process objProcess=null; //Der externe process, der hierdurch "gemonitored" werden soll
 	protected volatile String sLineFilter = null;

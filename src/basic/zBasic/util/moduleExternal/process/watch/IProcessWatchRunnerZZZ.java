@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusLocalZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 
 public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
@@ -42,7 +42,7 @@ public interface IProcessWatchRunnerZZZ extends IWatchRunnerZZZ{
 
 	//Merke: Obwohl fullName und abbr nicht direkt abgefragt werden, müssen Sie im Konstruktor sein, um die Enumeration so zu definieren.
 	//ALIAS("Uniquename","Statusmeldung","Beschreibung, wird nicht genutzt....",)
-	public enum STATUSLOCAL implements IEnumSetMappedStatusZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{	
+	public enum STATUSLOCAL implements IEnumSetMappedStatusLocalZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{	
 		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","ProcessWatchRunner: Nicht gestartet",""),
 		ISSTARTING(iSTATUSLOCAL_GROUPID,"isstarting","ProcessWatchRunner: Startet...",""),
 		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ProcessWatchRunner: Gestartet",""),

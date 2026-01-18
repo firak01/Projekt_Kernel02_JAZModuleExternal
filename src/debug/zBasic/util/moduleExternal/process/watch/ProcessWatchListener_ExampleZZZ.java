@@ -2,10 +2,10 @@ package debug.zBasic.util.moduleExternal.process.watch;
 
 import java.util.HashMap;
 
-import basic.zBasic.AbstractObjectWithFlagOnStatusListeningZZZ;
+import basic.zBasic.AbstractObjectWithFlagOnStatusLocalListeningZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusLocalZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
@@ -18,7 +18,7 @@ import basic.zKernel.status.IEventObjectStatusLocalZZZ;
  * @author fl86kyvo
  *
  */
-public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnStatusListeningZZZ {//implements IListenerObjectStatusLocalMessageZZZ, IListenerObjectStatusLocalMessageReactZZZ{
+public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnStatusLocalListeningZZZ {//implements IListenerObjectStatusLocalMessageZZZ, IListenerObjectStatusLocalMessageReactZZZ{
 	private static final long serialVersionUID = -2338056174362726426L;
 
 	public ProcessWatchListener_ExampleZZZ() throws ExceptionZZZ {
@@ -139,7 +139,7 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 
 	@Override
 	public HashMap createHashMapStatusLocal4ReactionCustom_String() {
-		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
+		HashMap<IEnumSetMappedStatusLocalZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusLocalZZZ, String>();
 		
 		//Reagiere auf diee Events... mit dem angegebenen Alias.
 		hmReturn.put(IProcessWatchMonitorZZZ.STATUSLOCAL.HASPROCESSWATCHRUNNERFILTERFOUND, "doFilterFound");
@@ -163,7 +163,7 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 	}
 
 	@Override
-	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusLocalZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		main:{
 		if(!bStatusValue)break main;
 		}
@@ -177,7 +177,7 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 	}
 
 	@Override
-	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusLocalZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		return true;
 	}
 

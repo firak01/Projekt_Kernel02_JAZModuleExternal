@@ -2,13 +2,13 @@ package debug.zBasic.util.moduleExternal.process.watch;
 
 import java.util.HashMap;
 
-import basic.zBasic.AbstractObjectWithFlagOnStatusListeningZZZ;
+import basic.zBasic.AbstractObjectWithFlagOnStatusLocalListeningZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
-import basic.zBasic.component.AbstractProgramWithFlagOnStatusListeningRunnableZZZ;
+import basic.zBasic.component.AbstractProgramWithFlagOnStatusLocalListeningRunnableZZZ;
 import basic.zBasic.component.IProgramRunnableZZZ;
 import basic.zBasic.util.abstractArray.ArrayUtilZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusLocalZZZ;
 import basic.zBasic.util.abstractEnum.IEnumSetMappedZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
@@ -24,7 +24,7 @@ import debug.zBasic.util.moduleExternal.log.watch.ILogFileWatchOnMonitorListener
  * @author fl86kyvo
  *
  */
-public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProgramWithFlagOnStatusListeningRunnableZZZ implements IProcessWatchOnMonitorListenerRunnerExampleZZZ {
+public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProgramWithFlagOnStatusLocalListeningRunnableZZZ implements IProcessWatchOnMonitorListenerRunnerExampleZZZ {
 	private static final long serialVersionUID = -2338056174362726426L;
 
 	public ProcessWatchListenerOnMonitor_RunnerExampleZZZ() throws ExceptionZZZ {
@@ -124,7 +124,7 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	}
 	
 	//Methode wird in der ReactionHashMap angegeben....
-		public boolean doFilterFound(IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+		public boolean doFilterFound(IEnumSetMappedStatusLocalZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 			boolean bReturn = false;
 			main:{
 				
@@ -248,8 +248,8 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	}
 
 	@Override
-	public HashMap<IEnumSetMappedStatusZZZ, String> createHashMapStatusLocal4ReactionCustom_String() {
-		HashMap<IEnumSetMappedStatusZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusZZZ, String>();
+	public HashMap<IEnumSetMappedStatusLocalZZZ, String> createHashMapStatusLocal4ReactionCustom_String() {
+		HashMap<IEnumSetMappedStatusLocalZZZ, String> hmReturn = new HashMap<IEnumSetMappedStatusLocalZZZ, String>();
 		
 		//Reagiere nur auf den "Filter" gefunden Event
 		hmReturn.put(IProcessWatchMonitorZZZ.STATUSLOCAL.HASPROCESSWATCHRUNNERFILTERFOUND, "doFilterFound");
@@ -275,7 +275,7 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	}
 	
 	@Override
-	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ{
+	public boolean reactOnStatusLocal4ActionCustom(String sAction, IEnumSetMappedStatusLocalZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ{
 			boolean bReturn = false;
 			main:{
 				if(!bStatusValue)break main;
@@ -311,7 +311,7 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 	}
 
 	@Override
-	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
+	public boolean queryReactOnStatusLocal4ActionCustom(String sActionAlias, IEnumSetMappedStatusLocalZZZ enumStatus, boolean bStatusValue, String sStatusMessage) throws ExceptionZZZ {
 		return true;
 	}
 

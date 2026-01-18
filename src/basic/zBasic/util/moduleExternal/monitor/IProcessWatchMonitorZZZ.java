@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 import basic.zBasic.ExceptionZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusLocalZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 
 public interface IProcessWatchMonitorZZZ extends IWatchListenerZZZ{
@@ -35,7 +35,7 @@ public interface IProcessWatchMonitorZZZ extends IWatchListenerZZZ{
 		
 	//++++++++++++++++++++++++
 	//ALIAS("Uniquename","Statusmeldung","Beschreibung, wird nicht genutzt....",)
-	public enum STATUSLOCAL implements IEnumSetMappedStatusZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{
+	public enum STATUSLOCAL implements IEnumSetMappedStatusLocalZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{
 		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","ZZZ: ProcessWatchMonitor neu",""),
 		ISSTARTING(iSTATUSLOCAL_GROUPID,"isstarting","ZZZ: ProcessWatchMonitor startet...",""),		
 		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","ZZZ: ProcessWatchMonitor gestartet",""),

@@ -9,7 +9,7 @@ import basic.zBasic.component.IProgramMonitorZZZ;
 import basic.zBasic.component.IProgramMonitorZZZ.FLAGZ;
 import basic.zBasic.component.IProgramMonitorZZZ.STATUSLOCAL;
 import basic.zBasic.component.IProgramRunnableZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusLocalZZZ;
 
 
 public interface ILogFileWatchMonitorRunnableZZZ extends ILogFileWatchMonitorZZZ, IProgramRunnableZZZ {

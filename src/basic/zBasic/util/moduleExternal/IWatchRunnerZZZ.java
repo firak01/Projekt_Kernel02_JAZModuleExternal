@@ -3,7 +3,7 @@ package basic.zBasic.util.moduleExternal;
 import java.util.EnumSet;
 
 import basic.zBasic.ExceptionZZZ;
-import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusZZZ;
+import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusLocalZZZ;
 
 public interface IWatchRunnerZZZ extends IWatchListenerZZZ{
 	public String getLineFilter();
@@ -48,7 +48,7 @@ public interface IWatchRunnerZZZ extends IWatchListenerZZZ{
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
 	//Merke: Obwohl fullName und abbr nicht direkt abgefragt werden, müssen Sie im Konstruktor sein, um die Enumeration so zu definieren.
 	//ALIAS("Uniquename","Statusmeldung","Beschreibung, wird nicht genutzt....",)
-	public enum STATUSLOCAL implements IEnumSetMappedStatusZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{
+	public enum STATUSLOCAL implements IEnumSetMappedStatusLocalZZZ{//Folgendes geht nicht, da alle Enums schon von einer Java BasisKlasse erben... extends EnumSetMappedBaseZZZ{
 		ISSTARTNEW(iSTATUSLOCAL_GROUPID,"isstartnew","LogFileWatchRunner: Nicht gestartet",""),
 		ISSTARTING(iSTATUSLOCAL_GROUPID,"isstarting","LogFileWatchRunner: Startet...",""),
 		ISSTARTED(iSTATUSLOCAL_GROUPID,"isstarted","LogFileWatchRunner: Gestartet",""),
