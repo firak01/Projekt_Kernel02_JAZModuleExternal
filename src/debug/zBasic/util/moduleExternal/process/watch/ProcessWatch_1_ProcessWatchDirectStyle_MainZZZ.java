@@ -138,7 +138,7 @@ public class ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ implements IConstant
 //  Damit werden auch die anderen Threads angehalten.
 			
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "FERTIG";
-			LogZZZ.logProtocolStringStatic(sLog);
+			LogZZZ.logProtocolStringStatic(ProcessWatch_1_ProcessWatchDirectStyle_MainZZZ.class, sLog);
 		 } catch (ExceptionZZZ e1) {
 			System.out.println(e1.getDetailAllLast());
 			e1.printStackTrace();
