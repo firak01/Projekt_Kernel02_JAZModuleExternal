@@ -89,7 +89,7 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 			}catch (InterruptedException e) {					
 				try {
 					String sLogIE = e.getMessage();
-					this.logProtocol("An error happend: '" + sLogIE + "'");
+					this.protocol("An error happend: '" + sLogIE + "'");
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
 					e1.printStackTrace();
@@ -109,12 +109,12 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.logProtocol(sLog);
+			this.protocol(sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocol(sLog);
+				this.protocol(sLog);
 				break main;
 			}
 			
@@ -129,12 +129,12 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 			main:{
 				
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocol(sLog);
+				this.protocol(sLog);
 				
 				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 				if(bReturn) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-					this.logProtocol(sLog);
+					this.protocol(sLog);
 					break main;
 				}
 				
@@ -294,11 +294,11 @@ public class ProcessWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 						break;	
 					default:
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-						this.logProtocol(sLog);
+						this.protocol(sLog);
 					}
 				}else {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-					this.logProtocol(sLog);
+					this.protocol(sLog);
 				}
 		
 		}//end main:

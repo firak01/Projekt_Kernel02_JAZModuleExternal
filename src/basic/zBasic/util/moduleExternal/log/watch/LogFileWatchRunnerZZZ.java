@@ -69,12 +69,12 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 		boolean bReturn = false;
 		main:{
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", StatusMessage='" + sStatusMessage +"'";
-			this.logProtocol(sLog);
+			this.protocol(sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocol(sLog);
+				this.protocol(sLog);
 				break main;
 			}
 			
@@ -88,12 +88,12 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 			boolean bReturn = false;
 			main:{
 				String sLog = ReflectCodeZZZ.getPositionCurrent() +  "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", StatusMessage='" + sStatusMessage +"'";
-				this.logProtocol(sLog);//!!! hier nicht noch mal eine Methode mit "ProtocolString" aufrufen, sonst wird damit erneut ein LogString gebastelt. D.h. man hat z.B. 2x die Datumsangabe oder 2x die Threadangabe 
+				this.protocol(sLog);//!!! hier nicht noch mal eine Methode mit "ProtocolString" aufrufen, sonst wird damit erneut ein LogString gebastelt. D.h. man hat z.B. 2x die Datumsangabe oder 2x die Threadangabe 
 						
 				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 				if(bReturn) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-					this.logProtocol(sLog);
+					this.protocol(sLog);
 					break main;
 				}
 				
@@ -309,7 +309,7 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 			
 			if(eventStatusLocalSet instanceof IEventObject4LogFileWatchMonitorStatusLocalZZZ) {
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Event vom Monitor!!!";
-				this.logProtocol(sLog);
+				this.protocol(sLog);
 				
 				bReturn = true;
 			}	
@@ -373,11 +373,11 @@ public class LogFileWatchRunnerZZZ extends AbstractLogFileWatchRunnerZZZ{
 						break;
 					default:
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-						this.logProtocol(sLog);
+						this.protocol(sLog);
 					}
 				}else {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-					this.logProtocol(sLog);
+					this.protocol(sLog);
 				}
 		
 		}//end main:

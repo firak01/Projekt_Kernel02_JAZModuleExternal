@@ -253,7 +253,7 @@ public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWith
 				BufferedWriter out = new BufferedWriter( new OutputStreamWriter(objProcess.getOutputStream()) );
 				out.write(sOut);
 			
-				this.logProtocol("STRING SEND TO PROCESS: "+ sOut);
+				this.protocol("STRING SEND TO PROCESS: "+ sOut);
 				this.setFlag("hasInput", true);
 				
 			} catch (IOException e) {

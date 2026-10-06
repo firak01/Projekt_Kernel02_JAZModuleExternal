@@ -213,7 +213,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		main:{
 			try {	
 				String sLog = ReflectCodeZZZ.getPositionCurrent()+"Starting Monitor, switching Status of Monitor.";				
-				this.logProtocol(sLog);
+				this.protocol(sLog);
 			
 				//NUN DAS BACKEND-AUFRUFEN. Merke, dass muss in einem eigenen Thread geschehen, damit das Icon anclickbar bleibt.								
 				//Merke: Wenn über das enum der setStatusLocal gemacht wird, dann kann über das enum auch weiteres uebergeben werden. Z.B. StatusMeldungen.				
@@ -223,7 +223,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 				boolean bStatusLocalSet = this.switchStatusLocalForGroupTo(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTARTING, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
 				if(!bStatusLocalSet) {
 					sLog = ReflectCodeZZZ.getPositionCurrent()+"Lokaler Status nicht gesetzt, aus Gruenden. Breche ab";
-					this.logProtocol(sLog);
+					this.protocol(sLog);
 					break main;
 				}			
 				Thread.sleep(5000);
@@ -243,36 +243,36 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 					if(objProgram==null){
 						//Hier nicht abbrechen, sondern die Verarbeitung bei der naechsten Datei fortfuehren
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Null as program for thread #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size();
-						this.logProtocol(sLog);
+						this.protocol(sLog);
 					}else {						
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Program found for thread #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size() +". Requesting thread start.";
-						this.logProtocol(sLog);
+						this.protocol(sLog);
 						
 						objProgram.start(); //das hat eine doppelte Funktion. a) Einfache Programme werden gestartet. b) Runnable Programme werden im eigenen Thread gestartet
 						
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Finished starting program #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size() + ".";
-						this.logProtocol(sLog);
+						this.protocol(sLog);
 	 				}
 				}//END for
 				if(iNumberOfProcessStarted==0) {
 					//Hier nicht abbrechen, sondern den Status wieder zurücksetzen.
 					sLog = ReflectCodeZZZ.getPositionCurrent()+"No program started.";										
-					this.logProtocol(sLog);
+					this.protocol(sLog);
 					
 					bStatusLocalSet = this.switchStatusLocalForGroupTo(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTARTNO, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
 					if(!bStatusLocalSet) {
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Lokaler Status nicht gesetzt, aus Gruenden. Breche ab";
-						this.logProtocol(sLog);
+						this.protocol(sLog);
 						break main;
 					}			
 				}else if(iNumberOfProcessStarted>=1) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + iNumberOfProcessStarted + " programs started.";
-					this.logProtocol(sLog);
+					this.protocol(sLog);
 					
 					bStatusLocalSet = this.switchStatusLocalForGroupTo(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTARTED, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
 					if(!bStatusLocalSet) {
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Lokaler Status nicht gesetzt, aus Gruenden. Breche ab";
-						this.logProtocol(sLog);
+						this.protocol(sLog);
 						break main;
 					}	
 				}
@@ -280,7 +280,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 				e.printStackTrace();
 				this.setStatusLocal(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR,true);
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
-				this.logLineDate(sLog);
+				this.printlnDate(sLog);
 			} finally {
 				
 	        }
@@ -293,17 +293,17 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			boolean bReturn = false;
 			main:{								
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocol(sLog);
+				this.protocol(sLog);
 				
 				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 				if(bReturn) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-					this.logProtocol(sLog);
+					this.protocol(sLog);
 					break main;
 				}
 				
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "DOSTOP!!!";
-				this.logProtocol(sLog);
+				this.protocol(sLog);
 				
 				bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
 			}//end main
@@ -317,12 +317,12 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			main:{
 				
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+"=> Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.logProtocol(sLog);
+				this.protocol(sLog);
 				
 				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 				if(bReturn) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-					this.logProtocol(sLog);
+					this.protocol(sLog);
 					break main;
 				}
 								
@@ -437,11 +437,11 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 					break;
 				default:
 					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-					this.logProtocol(sLog);
+					this.protocol(sLog);
 				}
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-				this.logProtocol(sLog);
+				this.protocol(sLog);
 			}
 	
 	}//end main:

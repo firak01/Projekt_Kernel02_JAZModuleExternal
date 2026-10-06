@@ -32,14 +32,14 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 			if(eventStatusLocal==null)break main;
 						
 			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Fuer ProcessWatchEvent.";
-			this.logLineDate(sLog);
+			this.printlnDate(sLog);
 			
 			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {
 				
 				boolean bRelevant = this.isEventRelevantAny((IEventObjectStatusLocalZZZ) eventStatusLocal); 
 				if(!bRelevant) {
 					sLog = 	ReflectCodeZZZ.getPositionCurrent() + ": Event / Status nicht relevant. Breche ab.";
-					this.logProtocol(sLog);
+					this.protocol(sLog);
 					break main;
 				}
 				
@@ -90,7 +90,7 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 			//int iIndex = eventStatusLocalSet.getProcessID();
 			String sStatusMessage = eventStatusLocalSet.getStatusMessage();	
 			sLog = ReflectCodeZZZ.getPositionCurrent() + ": StatusMessage ist = '" + sStatusMessage + "'";
-			this.logProtocol(sLog);
+			this.protocol(sLog);
 			
 
 			//Einen Status Anzunehmen ist hier nicht implementiert			
@@ -110,16 +110,16 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 			
 			if(bEventHasError && bEventEnded){
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status bEventHasError && bEventEnded";
-				this.logLineDate(sLog);					
+				this.printlnDate(sLog);					
 			}else if((!bEventHasError) && bEventEnded){
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status !bEventHasError && bEventEnded";
-				this.logLineDate(sLog);
+				this.printlnDate(sLog);
 				
 			}
 		
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Event ist kein instanceof IEventObjectStatusLocalZZZ. Klasse: " + eventStatusLocal.getClass().getName();
-				this.logLineDate(sLog);
+				this.printlnDate(sLog);
 			}//end if instanceof ...MessageSetZZZ
 			bReturn = true;
 		}//end main:

@@ -63,13 +63,13 @@ public class ProcessUsingProcessCreateAndWatchDummyZZZ extends AbstractObjectWit
 						//Hier nicht abbrechen, sondern die Verarbeitung bei der naechsten Datei fortfuehren
 						sLog = ReflectCodeZZZ.getPositionCurrent()+": Unable to create process, using command: '"+ sCommandConcrete +"'";
 						System.out.println(sLog);
-						this.logProtocol(sLog); 						
+						this.protocol(sLog); 						
 					}else{	
 						
 						//NEU: Einen anderen Thread zum "Monitoren" des Inputstreams des Processes verwenden. Dadurch werden die anderen Prozesse nicht angehalten.
 						sLog = ReflectCodeZZZ.getPositionCurrent()+": Successfull process created, using command: '"+ sCommandConcrete +"'";
 						System.out.println(sLog);
-						this.logProtocol(sLog);			
+						this.protocol(sLog);			
 					}
 				
 				
@@ -193,7 +193,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					
 					s="gelesen aus InputStream: '" + s + "'";
 					
-					this.logProtocol(s);
+					this.protocol(s);
 					boolean bContinue = this.analyseInputLineCustom(s);
 					if(!bContinue) break;
 					Thread.sleep(20);
