@@ -21,6 +21,7 @@ import basic.zBasic.util.file.FileEasyZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.IWatchRunnerZZZ;
 import basic.zKernel.status.IStatusLocalMessageUserZZZ;
+import custom.zKernel.Log;
 
 public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithStatusLocalOnStatusLocalListeningRunnableZZZ implements ILogFileWatchRunnerZZZ{
 	private static final long serialVersionUID = 6586079955658760005L;
@@ -112,7 +113,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 			BufferedReader brin = null;
 			try {
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "LogFileWatchRunner started.";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 					
 				File objFileLog = this.getLogFileWatched();
 				
@@ -121,17 +122,17 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				do {
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "Hat Flag gesetzt ('" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						break main;
 					}
 					bExists = FileEasyZZZ.exists(objFileLog);
 					if(!bExists) {
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "Wartet auf Existenz der Datei  ('"+ objFileLog.getAbsolutePath() +"') ...";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						Thread.sleep(5000);
 					}else {
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "Datei existiert ('"+ objFileLog.getAbsolutePath() +"')";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						Thread.sleep(5000);
 					}
 				}while(!bExists);
@@ -160,7 +161,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 					
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) { //Merke: Das ist eine Anweisung und kein Status. Darum bleibt es beim Flag.
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "Hat Flag gesetzt '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP .name() + "'. Breche ab.";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						break;
 					}
 					
@@ -173,12 +174,12 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 					boolean bFilterFound = this.writeOutputToLogPLUSanalyse(icount, sLine, sLineFilter);		//Man muss wohl erst den InputStream abgreifen, damit der Process weiterlaufen kann.
 					if(bFilterFound) {																								
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "Filter '" + sLineFilter + "' wurde gefunden in Zeile " + icount;
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						
 						//... ein Event soll auch beim Setzen des passenden Status erzeugt und geworfen werden.						
 		        		this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND,true);
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "Status '" + ILogFileWatchRunnerZZZ.STATUSLOCAL.HASFILTERFOUND.name() + "' gesetzt.";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						
 						//Merke: Das wird in der Erweiterung, bzw. am Ende des offerStatus ggfs. für eine gemappte Action gemacht.
 						//       Darum hier nicht mehr notwendig.
@@ -203,7 +204,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				}while(true);
 				this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.ISSTOPPED,true);
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Ended.";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				              	
 	            bReturn = true;
 	              
@@ -212,7 +213,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				try {
 					this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
 					e1.printStackTrace();
@@ -225,7 +226,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				try{
 					this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
 					e1.printStackTrace();
@@ -237,7 +238,7 @@ public abstract class AbstractLogFileWatchRunnerZZZ extends AbstractProgramWithS
 				try {
 					this.setStatusLocal(ILogFileWatchRunnerZZZ.STATUSLOCAL.HASERROR,true);
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
 					e1.printStackTrace();
@@ -328,7 +329,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 				
 				//+++ Die Zeile ausgeben und analysieren					
                 sLog = ReflectCodeZZZ.getPositionCurrent() + "Gelesen aus InputStream - " + iLineCounter +"\t: '" + sLine + "'";
-                this.protocol(sLog);
+                Log.protocol(this, sLog);
                		
 				bReturn = this.analyseInputLineCustom(sLine, sLineFilter);												
 		}//END main:
@@ -340,7 +341,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 		boolean bReturn = false;
 		main:{					
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "ERROR: " +sErrorLine;
-			this.protocol(sLog);			
+			Log.protocol(this, sLog);			
 			
 			bReturn = true;
 		}//END Main:	
@@ -382,7 +383,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			String sLog;
 			if(StringZZZ.contains(sLine, sLineFilter)) {
         		sLog = ReflectCodeZZZ.getPositionCurrent() + "Hat Zeilenfilter gefunden: '" + sLineFilter + "'";
-        		this.protocol(sLog);
+        		Log.protocol(this, sLog);
         		
         		bReturn = true;
 			}       			

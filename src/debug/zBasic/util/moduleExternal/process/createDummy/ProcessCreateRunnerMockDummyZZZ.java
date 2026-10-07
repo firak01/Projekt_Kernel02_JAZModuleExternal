@@ -3,6 +3,7 @@ package debug.zBasic.util.moduleExternal.process.createDummy;
 import basic.zBasic.AbstractObjectWithExceptionZZZ;
 import basic.zBasic.ExceptionZZZ;
 import basic.zBasic.ReflectCodeZZZ;
+import custom.zKernel.Log;
 
 public class ProcessCreateRunnerMockDummyZZZ extends AbstractObjectWithExceptionZZZ implements Runnable{
 
@@ -16,7 +17,7 @@ public class ProcessCreateRunnerMockDummyZZZ extends AbstractObjectWithException
 		while(true) {
 
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "Zaehler " + lcount;
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			
 			Thread.sleep(500);
 			lcount++;
@@ -25,7 +26,7 @@ public class ProcessCreateRunnerMockDummyZZZ extends AbstractObjectWithException
 			//wird die Anzahl der Ausgaben begrenzt.
 			if(lcount>=1010) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Zaehlerende erreicht. Breche ab.";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				break; //Für einen Test schaut sich niemand mehr als 1009 Zeilen an. 
 			}
 		}

@@ -14,6 +14,7 @@ import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
+import custom.zKernel.Log;
 
 /** Ein Beispiel-Broker, an dem sich die "hoerenden" Klassen registieren.
  * @author fl86kyvo
@@ -89,11 +90,11 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 					break;
 				default:
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 				}
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 			}
 	
 	}//end main:
@@ -106,7 +107,7 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			
 			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
 		}//end main
@@ -119,7 +120,7 @@ public class LogFileWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 			main:{
 				
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 								
 				if(bStatusValue) {//nur im true Fall
 					if(this.getFlag(IWatchListenerZZZ.FLAGZ.END_ON_FILTER_FOUND)){

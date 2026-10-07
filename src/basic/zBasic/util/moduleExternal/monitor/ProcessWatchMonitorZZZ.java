@@ -13,6 +13,7 @@ import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
+import custom.zKernel.Log;
 
 
 /**This class watches the ServerMainZZZ-class and the ServerConnectionListenerRuner-objects.
@@ -213,7 +214,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 		main:{
 			try {	
 				String sLog = ReflectCodeZZZ.getPositionCurrent()+"Starting Monitor, switching Status of Monitor.";				
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 			
 				//NUN DAS BACKEND-AUFRUFEN. Merke, dass muss in einem eigenen Thread geschehen, damit das Icon anclickbar bleibt.								
 				//Merke: Wenn über das enum der setStatusLocal gemacht wird, dann kann über das enum auch weiteres uebergeben werden. Z.B. StatusMeldungen.				
@@ -223,7 +224,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 				boolean bStatusLocalSet = this.switchStatusLocalForGroupTo(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTARTING, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
 				if(!bStatusLocalSet) {
 					sLog = ReflectCodeZZZ.getPositionCurrent()+"Lokaler Status nicht gesetzt, aus Gruenden. Breche ab";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 					break main;
 				}			
 				Thread.sleep(5000);
@@ -243,36 +244,36 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 					if(objProgram==null){
 						//Hier nicht abbrechen, sondern die Verarbeitung bei der naechsten Datei fortfuehren
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Null as program for thread #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size();
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 					}else {						
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Program found for thread #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size() +". Requesting thread start.";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						
 						objProgram.start(); //das hat eine doppelte Funktion. a) Einfache Programme werden gestartet. b) Runnable Programme werden im eigenen Thread gestartet
 						
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Finished starting program #" + iNumberOfProcessStarted + " von " + listaProcessStarter.size() + ".";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 	 				}
 				}//END for
 				if(iNumberOfProcessStarted==0) {
 					//Hier nicht abbrechen, sondern den Status wieder zurücksetzen.
 					sLog = ReflectCodeZZZ.getPositionCurrent()+"No program started.";										
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 					
 					bStatusLocalSet = this.switchStatusLocalForGroupTo(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTARTNO, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
 					if(!bStatusLocalSet) {
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Lokaler Status nicht gesetzt, aus Gruenden. Breche ab";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						break main;
 					}			
 				}else if(iNumberOfProcessStarted>=1) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + iNumberOfProcessStarted + " programs started.";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 					
 					bStatusLocalSet = this.switchStatusLocalForGroupTo(ILogFileWatchMonitorZZZ.STATUSLOCAL.ISSTARTED, true); //Damit der ISSTOPPED Wert auf jeden Fall auch beseitigt wird
 					if(!bStatusLocalSet) {
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Lokaler Status nicht gesetzt, aus Gruenden. Breche ab";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						break main;
 					}	
 				}
@@ -280,7 +281,7 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 				e.printStackTrace();
 				this.setStatusLocal(ILogFileWatchMonitorZZZ.STATUSLOCAL.HASERROR,true);
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "HASERROR Status gesetzt.";
-				this.printlnDate(sLog);
+				Log.printlnDate(this, sLog);
 			} finally {
 				
 	        }
@@ -293,17 +294,17 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			boolean bReturn = false;
 			main:{								
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				
 				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 				if(bReturn) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 					break main;
 				}
 				
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "DOSTOP!!!";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				
 				bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
 			}//end main
@@ -317,12 +318,12 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 			main:{
 				
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+"=> Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				
 				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 				if(bReturn) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 					break main;
 				}
 								
@@ -437,11 +438,11 @@ public class ProcessWatchMonitorZZZ extends AbstractProcessWatchMonitorZZZ {
 					break;
 				default:
 					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 				}
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName() + "=> Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 			}
 	
 	}//end main:

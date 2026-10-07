@@ -15,6 +15,7 @@ import basic.zBasic.util.moduleExternal.monitor.ILogFileWatchMonitorZZZ;
 import basic.zKernel.flag.IFlagZEnabledZZZ;
 import basic.zKernel.status.IEventObject4LogFileWatchMonitorStatusLocalZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
+import custom.zKernel.Log;
 import debug.zBasic.util.moduleExternal.log.create.ILogFileCreateRunnerOnMonitorListeningZZZ;
 
 /**Diese Klasse läuft einfach und ist an einem Monitor registriert.
@@ -91,7 +92,7 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 			}catch (InterruptedException e) {					
 				try {
 					String sLogIE = e.getMessage();
-					this.protocol("An error happend: '" + sLogIE + "'");
+					Log.protocol(this, "An error happend: '" + sLogIE + "'");
 				} catch (ExceptionZZZ e1) {
 					System.out.println(e1.getDetailAllLast());
 					e1.printStackTrace();
@@ -112,12 +113,12 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				break main;
 			}
 			
@@ -132,12 +133,12 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 			main:{
 				
 				String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				
 				bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 				if(bReturn) {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 					break main;
 				}
 				
@@ -298,11 +299,11 @@ public class LogFileWatchListenerOnMonitor_RunnerExampleZZZ extends AbstractProg
 						break;	
 					default:
 						sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 					}
 				}else {
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 				}
 		
 		}//end main:

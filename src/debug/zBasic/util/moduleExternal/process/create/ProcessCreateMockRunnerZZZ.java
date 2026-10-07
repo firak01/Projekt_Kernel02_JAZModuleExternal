@@ -20,6 +20,7 @@ import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.create.AbstractProcessCreateRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.create.IProcessCreateRunnerZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
+import custom.zKernel.Log;
 
 /**Diese Klasse erzeugt laaangsam, Zeile fuer Zeile eine Log-Datei.
  * Der Inhalt der Log-Datei kommt aus einer anderen Dummy-Log-Datei, die fest im Projekt als Beispiel vorliegt.
@@ -86,12 +87,12 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				break main;
 			}
 			
@@ -107,12 +108,12 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				break main;
 			}
 			
@@ -187,7 +188,7 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 						//String sWorkspace2 = FileEasyZZZ.getFileRootPathAbsolute();
 					    //String sWorkspace3 = FileEasyZZZ.getDirectoryOfSystemClassloaderAsString();					    
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Pfad zum Workspace, als Root fuer die Batch: '"+ sWorkspace +"'";						
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						
 						sDirectory = FileEasyZZZ.joinFilePathNameForWorkspace(sWorkspace, "bat");
 												
@@ -197,7 +198,7 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 						//alternativ ein fester Absoluter Pfad auf der Festplatte
 						
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Ausfuehrung nicht im Workspace, Pfad fuer die Batch fehlt !!!";						
-						this.protocol(sLog);	
+						Log.protocol(this, sLog);
 						break main;
 					}
 					
@@ -224,7 +225,7 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 					String sDirectoryRootOfJavaExecution = FileEasyZZZ.getFileRootPathAbsoluteForExecutionJava();
 					String sCommandConcrete = "cmd /c " + sFilePathConcrete + " " + sDirectoryRootOfJavaExecution;
 					sLog = ReflectCodeZZZ.getPositionCurrent()+"Konkreter Aufruf der Batch: '"+ sCommandConcrete +"'";						
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 					
 					Runtime load = Runtime.getRuntime();
 					objReturn = load.exec(sCommandConcrete);
@@ -232,12 +233,12 @@ public class ProcessCreateMockRunnerZZZ extends AbstractProcessCreateRunnerZZZ i
 					if(objReturn==null){
 						//Hier nicht abbrechen, sondern die Verarbeitung bei der naechsten Datei fortfuehren
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Unable to create process, using command: '"+ sCommandConcrete +"'";						
-						this.protocol(sLog); 						
+						Log.protocol(this, sLog);					
 					}else{	
 						
 						//NEU: Einen anderen Thread zum "Monitoren" des Inputstreams des Processes verwenden. Dadurch werden die anderen Prozesse nicht angehalten.
 						sLog = ReflectCodeZZZ.getPositionCurrent()+"Successfull process created, using command: '"+ sCommandConcrete +"'";
-						this.protocol(sLog);			
+						Log.protocol(this, sLog);
 					}
 				
 				
@@ -427,7 +428,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					
 					s=ReflectCodeZZZ.getPositionCurrent() + "Gelesen aus InputStream: '" + s + "'";
 					
-					this.protocol(s);
+					Log.protocol(this, s);
 					boolean bAny = this.analyseInputLineCustom(s);
 									
 					Thread.sleep(20);
@@ -518,11 +519,11 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					break;
 				default:
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 				}
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 			}
 	
 	}//end main:

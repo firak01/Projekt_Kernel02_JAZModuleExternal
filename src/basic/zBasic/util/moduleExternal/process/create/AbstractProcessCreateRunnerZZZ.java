@@ -18,6 +18,7 @@ import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.ICreateRunnerZZZ;
 import basic.zKernel.flag.IFlagZEnabledZZZ;
 import basic.zKernel.status.IStatusLocalMessageUserZZZ;
+import custom.zKernel.Log;
 
 /**This class receives the stream from a process, which was started by the ConfigStarterZZZ class.
  * This is necessary, because the process will only goon working, if the streams were "catched" by a target.
@@ -253,7 +254,7 @@ public abstract class AbstractProcessCreateRunnerZZZ extends AbstractProgramWith
 				BufferedWriter out = new BufferedWriter( new OutputStreamWriter(objProcess.getOutputStream()) );
 				out.write(sOut);
 			
-				this.protocol("STRING SEND TO PROCESS: "+ sOut);
+				Log.protocol(this, "STRING SEND TO PROCESS: "+ sOut);
 				this.setFlag("hasInput", true);
 				
 			} catch (IOException e) {

@@ -12,6 +12,7 @@ import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zBasic.util.moduleExternal.monitor.IProcessWatchMonitorZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
 import basic.zKernel.status.ISenderObjectStatusLocalZZZ;
+import custom.zKernel.Log;
 
 /**This class receives the stream from a process, which was started by the ConfigStarterZZZ class.
  * This is necessary, because the process will only goon working, if the streams were "catched" by a target.
@@ -46,17 +47,17 @@ public class ProcessWatchRunnerZZZ extends AbstractProcessWatchRunnerZZZ {
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				break main;
 			}
 			
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "DOSTOP!!!";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			
 			bReturn = this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, bStatusValue);
 		}//end main
@@ -69,12 +70,12 @@ public class ProcessWatchRunnerZZZ extends AbstractProcessWatchRunnerZZZ {
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				break main;
 			}
 			
@@ -167,11 +168,11 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 			int iZaehler = StringZZZ.toInteger(sZaehler);
 			if(iZaehler % 10 == 0 && iZaehler > 0) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - 10er Zaehler gefunden.";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				break main;				
 			}else if(iZaehler >= 50) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "TESTFGL PROCESS STRING ANALYSE - Zaehler ueber 50. Breche ab.";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				//this.setFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP, false);//Merke: STOPREQUEST ist eine Anweisung.. bleibt also ein Flag und ist kein Status
 				bReturn = true;
 				break main;
@@ -344,11 +345,11 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					break;
 				default:
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 				}
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 			}
 	
 	}//end main:

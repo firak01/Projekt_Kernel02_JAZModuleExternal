@@ -27,6 +27,7 @@ import basic.zBasic.util.moduleExternal.log.watch.ILogFileWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.create.IProcessCreateRunnerZZZ;
 import basic.zKernel.flag.IFlagZEnabledZZZ;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
+import custom.zKernel.Log;
 
 /**Diese Klasse erzeugt laaangsam, Zeile fuer Zeile eine Log-Datei.
  * Der Inhalt der Log-Datei kommt aus einer anderen Dummy-Log-Datei, die fest im Projekt als Beispiel vorliegt.
@@ -124,12 +125,12 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				break main;
 			}
 			
@@ -144,12 +145,12 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 		main:{
 			
 			String sLog = ReflectCodeZZZ.getPositionCurrent() + "Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			
 			bReturn = this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP);
 			if(bReturn) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + this.getClass().getSimpleName()+ "=> STOP FLAG SCHON GESETZT. Breche ab. Status='"+enumStatus.getName() +"', StatusValue="+bStatusValue+", EventMessage='" + sStatusMessage +"'";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 				break main;
 			}
 			
@@ -194,17 +195,17 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 				do {
 					if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) {
 						String sLog = ReflectCodeZZZ.getPositionCurrent() + "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'. Breche ab.";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						break main;
 					}
 					bExists = FileEasyZZZ.exists(objFileSource);
 					if(!bExists) {
 						String sLog = ReflectCodeZZZ.getPositionCurrent() + "File not exists, waiting for: '" + objFileSource.getAbsolutePath() + "'.";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 						Thread.sleep(5000);
 					}else {
 						String sLog = ReflectCodeZZZ.getPositionCurrent() + "File exists: '" + objFileSource.getAbsolutePath() + "'.";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
 					}
 				}while(!bExists);
 								
@@ -231,7 +232,7 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
                 	Thread.sleep(300); //Bremse zum Debuggen ab. Sonst gehen mir die Zeilen aus... ;-))
                 	if(this.getFlag(IProgramRunnableZZZ.FLAGZ.REQUEST_STOP)) {
                 		String sLog = ReflectCodeZZZ.getPositionCurrent() + "Flag gesetzt: '" + IProgramRunnableZZZ.FLAGZ.REQUEST_STOP.name() + "'. Breche ab.";
-						this.protocol(sLog);
+						Log.protocol(this, sLog);
     					break main;
     				}
                     sLine = br.readLine();
@@ -239,7 +240,7 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
                     {
                     	icount++;          
                     	String sLog = ReflectCodeZZZ.getPositionCurrent() + icount +"\t: " + sLine;
-                    	this.protocol(sLog);
+                    	Log.protocol(this, sLog);
                     	objLogStream.write(sLine.getBytes());
                     	objLogStream.write(StringZZZ.crlf().getBytes());//Merke: Ohne diese explizite neue Zeile wird alles hintereinander geschrieben.
                     	
@@ -349,11 +350,11 @@ public class LogFileCreateRunnerMockZZZ extends AbstractProgramWithFlagOnStatusL
 					break;
 				default:
 					sLog = ReflectCodeZZZ.getPositionCurrent() + "ActionAlias wird noch nicht behandelt. '" + sAction + "'";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 				}
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Kein ActionAlias ermittelt. Fuehre keine Aktion aus.";
-				this.protocol(sLog);
+				Log.protocol(this, sLog);
 			}
 	
 	}//end main:

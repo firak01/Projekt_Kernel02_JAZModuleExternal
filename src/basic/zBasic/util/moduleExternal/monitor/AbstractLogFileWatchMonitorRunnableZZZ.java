@@ -11,6 +11,7 @@ import basic.zBasic.util.abstractEnum.IEnumSetMappedStatusLocalZZZ;
 import basic.zBasic.util.datatype.string.StringZZZ;
 import basic.zBasic.util.moduleExternal.IWatchListenerZZZ;
 import basic.zKernel.flag.IFlagZEnabledZZZ;
+import custom.zKernel.Log;
 
 /**Beachte: Es wird ILogFileWatchMonitorZZZ implementiert
  *          und nicht etwa ein ILogFileWatchMonitorRunnableZZZ.
@@ -242,14 +243,14 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 			bFunction = this.proofStatusLocalExists(sStatusName);															
 			if(!bFunction) {
 				sLog = ReflectCodeZZZ.getPositionCurrent() + "Would like to fire event, but this status is not available: '" + sStatusName + "'";
-				this.protocol(sLog);			
+				Log.protocol(this, sLog);			
 				break main;
 			}
 			
 		bFunction = this.proofStatusLocalValueChanged(sStatusName, bStatusValue);
 		if(!bFunction) {
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "Would like to fire event, but this status has not changed: '" + sStatusName + "'";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			break main;
 		}	
 		
@@ -273,12 +274,12 @@ public abstract class AbstractLogFileWatchMonitorRunnableZZZ  extends AbstractPr
 		}
 		
 		sLog = ReflectCodeZZZ.getPositionCurrent() + "Verarbeitet sStatusMessageToSet='" + sStatusMessageToSet + "'";
-		this.protocol(sLog);
+		Log.protocol(this, sLog);
 
 		//Falls eine Message extra uebergeben worden ist, ueberschreibe...
 		if(sStatusMessageToSet!=null) {
 			sLog = ReflectCodeZZZ.getPositionCurrent() + "Setzt sStatusMessageToSet='" + sStatusMessageToSet + "'";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 		}
 		//Merke: Dabei wird die uebergebene Message in den speziellen "Ringspeicher" geschrieben, auch NULL Werte
 		//       und der Event wird ggfs. geworfen...

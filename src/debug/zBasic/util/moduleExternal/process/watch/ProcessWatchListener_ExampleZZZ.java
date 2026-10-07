@@ -13,6 +13,7 @@ import basic.zBasic.util.moduleExternal.monitor.IProcessWatchMonitorZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ;
 import basic.zBasic.util.moduleExternal.process.watch.IProcessWatchRunnerZZZ.STATUSLOCAL;
 import basic.zKernel.status.IEventObjectStatusLocalZZZ;
+import custom.zKernel.Log;
 
 /** Ein Beispiel-Broker, an dem sich die "hoerenden" Klassen registieren.
  * @author fl86kyvo
@@ -32,14 +33,14 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 			if(eventStatusLocal==null)break main;
 						
 			String sLog = ReflectCodeZZZ.getPositionCurrent()+": Fuer ProcessWatchEvent.";
-			this.printlnDate(sLog);
+			Log.protocol(this, sLog);
 			
 			if(eventStatusLocal instanceof IEventObjectStatusLocalZZZ) {
 				
 				boolean bRelevant = this.isEventRelevantAny((IEventObjectStatusLocalZZZ) eventStatusLocal); 
 				if(!bRelevant) {
 					sLog = 	ReflectCodeZZZ.getPositionCurrent() + ": Event / Status nicht relevant. Breche ab.";
-					this.protocol(sLog);
+					Log.protocol(this, sLog);
 					break main;
 				}
 				
@@ -90,7 +91,7 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 			//int iIndex = eventStatusLocalSet.getProcessID();
 			String sStatusMessage = eventStatusLocalSet.getStatusMessage();	
 			sLog = ReflectCodeZZZ.getPositionCurrent() + ": StatusMessage ist = '" + sStatusMessage + "'";
-			this.protocol(sLog);
+			Log.protocol(this, sLog);
 			
 
 			//Einen Status Anzunehmen ist hier nicht implementiert			
@@ -110,16 +111,16 @@ public class ProcessWatchListener_ExampleZZZ extends AbstractObjectWithFlagOnSta
 			
 			if(bEventHasError && bEventEnded){
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status bEventHasError && bEventEnded";
-				this.printlnDate(sLog);					
+				Log.protocol(this, sLog);		
 			}else if((!bEventHasError) && bEventEnded){
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Status !bEventHasError && bEventEnded";
-				this.printlnDate(sLog);
+				Log.protocol(this, sLog);
 				
 			}
 		
 			}else {
 				sLog = ReflectCodeZZZ.getPositionCurrent()+": Event ist kein instanceof IEventObjectStatusLocalZZZ. Klasse: " + eventStatusLocal.getClass().getName();
-				this.printlnDate(sLog);
+				Log.protocol(this, sLog);
 			}//end if instanceof ...MessageSetZZZ
 			bReturn = true;
 		}//end main:
