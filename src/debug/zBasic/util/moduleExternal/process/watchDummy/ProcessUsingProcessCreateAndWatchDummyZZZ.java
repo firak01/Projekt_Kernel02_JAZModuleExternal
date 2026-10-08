@@ -194,7 +194,7 @@ TCP connection established with [AF_INET]192.168.3.116:4999
 					
 					s="gelesen aus InputStream: '" + s + "'";
 					
-					this.protocol(s);
+					Log.protocol(this, s);
 					boolean bContinue = this.analyseInputLineCustom(s);
 					if(!bContinue) break;
 					Thread.sleep(20);
